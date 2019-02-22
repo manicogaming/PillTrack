@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout pills_layout, appoint_layout, add_pills_layout, add_appoints_layout, account_layout, add_button;
     private View pills, appointments, add_pills, add_appoints, account;
     private TextView AccountName0, AccountAge0;
-    RecyclerView AccountUsers;
+    private RecyclerView AccountUsers;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Account(){
-       /* RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) add_button.getLayoutParams();
-        params.addRule(RelativeLayout.BELOW, R.id.account);**/
+       RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) add_button.getLayoutParams();
+        params.addRule(RelativeLayout.BELOW, R.id.account);
 
         pills_layout.removeView(pills);
         appoint_layout.removeView(appointments);
@@ -131,11 +131,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AccountUsers = findViewById(R.id.AccountList);
-        AccountUsers.setHasFixedSize(true);
-        AccountUsers.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-
-
         pills_layout = findViewById(R.id.pills_layout);
         appoint_layout = findViewById(R.id.appoint_layout);
         add_pills_layout = findViewById(R.id.add_pills);
@@ -163,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getUserInfo(){
+        AccountUsers = findViewById(R.id.AccountList);
+        AccountUsers.setHasFixedSize(true);
+        AccountUsers.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String userid = user.getUid();
 
