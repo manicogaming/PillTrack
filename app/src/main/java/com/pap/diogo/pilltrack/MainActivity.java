@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout pills_layout, appoint_layout, add_pills_layout, add_appoints_layout, account_layout, add_button;
     private View pills, appointments, add_pills, add_appoints, account;
     private TextView AccountName0, AccountAge0;
-    private RecyclerView AccountUsers;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -146,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         appointments = inflater.inflate(R.layout.appointments, null);
         add_pills = inflater.inflate(R.layout.add_pills, null);
         add_appoints = inflater.inflate(R.layout.add_appoint, null);
-        account = inflater.inflate(R.layout.account, null);
+        //account = inflater.inflate(R.layout.account, null);
 
         pills_layout.addView(pills);
         appoint_layout.addView(appointments);
@@ -158,9 +157,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getUserInfo(){
-        AccountUsers = findViewById(R.id.AccountList);
-        AccountUsers.setHasFixedSize(true);
-        AccountUsers.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+        RecyclerView accountUsers = findViewById(R.id.AccountList);
+        accountUsers.setHasFixedSize(true);
+        accountUsers.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String userid = user.getUid();
@@ -197,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         };
-        AccountUsers.setAdapter(AccountAdapter);
+        accountUsers.setAdapter(AccountAdapter);
     }
 
     public static class AccountInfo extends RecyclerView.ViewHolder{
