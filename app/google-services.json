@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "953798369511",
+    "firebase_url": "https://pilltrack-3a2af.firebaseio.com",
+    "project_id": "pilltrack-3a2af",
+    "storage_bucket": "pilltrack-3a2af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953798369511:android:77288224c655291a",
+        "android_client_info": {
+          "package_name": "com.pap.diogo.pilltrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953798369511-7l5i6cbc7unb3sh5a5no4911j3nfn7qv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pap.diogo.pilltrack",
+            "certificate_hash": "cefdecdab8a1152e31c9b840145f3d65da8ee7e6"
+          }
+        },
+        {
+          "client_id": "953798369511-daa1vf1kualffcu761uhakahjaeqaiqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANSXRTTD3RizL4rJqa_jP6kc4ZUkpRBx4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953798369511-daa1vf1kualffcu761uhakahjaeqaiqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

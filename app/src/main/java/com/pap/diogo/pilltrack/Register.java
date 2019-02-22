@@ -1,0 +1,86 @@
+package com.pap.diogo.pilltrack;
+
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class Register extends AppCompatActivity implements View.OnClickListener{
+
+    private Button btnRegister;
+    private EditText txtName, txtEmail, txtPassword, txtAge;
+    private FirebaseAuth Register;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+        Register = FirebaseAuth.getInstance();
+        btnRegister = findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(this);
+        txtName = findViewById(R.id.txtname);
+        txtEmail = findViewById(R.id.txtemail);
+        txtPassword = findViewById(R.id.txtpassword);
+        txtAge = findViewById(R.id.txtage);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = Register.getCurrentUser();
+    }
+
+    @Override
+    public void onClick(View v) {
+        userRegister();
+    }
+
+    private void userRegister() {
+        final String Email = txtEmail.getText().toString().trim();
+        final String Password = txtPassword.getText().toString().trim();
+        final String Name = txtName.getText().toString().trim();
+        final String Age = txtAge.getText().toString().trim();
+
+        Register.createUserWithEmailAndPassword(Email,Password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            RegisterInfo userInformation = new RegisterInfo(Name, Age);
+
+                            FirebaseDatabase.getInstance().getReference("Users").child(Register.getCurrentUser().getUid()).setValue(userInformation).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(Register.this, "Registo com sucesso!", Toast.LENGTH_SHORT).show();
+                                        Intent home = new Intent(Register.this,MainActivity.class);
+                                        startActivity(home);
+                                    }
+                                }
+                            });
+                        } else {
+                            //If user already exists show a message
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                Toast.makeText(Register.this, "E-mail já registado.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Register.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+    }
+}
