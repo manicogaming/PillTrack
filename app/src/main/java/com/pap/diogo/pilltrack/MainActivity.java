@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -159,48 +160,46 @@ public class MainActivity extends AppCompatActivity {
     public void getUserInfo(){
         RecyclerView accountUsers = account.findViewById(R.id.AccountList);
 
-        if (accountUsers != null)
-        {
-            accountUsers.setHasFixedSize(true);
-            accountUsers.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+        accountUsers.setHasFixedSize(true);
+        accountUsers.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            final String userid = user.getUid();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final String userid = user.getUid();
 
-            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
 
-            FirebaseRecyclerOptions<AccountLayout> AccountQ = new FirebaseRecyclerOptions.Builder<AccountLayout>().setQuery(ref, AccountLayout.class).setLifecycleOwner(this).build();
+        FirebaseRecyclerOptions<AccountLayout> AccountQ = new FirebaseRecyclerOptions.Builder<AccountLayout>().setQuery(ref, AccountLayout.class).setLifecycleOwner(this).build();
 
-            FirebaseRecyclerAdapter<AccountLayout, AccountInfo> AccountAdapter = new FirebaseRecyclerAdapter<AccountLayout, AccountInfo>(AccountQ){
+        FirebaseRecyclerAdapter<AccountLayout, AccountInfo> AccountAdapter = new FirebaseRecyclerAdapter<AccountLayout, AccountInfo>(AccountQ){
 
-                @NonNull
-                @Override
-                public AccountInfo onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                    return new AccountInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.account_layout, viewGroup, false));
-                }
+            @NonNull
+            @Override
+            public AccountInfo onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                return new AccountInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.account_layout, viewGroup, false));
+            }
 
-                @Override
-                protected void onBindViewHolder(@NonNull final AccountInfo holder, int position, @NonNull final AccountLayout model) {
-                    ref.child(userid).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            final String name = dataSnapshot.child("name").getValue().toString();
-                            final String age = dataSnapshot.child("idade").getValue().toString();
-                            holder.setName(name);
-                            holder.setAge(age);
-                        }
+            @Override
+            protected void onBindViewHolder(@NonNull final AccountInfo holder, int position, @NonNull final AccountLayout model) {
+                ref.child(userid).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        final String name = dataSnapshot.child("name").getValue().toString();
+                        final String age = dataSnapshot.child("idade").getValue().toString();
+                        holder.setName(name);
+                        holder.setAge(age);
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
-                }
+                    }
+                });
+            }
 
 
-            };
-            accountUsers.setAdapter(AccountAdapter);
-        }
+        };
+        accountUsers.setAdapter(AccountAdapter);
+
     }
 
     public static class AccountInfo extends RecyclerView.ViewHolder{
