@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         pills_layout.removeView(pills);
         appoint_layout.removeView(appointments);
         add_pills_layout.removeView(add_pills);
-        account_layout.removeView(account);
+        //account_layout.removeView(account);
 
         add_appoints_layout.removeAllViews();
         add_appoints_layout.addView(add_appoints);
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         pills_layout.removeView(pills);
         appoint_layout.removeView(appointments);
         add_appoints_layout.removeView(add_appoints);
-        account_layout.removeView(account);
+        //account_layout.removeView(account);
 
         add_pills_layout.removeAllViews();
         add_pills_layout.addView(add_pills);
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     private void Home() {
         add_appoints_layout.removeView(add_appoints);
         add_pills_layout.removeView(add_pills);
-        account_layout.removeView(account);
+        //account_layout.removeView(account);
 
         pills_layout.removeAllViews();
         pills_layout.addView(pills);
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         appoint_layout = findViewById(R.id.appoint_layout);
         add_pills_layout = findViewById(R.id.add_pills);
         add_appoints_layout = findViewById(R.id.add_appoints);
-        account_layout = findViewById(R.id.account);
+        //account_layout = findViewById(R.id.account);
         add_button = findViewById(R.id.add);
         AccountName0 = findViewById(R.id.AccountName0);
         AccountAge0 = findViewById(R.id.AccountAge0);
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         appointments = inflater.inflate(R.layout.appointments, null);
         add_pills = inflater.inflate(R.layout.add_pills, null);
         add_appoints = inflater.inflate(R.layout.add_appoint, null);
-        //account = inflater.inflate(R.layout.account, null);
+        account = inflater.inflate(R.layout.account, null);
 
         pills_layout.addView(pills);
         appoint_layout.addView(appointments);
@@ -157,46 +157,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getUserInfo(){
-        RecyclerView accountUsers = findViewById(R.id.AccountList);
-        accountUsers.setHasFixedSize(true);
-        accountUsers.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+        RecyclerView accountUsers = account.findViewById(R.id.AccountList);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final String userid = user.getUid();
+        if (accountUsers != null)
+        {
+            accountUsers.setHasFixedSize(true);
+            accountUsers.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            final String userid = user.getUid();
 
-        FirebaseRecyclerOptions<AccountLayout> AccountQ = new FirebaseRecyclerOptions.Builder<AccountLayout>().setQuery(ref, AccountLayout.class).setLifecycleOwner(this).build();
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
 
-        FirebaseRecyclerAdapter<AccountLayout, AccountInfo> AccountAdapter = new FirebaseRecyclerAdapter<AccountLayout, AccountInfo>(AccountQ){
+            FirebaseRecyclerOptions<AccountLayout> AccountQ = new FirebaseRecyclerOptions.Builder<AccountLayout>().setQuery(ref, AccountLayout.class).setLifecycleOwner(this).build();
 
-            @NonNull
-            @Override
-            public AccountInfo onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                return new AccountInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.account_layout, viewGroup, false));
-            }
+            FirebaseRecyclerAdapter<AccountLayout, AccountInfo> AccountAdapter = new FirebaseRecyclerAdapter<AccountLayout, AccountInfo>(AccountQ){
 
-            @Override
-            protected void onBindViewHolder(@NonNull final AccountInfo holder, int position, @NonNull final AccountLayout model) {
-                ref.child(userid).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        final String name = dataSnapshot.child("name").getValue().toString();
-                        final String age = dataSnapshot.child("idade").getValue().toString();
-                        holder.setName(name);
-                        holder.setAge(age);
-                    }
+                @NonNull
+                @Override
+                public AccountInfo onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                    return new AccountInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.account_layout, viewGroup, false));
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                protected void onBindViewHolder(@NonNull final AccountInfo holder, int position, @NonNull final AccountLayout model) {
+                    ref.child(userid).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            final String name = dataSnapshot.child("name").getValue().toString();
+                            final String age = dataSnapshot.child("idade").getValue().toString();
+                            holder.setName(name);
+                            holder.setAge(age);
+                        }
 
-                    }
-                });
-            }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
 
 
-        };
-        accountUsers.setAdapter(AccountAdapter);
+            };
+            accountUsers.setAdapter(AccountAdapter);
+        }
     }
 
     public static class AccountInfo extends RecyclerView.ViewHolder{
