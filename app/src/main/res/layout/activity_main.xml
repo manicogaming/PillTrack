@@ -12,6 +12,93 @@
         android:layout_height="wrap_content"
         android:id="@+id/pills_layout">
 
+        <TextView
+            android:id="@+id/PillHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="Medicamentos"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:layout_alignParentTop="true"/>
+
+        <RelativeLayout
+            android:id="@+id/PillRelative0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_below="@+id/PillHeader">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/PillNames"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/PillName0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="Medicamento1"
+                    android:layout_centerVertical="true"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/PillFunc0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="Função1"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/PillName0"
+                    android:layout_toEndOf="@+id/PillName0"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/PillInfos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/PillNames">
+
+                <TextView
+                    android:id="@+id/NextPill0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="PróximaMedicação"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:textSize="20sp" />
+
+                <ImageButton
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="85dp"
+                    android:layout_marginRight="85dp"
+                    android:src="@drawable/ic_notifications" />
+
+                <ImageButton
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_edit"/>
+            </RelativeLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
@@ -20,24 +107,335 @@
         android:id="@+id/appoint_layout"
         android:layout_below="@+id/pills_layout">
 
+        <TextView
+            android:id="@+id/AppointHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="Consultas"
+            android:textAlignment="center"
+            android:textSize="24sp"/>
+
+        <RelativeLayout
+            android:id="@+id/AppointRelative0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_below="@+id/AppointHeader">
+
+
+            <TextView
+                android:id="@+id/AppointName0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="Consulta1"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:id="@+id/AppointInfos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/AppointName0">
+
+                <TextView
+                    android:id="@+id/AppointDate0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="Data"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:textSize="20sp" />
+
+                <ImageButton
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="85dp"
+                    android:layout_marginRight="85dp"
+                    android:src="@drawable/ic_notifications" />
+
+                <ImageButton
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_edit"/>
+            </RelativeLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ver a localização no Google Maps"
+                android:layout_below="@id/AppointInfos"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"/>
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/add_pills">
+
+        <RelativeLayout
+            android:id="@+id/EPills"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edit_bg"
+            android:padding="15dp">
+
+            <RelativeLayout
+                android:id="@+id/EPillInfos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/EPillName0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Medicamento1"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/EPillFunc0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/EPillName0"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Função1"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/EPillInterval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/EPillFunc0"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Intervalo"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/EPillDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/EPillInfos"
+                android:layout_toRightOf="@+id/EPillInfos"
+                android:layout_centerInParent="true">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/remove_button"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_delete"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/add_appoints">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/EAppoints"
+            android:layout_margin="15dp"
+            android:background="@drawable/edit_bg"
+            android:padding="15dp">
+
+            <RelativeLayout
+                android:id="@+id/EAppointInfos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/EAppointName0"
+                    android:text="Consulta1"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/EAppointDate0"
+                    android:text="Data"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/EAppointName0"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/EAppointHospital"
+                    android:text="Hospital"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/EAppointDate0"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/EAppointHospital"
+                    android:layout_toEndOf="@id/EAppointHospital"
+                    android:layout_toRightOf="@id/EAppointHospital"
+                    android:layout_marginLeft="75dp"
+                    android:layout_marginStart="75dp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/EAppointDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/EAppointInfos"
+                android:layout_toRightOf="@+id/EAppointInfos"
+                android:layout_centerInParent="true">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/remove_button"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_delete"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/account">
+
+        <RelativeLayout
+            android:id="@+id/AccountUser"
+            android:layout_width="match_parent"
+            android:layout_height="163dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edit_bg"
+            android:padding="15dp">
+
+            <RelativeLayout
+                android:id="@+id/AccountImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_user"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/AccountInfos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/AccountImage"
+                android:layout_toEndOf="@id/AccountImage"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp">
+
+                <TextView
+                    android:id="@+id/AccountName0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Nome1"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/AccountAge0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/AccountName0"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Idade1"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/AccountChangePass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/AccountAge0"
+                    android:text="Mudar Palavra-Passe"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/change_password"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout

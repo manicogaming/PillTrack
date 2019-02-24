@@ -34,7 +34,6 @@ import org.w3c.dom.Text;
 public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout pills_layout, appoint_layout, add_pills_layout, add_appoints_layout, account_layout, add_button;
-    private View pills, appointments, add_pills, add_appoints, account;
     private TextView AccountName0, AccountAge0;
 
 
@@ -65,19 +64,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Account(){
-       RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) add_button.getLayoutParams();
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) add_button.getLayoutParams();
         params.addRule(RelativeLayout.BELOW, R.id.account);
 
-        pills_layout.removeView(pills);
-        appoint_layout.removeView(appointments);
-        add_pills_layout.removeView(add_pills);
-        add_appoints_layout.removeView(add_appoints);
-
-        //account_layout.removeAllViews();
-        //account_layout.addView(account);
+        pills_layout.setVisibility(View.GONE);
+        appoint_layout.setVisibility(View.GONE);
+        add_pills_layout.setVisibility(View.GONE);
+        add_appoints_layout.setVisibility(View.GONE);
+        account_layout.setVisibility(View.VISIBLE);
 
         add_button.setVisibility(View.VISIBLE);
-        getUserInfo();
 
     }
 
@@ -86,13 +82,11 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) add_button.getLayoutParams();
         params.addRule(RelativeLayout.BELOW, R.id.add_appoints);
 
-        pills_layout.removeView(pills);
-        appoint_layout.removeView(appointments);
-        add_pills_layout.removeView(add_pills);
-        //account_layout.removeView(account);
-
-        add_appoints_layout.removeAllViews();
-        add_appoints_layout.addView(add_appoints);
+        pills_layout.setVisibility(View.GONE);
+        appoint_layout.setVisibility(View.GONE);
+        add_pills_layout.setVisibility(View.GONE);
+        add_appoints_layout.setVisibility(View.VISIBLE);
+        account_layout.setVisibility(View.GONE);
 
         add_button.setVisibility(View.VISIBLE);
     }
@@ -101,27 +95,21 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) add_button.getLayoutParams();
         params.addRule(RelativeLayout.BELOW, R.id.add_pills);
 
-        pills_layout.removeView(pills);
-        appoint_layout.removeView(appointments);
-        add_appoints_layout.removeView(add_appoints);
-        //account_layout.removeView(account);
-
-        add_pills_layout.removeAllViews();
-        add_pills_layout.addView(add_pills);
+        pills_layout.setVisibility(View.GONE);
+        appoint_layout.setVisibility(View.GONE);
+        add_pills_layout.setVisibility(View.VISIBLE);
+        add_appoints_layout.setVisibility(View.GONE);
+        account_layout.setVisibility(View.GONE);
 
         add_button.setVisibility(View.VISIBLE);
     }
 
     private void Home() {
-        add_appoints_layout.removeView(add_appoints);
-        add_pills_layout.removeView(add_pills);
-        //account_layout.removeView(account);
-
-        pills_layout.removeAllViews();
-        pills_layout.addView(pills);
-
-        appoint_layout.removeAllViews();
-        appoint_layout.addView(appointments);
+        pills_layout.setVisibility(View.VISIBLE);
+        appoint_layout.setVisibility(View.VISIBLE);
+        add_pills_layout.setVisibility(View.GONE);
+        add_appoints_layout.setVisibility(View.GONE);
+        account_layout.setVisibility(View.GONE);
 
         add_button.setVisibility(View.GONE);
     }
@@ -135,90 +123,46 @@ public class MainActivity extends AppCompatActivity {
         appoint_layout = findViewById(R.id.appoint_layout);
         add_pills_layout = findViewById(R.id.add_pills);
         add_appoints_layout = findViewById(R.id.add_appoints);
-        //account_layout = findViewById(R.id.account);
-        add_button = findViewById(R.id.add);
+        account_layout = findViewById(R.id.account);
+
         AccountName0 = findViewById(R.id.AccountName0);
         AccountAge0 = findViewById(R.id.AccountAge0);
 
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        add_button = findViewById(R.id.add);
 
-        pills = inflater.inflate(R.layout.pills, null);
-        appointments = inflater.inflate(R.layout.appointments, null);
-        add_pills = inflater.inflate(R.layout.add_pills, null);
-        add_appoints = inflater.inflate(R.layout.add_appoint, null);
-        account = inflater.inflate(R.layout.account, null);
-
-        pills_layout.addView(pills);
-        appoint_layout.addView(appointments);
-
+        pills_layout.setVisibility(View.VISIBLE);
+        appoint_layout.setVisibility(View.VISIBLE);
+        add_pills_layout.setVisibility(View.GONE);
+        add_appoints_layout.setVisibility(View.GONE);
+        account_layout.setVisibility(View.GONE);
         add_button.setVisibility(View.GONE);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    public void getUserInfo(){
-        RecyclerView accountUsers = account.findViewById(R.id.AccountList);
-
-        accountUsers.setHasFixedSize(true);
-        accountUsers.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String userid = user.getUid();
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
 
-        FirebaseRecyclerOptions<AccountLayout> AccountQ = new FirebaseRecyclerOptions.Builder<AccountLayout>().setQuery(ref, AccountLayout.class).setLifecycleOwner(this).build();
-
-        FirebaseRecyclerAdapter<AccountLayout, AccountInfo> AccountAdapter = new FirebaseRecyclerAdapter<AccountLayout, AccountInfo>(AccountQ){
-
-            @NonNull
+        ref.child(userid).addValueEventListener(new ValueEventListener() {
             @Override
-            public AccountInfo onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                return new AccountInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.account_layout, viewGroup, false));
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String name = dataSnapshot.child("name").getValue().toString();
+                final String age = dataSnapshot.child("idade").getValue().toString();
+                AccountName0.setText(name);
+                AccountAge0.setText(age + " anos");
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull final AccountInfo holder, int position, @NonNull final AccountLayout model) {
-                ref.child(userid).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        final String name = dataSnapshot.child("name").getValue().toString();
-                        final String age = dataSnapshot.child("idade").getValue().toString();
-                        holder.setName(name);
-                        holder.setAge(age);
-                    }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
             }
-
-
-        };
-        accountUsers.setAdapter(AccountAdapter);
-
+        });
     }
-
-    public static class AccountInfo extends RecyclerView.ViewHolder{
-        View AccountL;
-
-        public AccountInfo(@NonNull View itemView) {
-            super(itemView);
-
-            AccountL = itemView;
-        }
-
-        public void setName(String name){
-            TextView AccountName = AccountL.findViewById(R.id.AccountName0);
-            AccountName.setText(name);
-        }
-
-        public void setAge(String age){
-            TextView AccountAge = AccountL.findViewById(R.id.AccountAge0);
-            AccountAge.setText(age);
-        }
-    }
-}
+};
