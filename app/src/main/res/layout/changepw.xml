@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/changepw_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            app:hintTextAppearance="@style/TextLabel">
+
+            <EditText
+                android:id="@+id/txtPassword"
+                android:layout_width="275dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/colorDarkRed"
+                android:hint="Nova Password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnChangePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout2"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/change_password"
+            android:padding="15dp"
+            android:text="Confirmar"
+            android:textColor="@color/colorWhite"
+            android:textSize="22sp" />
+    </RelativeLayout>
+
+
+</RelativeLayout>
