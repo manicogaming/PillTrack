@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,85 +41,27 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment selectedFragment = null;
+
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    Home();
-                    return true;
+                    selectedFragment = new HomeFragment();
+                    break;
                 case R.id.navigation_pills:
-                    Pills();
-                    return true;
+                    selectedFragment = new PillsFragment();
+                    break;
                 case R.id.navigation_appointment:
-                    Appointment();
-                    return true;
+                    selectedFragment = new AppointsFragment();
+                    break;
                 case R.id.navigation_account:
-                    Account();
-                    return true;
+                    selectedFragment = new AccountFragment();
+                    break;
             }
-            return false;
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+
+            return true;
         }
     };
-
-    public MainActivity() {
-    }
-
-    private void Account(){
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) add_button.getLayoutParams();
-        params.addRule(RelativeLayout.BELOW, R.id.account);
-
-        pills_layout.setVisibility(View.GONE);
-        appoint_layout.setVisibility(View.GONE);
-        add_pills_layout.setVisibility(View.GONE);
-        add_appoints_layout.setVisibility(View.GONE);
-        //account_layout.setVisibility(View.VISIBLE);
-
-        add_button.setVisibility(View.VISIBLE);
-
-        /*Button accountChangePass = findViewById(R.id.AccountChangePass);
-
-        accountChangePass.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent ChangePW = new Intent(MainActivity.this, ChangePW.class);
-                startActivity(ChangePW);
-            }
-        });*/
-    }
-
-
-    private void Appointment() {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) add_button.getLayoutParams();
-        params.addRule(RelativeLayout.BELOW, R.id.add_appoints);
-
-        pills_layout.setVisibility(View.GONE);
-        appoint_layout.setVisibility(View.GONE);
-        add_pills_layout.setVisibility(View.GONE);
-        add_appoints_layout.setVisibility(View.VISIBLE);
-        //account_layout.setVisibility(View.GONE);
-
-        add_button.setVisibility(View.VISIBLE);
-    }
-
-    private void Pills() {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) add_button.getLayoutParams();
-        params.addRule(RelativeLayout.BELOW, R.id.add_pills);
-
-        pills_layout.setVisibility(View.GONE);
-        appoint_layout.setVisibility(View.GONE);
-        add_pills_layout.setVisibility(View.VISIBLE);
-        add_appoints_layout.setVisibility(View.GONE);
-        //account_layout.setVisibility(View.GONE);
-
-        add_button.setVisibility(View.VISIBLE);
-    }
-
-    private void Home() {
-        pills_layout.setVisibility(View.VISIBLE);
-        appoint_layout.setVisibility(View.VISIBLE);
-        add_pills_layout.setVisibility(View.GONE);
-        add_appoints_layout.setVisibility(View.GONE);
-        //account_layout.setVisibility(View.GONE);
-
-        add_button.setVisibility(View.GONE);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,35 +75,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(VerifyLogin);
         }
 
-        pills_layout = findViewById(R.id.pills_layout);
-        appoint_layout = findViewById(R.id.appoint_layout);
-        add_pills_layout = findViewById(R.id.add_pills);
-        add_appoints_layout = findViewById(R.id.add_appoints);
-        //account_layout = findViewById(R.id.accountlist);
-
-        AccountName0 = findViewById(R.id.AccountName0);
-        AccountAge0 = findViewById(R.id.AccountAge0);
-
-        add_button = findViewById(R.id.add);
-
-        pills_layout.setVisibility(View.VISIBLE);
-        appoint_layout.setVisibility(View.VISIBLE);
-        add_pills_layout.setVisibility(View.GONE);
-        add_appoints_layout.setVisibility(View.GONE);
-        //account_layout.setVisibility(View.GONE);
-        add_button.setVisibility(View.GONE);
-
-        recyclerView = findViewById(R.id.accountlist);
+        /*recyclerView = findViewById(R.id.accountlist);
 
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);*/
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    /*public class ViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout root;
         public TextView txtTitle;
         public TextView txtDesc;
@@ -178,12 +107,12 @@ public class MainActivity extends AppCompatActivity {
         public void setTxtDesc(String string) {
             txtDesc.setText(string);
         }
-    }
+    }*/
 
     @Override
     protected void onStart() {
         super.onStart();
-        Query query = FirebaseDatabase.getInstance()
+        /*Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("Users");
 
@@ -224,53 +153,12 @@ public class MainActivity extends AppCompatActivity {
 
         };
         recyclerView.setAdapter(adapter);
-        adapter.startListening();
+        adapter.startListening();*/
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users");
-
-        FirebaseRecyclerOptions<Account> options =
-                new FirebaseRecyclerOptions.Builder<Account>()
-                        .setQuery(query, new SnapshotParser<Account>() {
-                            @NonNull
-                            @Override
-                            public Account parseSnapshot(@NonNull DataSnapshot snapshot) {
-                                return new Account(snapshot.child("name").getValue().toString(),
-                                        snapshot.child("idade").getValue().toString());
-                            }
-                        })
-                        .build();
-
-        adapter = new FirebaseRecyclerAdapter<Account, ViewHolder>(options) {
-            @Override
-            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.account, parent, false);
-
-                return new ViewHolder(view);
-            }
-
-
-            @Override
-            protected void onBindViewHolder(ViewHolder holder, final int position, Account model) {
-                holder.setTxtTitle(model.getName());
-                holder.setTxtDesc(model.getIdade());
-
-                holder.root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-        };
-        recyclerView.setAdapter(adapter);
-        adapter.stopListening();
+        /*adapter.stopListening();*/
     }
 };
