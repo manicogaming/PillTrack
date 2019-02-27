@@ -5,27 +5,33 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
 
 public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout pills_layout, appoint_layout, add_pills_layout, add_appoints_layout, account_layout, add_button;
     private TextView AccountName0, AccountAge0;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
+    private FirebaseRecyclerAdapter adapter;
+    private View view;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -61,18 +67,18 @@ public class MainActivity extends AppCompatActivity {
         appoint_layout.setVisibility(View.GONE);
         add_pills_layout.setVisibility(View.GONE);
         add_appoints_layout.setVisibility(View.GONE);
-        account_layout.setVisibility(View.VISIBLE);
+        //account_layout.setVisibility(View.VISIBLE);
 
         add_button.setVisibility(View.VISIBLE);
 
-        Button accountChangePass = findViewById(R.id.AccountChangePass);
+        /*Button accountChangePass = findViewById(R.id.AccountChangePass);
 
         accountChangePass.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent ChangePW = new Intent(MainActivity.this, ChangePW.class);
                 startActivity(ChangePW);
             }
-        });
+        });*/
     }
 
 
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         appoint_layout.setVisibility(View.GONE);
         add_pills_layout.setVisibility(View.GONE);
         add_appoints_layout.setVisibility(View.VISIBLE);
-        account_layout.setVisibility(View.GONE);
+        //account_layout.setVisibility(View.GONE);
 
         add_button.setVisibility(View.VISIBLE);
     }
@@ -97,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         appoint_layout.setVisibility(View.GONE);
         add_pills_layout.setVisibility(View.VISIBLE);
         add_appoints_layout.setVisibility(View.GONE);
-        account_layout.setVisibility(View.GONE);
+        //account_layout.setVisibility(View.GONE);
 
         add_button.setVisibility(View.VISIBLE);
     }
@@ -107,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         appoint_layout.setVisibility(View.VISIBLE);
         add_pills_layout.setVisibility(View.GONE);
         add_appoints_layout.setVisibility(View.GONE);
-        account_layout.setVisibility(View.GONE);
+        //account_layout.setVisibility(View.GONE);
 
         add_button.setVisibility(View.GONE);
     }
@@ -128,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         appoint_layout = findViewById(R.id.appoint_layout);
         add_pills_layout = findViewById(R.id.add_pills);
         add_appoints_layout = findViewById(R.id.add_appoints);
-        account_layout = findViewById(R.id.account);
+        //account_layout = findViewById(R.id.accountlist);
 
         AccountName0 = findViewById(R.id.AccountName0);
         AccountAge0 = findViewById(R.id.AccountAge0);
@@ -139,35 +145,132 @@ public class MainActivity extends AppCompatActivity {
         appoint_layout.setVisibility(View.VISIBLE);
         add_pills_layout.setVisibility(View.GONE);
         add_appoints_layout.setVisibility(View.GONE);
-        account_layout.setVisibility(View.GONE);
+        //account_layout.setVisibility(View.GONE);
         add_button.setVisibility(View.GONE);
+
+        recyclerView = findViewById(R.id.accountlist);
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public RelativeLayout root;
+        public TextView txtTitle;
+        public TextView txtDesc;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            root = itemView.findViewById(R.id.account);
+            txtTitle = itemView.findViewById(R.id.AccountName0);
+            txtDesc = itemView.findViewById(R.id.AccountAge0);
+        }
+
+        public void setTxtTitle(String string) {
+            txtTitle.setText(string);
+        }
+
+
+        public void setTxtDesc(String string) {
+            txtDesc.setText(string);
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Users");
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final String userid = user.getUid();
+        FirebaseRecyclerOptions<Account> options =
+                new FirebaseRecyclerOptions.Builder<Account>()
+                        .setQuery(query, new SnapshotParser<Account>() {
+                            @NonNull
+                            @Override
+                            public Account parseSnapshot(@NonNull DataSnapshot snapshot) {
+                                return new Account(snapshot.child("name").getValue().toString(),
+                                        snapshot.child("idade").getValue().toString());
+                            }
+                        })
+                        .build();
 
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
-
-        ref.child(userid).addValueEventListener(new ValueEventListener() {
+        adapter = new FirebaseRecyclerAdapter<Account, ViewHolder>(options) {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final String name = dataSnapshot.child("name").getValue().toString();
-                final String age = dataSnapshot.child("idade").getValue().toString();
-                AccountName0.setText(name);
-                AccountAge0.setText(age + " anos");
+            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.account, parent, false);
+
+                return new ViewHolder(view);
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            @Override
+            protected void onBindViewHolder(ViewHolder holder, final int position, Account model) {
+                holder.setTxtTitle(model.getName());
+                holder.setTxtDesc(model.getIdade());
+
+                holder.root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        });
+
+        };
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Users");
+
+        FirebaseRecyclerOptions<Account> options =
+                new FirebaseRecyclerOptions.Builder<Account>()
+                        .setQuery(query, new SnapshotParser<Account>() {
+                            @NonNull
+                            @Override
+                            public Account parseSnapshot(@NonNull DataSnapshot snapshot) {
+                                return new Account(snapshot.child("name").getValue().toString(),
+                                        snapshot.child("idade").getValue().toString());
+                            }
+                        })
+                        .build();
+
+        adapter = new FirebaseRecyclerAdapter<Account, ViewHolder>(options) {
+            @Override
+            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.account, parent, false);
+
+                return new ViewHolder(view);
+            }
+
+
+            @Override
+            protected void onBindViewHolder(ViewHolder holder, final int position, Account model) {
+                holder.setTxtTitle(model.getName());
+                holder.setTxtDesc(model.getIdade());
+
+                holder.root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+        };
+        recyclerView.setAdapter(adapter);
+        adapter.stopListening();
     }
 };

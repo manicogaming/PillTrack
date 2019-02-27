@@ -358,85 +358,13 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/account">
+        android:id="@+id/accountlist">
 
-        <RelativeLayout
-            android:id="@+id/AccountUser"
-            android:layout_width="match_parent"
-            android:layout_height="163dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/edit_bg"
-            android:padding="15dp">
-
-            <RelativeLayout
-                android:id="@+id/AccountImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_user"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/AccountInfos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/AccountImage"
-                android:layout_toEndOf="@id/AccountImage"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp">
-
-                <TextView
-                    android:id="@+id/AccountName0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="Nome1"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/AccountAge0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/AccountName0"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="Idade1"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/AccountChangePass"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/AccountAge0"
-                    android:text="Mudar Palavra-Passe"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textAllCaps="false"
-                    android:padding="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/custom_button"/>
-            </RelativeLayout>
-
-        </RelativeLayout>
-    </RelativeLayout>
+    </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
         android:id="@+id/add"

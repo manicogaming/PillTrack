@@ -1,13 +1,13 @@
 package com.pap.diogo.pilltrack;
 
-public class AccountLayout {
+public class Account {
     private String name, idade;
 
-    public AccountLayout() {
+    public Account() {
 
     }
 
-    public AccountLayout(String name, String idade) {
+    public Account(String name, String idade) {
         this.name = name;
         this.idade = idade;
     }
