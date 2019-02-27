@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Launcher">
+    tools:context=".Launcher"
+    android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:id="@+id/linear1"
@@ -20,7 +21,10 @@
             android:layout_height="75dp"
             android:text="Utente Novo"
             android:textAllCaps="false"
-            android:textSize="26sp" />
+            android:textSize="26sp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/custom_button"/>
 
         <Button
             android:id="@+id/btnExistente"
@@ -29,7 +33,9 @@
             android:text="Utente Existente"
             android:textSize="26sp"
             android:textAllCaps="false"
-            android:layout_below="@+id/btnNovo"/>
+            android:layout_below="@+id/btnNovo"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/custom_button"/>
 
     </RelativeLayout>
 

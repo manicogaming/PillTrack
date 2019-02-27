@@ -39,12 +39,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = Register.getCurrentUser();
-    }
-
-    @Override
     public void onClick(View v) {
         userRegister();
     }
@@ -68,7 +62,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                     if (task.isSuccessful()) {
                                         Toast.makeText(Register.this, "Registo com sucesso!", Toast.LENGTH_SHORT).show();
                                         Intent home = new Intent(Register.this,MainActivity.class);
+                                        home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(home);
+                                        finish(); // call this to finish the current activity
                                     }
                                 }
                             });

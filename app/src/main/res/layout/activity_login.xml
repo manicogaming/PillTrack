@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Register">
+    tools:context=".Register"
+    android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:id="@+id/linear3"
@@ -56,9 +57,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout2"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
             android:text="Login"
             android:textSize="22sp"
-            android:padding="15dp"/>
+            android:padding="15dp"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/colorWhite"/>
 
     </RelativeLayout>
 

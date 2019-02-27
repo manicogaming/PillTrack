@@ -34,15 +34,11 @@ public class Launcher extends AppCompatActivity implements View.OnClickListener{
         if (v == btnNovo)
         {
             Intent register = new Intent(this,Register.class);
-            register.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(register);
-            finish(); // call this to finish the current activity
         }
         if (v == btnExistente) {
             Intent login = new Intent(Launcher.this,Login.class);
-            login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(login);
-            finish(); // call this to finish the current activity
         }
     }
 }

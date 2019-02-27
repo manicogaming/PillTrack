@@ -13,15 +13,32 @@
         android:layout_centerVertical="true"
         android:layout_centerInParent="true">
 
+        <EditText
+            android:id="@+id/txtEmailCHPW"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/colorDarkRed"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="22sp" />
+
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/layout2"
+            android:id="@+id/oldpw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:passwordToggleEnabled="true"
-            app:hintTextAppearance="@style/TextLabel">
+            app:hintTextAppearance="@style/TextLabel"
+            android:layout_below="@+id/txtEmailCHPW">
 
             <EditText
-                android:id="@+id/txtPassword"
+                android:id="@+id/txtOldPassword"
                 android:layout_width="275dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -30,7 +47,33 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@color/colorDarkRed"
-                android:hint="Nova Password"
+                android:hint="Palavra-Passe Antiga"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/newpw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            app:hintTextAppearance="@style/TextLabel"
+            android:layout_below="@id/oldpw">
+
+            <EditText
+                android:id="@+id/txtNewPassword"
+                android:layout_width="275dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/colorDarkRed"
+                android:hint="Nova Palavra-Passe"
                 android:inputType="textPassword"
                 android:padding="10dp"
                 android:textColor="@color/colorWhite"
@@ -42,11 +85,11 @@
             android:id="@+id/btnChangePassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layout2"
+            android:layout_below="@+id/newpw"
             android:layout_centerInParent="true"
             android:layout_marginTop="18dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/change_password"
+            android:background="@drawable/custom_button"
             android:padding="15dp"
             android:text="Confirmar"
             android:textColor="@color/colorWhite"

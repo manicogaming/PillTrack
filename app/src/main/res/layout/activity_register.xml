@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Register">
+    tools:context=".Register"
+    android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:id="@+id/linear3"
@@ -92,7 +93,10 @@
             android:layout_centerHorizontal="true"
             android:text="Registar"
             android:textSize="22sp"
-            android:padding="15dp"/>
+            android:layout_marginTop="15dp"
+            android:padding="15dp"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/colorWhite"/>
 
     </RelativeLayout>
 
