@@ -88,22 +88,22 @@ public class AccountFragment extends Fragment {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtTitle;
-        public TextView txtDesc;
+        public TextView txtName;
+        public TextView txtAge;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            txtTitle = itemView.findViewById(R.id.AccountName0);
-            txtDesc = itemView.findViewById(R.id.AccountAge0);
+            txtName = itemView.findViewById(R.id.AccountName0);
+            txtAge = itemView.findViewById(R.id.AccountAge0);
         }
 
         public void setTxtTitle(String string) {
-            txtTitle.setText(string);
+            txtName.setText(string);
         }
 
 
         public void setTxtDesc(String string) {
-            txtDesc.setText(string);
+            txtName.setText(string);
         }
     }
 }
