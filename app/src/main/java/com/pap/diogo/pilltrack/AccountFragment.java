@@ -28,19 +28,17 @@ import com.google.firebase.database.ValueEventListener;
 
 public class AccountFragment extends Fragment {
     private RecyclerView AccountUsers;
-    private View mMainView;
-    private FirebaseRecyclerAdapter adapter;
+    private FirebaseRecyclerAdapter<Account, AccountInfo> AccountAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_account, container, false);
+        View mMainView = inflater.inflate(R.layout.fragment_account, container, false);
 
         AccountUsers = mMainView.findViewById(R.id.accountlist);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         AccountUsers.setLayoutManager(linearLayoutManager);
-        AccountUsers.setHasFixedSize(true);
 
         return mMainView;
     }
@@ -56,7 +54,7 @@ public class AccountFragment extends Fragment {
 
         FirebaseRecyclerOptions<Account> AccountQ = new FirebaseRecyclerOptions.Builder<Account>().setQuery(ref, Account.class).setLifecycleOwner(this).build();
 
-        FirebaseRecyclerAdapter<Account, AccountInfo> AccountAdapter = new FirebaseRecyclerAdapter<Account, AccountInfo>(AccountQ){
+        AccountAdapter = new FirebaseRecyclerAdapter<Account, AccountInfo>(AccountQ){
 
             @NonNull
             @Override
@@ -86,6 +84,12 @@ public class AccountFragment extends Fragment {
         };
         AccountUsers.setAdapter(AccountAdapter);
         AccountAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        AccountAdapter.stopListening();
     }
 
     public static class AccountInfo extends RecyclerView.ViewHolder{

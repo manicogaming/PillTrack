@@ -73,18 +73,4 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
     }
-
-    /**/
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        /**/
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        /*adapter.stopListening();*/
-    }
 };
