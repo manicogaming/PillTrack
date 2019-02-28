@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,17 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class AccountFragment extends Fragment {
-    private RecyclerView recyclerView;
-    private Query query;
+    private RecyclerView AccountUsers;
     private View mMainView;
     private FirebaseRecyclerAdapter adapter;
 
@@ -31,15 +36,11 @@ public class AccountFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mMainView = inflater.inflate(R.layout.fragment_account, container, false);
 
-        recyclerView = mMainView.findViewById(R.id.accountlist);
+        AccountUsers = mMainView.findViewById(R.id.accountlist);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setHasFixedSize(true);
-
-        query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users");
+        AccountUsers.setLayoutManager(linearLayoutManager);
+        AccountUsers.setHasFixedSize(true);
 
         return mMainView;
     }
@@ -48,62 +49,62 @@ public class AccountFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        FirebaseRecyclerOptions<Account> options =
-                new FirebaseRecyclerOptions.Builder<Account>()
-                        .setQuery(query, new SnapshotParser<Account>() {
-                            @NonNull
-                            @Override
-                            public Account parseSnapshot(@NonNull DataSnapshot snapshot) {
-                                return new Account(snapshot.child("name").getValue().toString(),
-                                        snapshot.child("idade").getValue().toString());
-                            }
-                        })
-                        .build();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final String userid = user.getUid();
 
-        adapter = new FirebaseRecyclerAdapter<Account, ViewHolder>(options) {
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+
+        FirebaseRecyclerOptions<Account> AccountQ = new FirebaseRecyclerOptions.Builder<Account>().setQuery(ref, Account.class).setLifecycleOwner(this).build();
+
+        FirebaseRecyclerAdapter<Account, AccountInfo> AccountAdapter = new FirebaseRecyclerAdapter<Account, AccountInfo>(AccountQ){
+
             @NonNull
             @Override
-            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                return new ViewHolder(LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.account, parent, false));
+            public AccountInfo onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                return new AccountInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.account, viewGroup, false));
             }
-
 
             @Override
-            protected void onBindViewHolder(@NonNull ViewHolder holder, final int position, @NonNull Account model) {
-                holder.setTxtTitle(model.getName());
-                holder.setTxtDesc(model.getIdade());
+            protected void onBindViewHolder(@NonNull final AccountInfo holder, int position, @NonNull final Account model) {
+                ref.child(userid).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        final String name = dataSnapshot.child("name").getValue().toString();
+                        final String age = dataSnapshot.child("idade").getValue().toString();
+                        holder.setName(name);
+                        holder.setAge(age);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
+
         };
-        recyclerView.setAdapter(adapter);
-
-        adapter.startListening();
+        AccountUsers.setAdapter(AccountAdapter);
+        AccountAdapter.startListening();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
+    public static class AccountInfo extends RecyclerView.ViewHolder{
+        View AccountL;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtName;
-        public TextView txtAge;
-
-        public ViewHolder(View itemView) {
+        public AccountInfo(@NonNull View itemView) {
             super(itemView);
-            txtName = itemView.findViewById(R.id.AccountName0);
-            txtAge = itemView.findViewById(R.id.AccountAge0);
+
+            AccountL = itemView;
         }
 
-        public void setTxtTitle(String string) {
-            txtName.setText(string);
+        public void setName(String name){
+            TextView AccountName = AccountL.findViewById(R.id.AccountName0);
+            AccountName.setText(name);
         }
 
-
-        public void setTxtDesc(String string) {
-            txtName.setText(string);
+        public void setAge(String age){
+            TextView AccountAge = AccountL.findViewById(R.id.AccountAge0);
+            AccountAge.setText(age);
         }
     }
 }
