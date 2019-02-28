@@ -41,6 +41,13 @@ public class AccountFragment extends Fragment {
                 .getReference()
                 .child("Users");
 
+        return mMainView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
         FirebaseRecyclerOptions<Account> options =
                 new FirebaseRecyclerOptions.Builder<Account>()
                         .setQuery(query, new SnapshotParser<Account>() {
@@ -70,14 +77,6 @@ public class AccountFragment extends Fragment {
         };
         recyclerView.setAdapter(adapter);
 
-        return mMainView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
         adapter.startListening();
     }
 
@@ -87,7 +86,7 @@ public class AccountFragment extends Fragment {
         adapter.stopListening();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txtTitle;
         public TextView txtDesc;
 
