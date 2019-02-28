@@ -21,25 +21,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 public class AccountFragment extends Fragment {
-    private View view;
+    private RecyclerView recyclerView;
+    private Query query;
+    private View mMainView;
+    private FirebaseRecyclerAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_account, container, false);
-    }
+        mMainView = inflater.inflate(R.layout.fragment_account, container, false);
 
-    @Override
-    public void onStart() {
-        super.onStart();
+        recyclerView = mMainView.findViewById(R.id.accountlist);
 
-        /*RecyclerView recyclerView = findViewById(R.id.accountlist);*/
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
 
-        /*LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);*/
-        /*recyclerView.setLayoutManager(linearLayoutManager);*/
-        /*recyclerView.setHasFixedSize(true);*/
-
-        Query query = FirebaseDatabase.getInstance()
+        query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("Users");
 
@@ -55,13 +53,11 @@ public class AccountFragment extends Fragment {
                         })
                         .build();
 
-        FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<Account, ViewHolder>(options) {
+        adapter = new FirebaseRecyclerAdapter<Account, ViewHolder>(options) {
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.account, parent, false);
-
-                return new ViewHolder(view);
+                return new ViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.account, parent, false));
             }
 
 
@@ -69,28 +65,34 @@ public class AccountFragment extends Fragment {
             protected void onBindViewHolder(ViewHolder holder, final int position, Account model) {
                 holder.setTxtTitle(model.getName());
                 holder.setTxtDesc(model.getIdade());
-
-                holder.root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
             }
 
         };
-        /*recyclerView.setAdapter(adapter);*/
+        recyclerView.setAdapter(adapter);
+
+        return mMainView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
         adapter.startListening();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public RelativeLayout root;
         public TextView txtTitle;
         public TextView txtDesc;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            root = itemView.findViewById(R.id.account);
             txtTitle = itemView.findViewById(R.id.AccountName0);
             txtDesc = itemView.findViewById(R.id.AccountAge0);
         }
