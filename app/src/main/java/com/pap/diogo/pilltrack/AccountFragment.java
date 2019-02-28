@@ -61,15 +61,16 @@ public class AccountFragment extends Fragment {
                         .build();
 
         adapter = new FirebaseRecyclerAdapter<Account, ViewHolder>(options) {
+            @NonNull
             @Override
-            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 return new ViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.account, parent, false));
             }
 
 
             @Override
-            protected void onBindViewHolder(ViewHolder holder, final int position, Account model) {
+            protected void onBindViewHolder(@NonNull ViewHolder holder, final int position, @NonNull Account model) {
                 holder.setTxtTitle(model.getName());
                 holder.setTxtDesc(model.getIdade());
             }
