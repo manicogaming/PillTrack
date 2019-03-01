@@ -38,7 +38,7 @@
             android:layout_marginLeft="15dp">
 
             <TextView
-                android:id="@+id/AccountName0"
+                android:id="@+id/AccountName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
@@ -49,10 +49,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/AccountAge0"
+                android:id="@+id/AccountAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/AccountName0"
+                android:layout_below="@+id/AccountName"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:text="Idade1"
@@ -64,7 +64,7 @@
                 android:id="@+id/AccountChangePass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/AccountAge0"
+                android:layout_below="@+id/AccountAge"
                 android:text="Mudar Palavra-Passe"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp"

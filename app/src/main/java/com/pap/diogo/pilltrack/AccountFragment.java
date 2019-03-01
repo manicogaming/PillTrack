@@ -113,12 +113,12 @@ public class AccountFragment extends Fragment {
         }
 
         public void setName(String name){
-            TextView AccountName = AccountL.findViewById(R.id.AccountName0);
+            TextView AccountName = AccountL.findViewById(R.id.AccountName);
             AccountName.setText(name);
         }
 
         public void setAge(String age){
-            TextView AccountAge = AccountL.findViewById(R.id.AccountAge0);
+            TextView AccountAge = AccountL.findViewById(R.id.AccountAge);
             AccountAge.setText(age + " anos");
         }
     }

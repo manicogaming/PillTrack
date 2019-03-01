@@ -21,7 +21,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/EPillName0"
+                android:id="@+id/EPillName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
@@ -32,10 +32,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/EPillFunc0"
+                android:id="@+id/EPillFunc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/EPillName0"
+                android:layout_below="@+id/EPillName"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:text="Função1"
@@ -47,7 +47,7 @@
                 android:id="@+id/EPillInterval"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/EPillFunc0"
+                android:layout_below="@+id/EPillFunc"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:text="Intervalo"
