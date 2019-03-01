@@ -49,15 +49,6 @@
                 android:layout_below="@+id/EAppointDate"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"/>
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/EAppointHospital"
-                android:layout_toEndOf="@id/EAppointHospital"
-                android:layout_toRightOf="@id/EAppointHospital"
-                android:layout_marginLeft="75dp"
-                android:layout_marginStart="75dp"/>
         </RelativeLayout>
 
         <RelativeLayout

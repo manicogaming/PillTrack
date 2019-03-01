@@ -39,30 +39,38 @@ public class ChangePW extends AppCompatActivity implements View.OnClickListener{
         final String newPassword = txtNewPassword.getText().toString().trim();
         final String oldPassword = txtOldPassword.getText().toString().trim();
         final String email = txtEmailCHPW.getText().toString().trim();
+        String userEmail = user.getEmail();
 
-        AuthCredential credential = EmailAuthProvider
-                .getCredential(email, oldPassword);
+        if (email.equals(userEmail))
+        {
+            AuthCredential credential = EmailAuthProvider
+                    .getCredential(email, oldPassword);
 
-        // Prompt the user to re-provide their sign-in credentials
-        user.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(ChangePW.this, "Palavra-Passe mudada com sucesso!", Toast.LENGTH_SHORT).show();
-                                        Intent Home = new Intent(ChangePW.this, MainActivity.class);
-                                        Home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(Home);
-                                        finish(); // call this to finish the current activity
+            // Prompt the user to re-provide their sign-in credentials
+            user.reauthenticate(credential)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(ChangePW.this, "Palavra-Passe mudada com sucesso!", Toast.LENGTH_SHORT).show();
+                                            Intent Home = new Intent(ChangePW.this, MainActivity.class);
+                                            Home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(Home);
+                                            finish(); // call this to finish the current activity
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+        }
+        else
+        {
+            Toast.makeText(ChangePW.this, "Este Email não pertence à conta!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
