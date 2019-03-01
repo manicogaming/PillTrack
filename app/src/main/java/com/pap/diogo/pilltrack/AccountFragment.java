@@ -1,5 +1,6 @@
 package com.pap.diogo.pilltrack;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,11 +96,20 @@ public class AccountFragment extends Fragment {
 
     public static class AccountInfo extends RecyclerView.ViewHolder{
         View AccountL;
+        Button btnChangePass;
 
         public AccountInfo(@NonNull View itemView) {
             super(itemView);
 
             AccountL = itemView;
+            btnChangePass = AccountL.findViewById(R.id.AccountChangePass);
+
+            btnChangePass.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AccountL.getContext().startActivity(new Intent(AccountL.getContext(), ChangePW.class));
+                }
+            });
         }
 
         public void setName(String name){
@@ -108,7 +119,7 @@ public class AccountFragment extends Fragment {
 
         public void setAge(String age){
             TextView AccountAge = AccountL.findViewById(R.id.AccountAge0);
-            AccountAge.setText(age);
+            AccountAge.setText(age + " anos");
         }
     }
 }
