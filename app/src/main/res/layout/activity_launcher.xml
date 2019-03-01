@@ -18,7 +18,7 @@
         <Button
             android:id="@+id/btnNovo"
             android:layout_width="250dp"
-            android:layout_height="75dp"
+            android:layout_height="65dp"
             android:text="Utente Novo"
             android:textAllCaps="false"
             android:textSize="26sp"
@@ -29,7 +29,7 @@
         <Button
             android:id="@+id/btnExistente"
             android:layout_width="250dp"
-            android:layout_height="75dp"
+            android:layout_height="65dp"
             android:text="Utente Existente"
             android:textSize="26sp"
             android:textAllCaps="false"

@@ -28,7 +28,8 @@
                 android:ems="10"
                 android:hint="Nome"
                 android:inputType="textPersonName"
-                android:textSize="22sp"/>
+                android:textSize="22sp"
+                android:textColor="@color/colorWhite"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -45,7 +46,8 @@
                 android:ems="10"
                 android:hint="E-mail"
                 android:inputType="textEmailAddress"
-                android:textSize="22sp"/>
+                android:textSize="22sp"
+                android:textColor="@color/colorWhite"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -64,7 +66,8 @@
                 android:ems="10"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                android:textColor="@color/colorWhite"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -82,7 +85,8 @@
                 android:ems="10"
                 android:hint="Idade"
                 android:inputType="number"
-                android:textSize="22sp"/>
+                android:textSize="22sp"
+                android:textColor="@color/colorWhite"/>
         </android.support.design.widget.TextInputLayout>
 
         <Button
