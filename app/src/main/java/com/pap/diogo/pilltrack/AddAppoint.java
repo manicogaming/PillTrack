@@ -48,8 +48,8 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         String hostpial = txtHospital.getText().toString().trim();
         String date = txtDate.getText().toString().trim();
 
-        mUsers.child("Appoints").push().child("name").setValue(name);
-        mUsers.child("Appoints").push().child("hospital").setValue(hostpial);
-        mUsers.child("Appoints").push().child("date").setValue(date);
+        AppointInfo AppointInfo = new AppointInfo(name, hostpial, date);
+
+        mUsers.child("Appoints").push().setValue(AppointInfo);
     }
 }
