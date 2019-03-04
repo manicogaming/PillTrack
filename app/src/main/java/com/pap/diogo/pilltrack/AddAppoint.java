@@ -22,7 +22,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
     private EditText txtNameAppoint, txtHospital, txtDate;
     private Button btnAddAppoint;
     private FirebaseUser user;
-    private DatabaseReference mDatabase, mUsers;
+    private DatabaseReference mDatabase, mUsers, pRef;
     private String userid;
 
     @Override
@@ -40,6 +40,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         userid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mUsers = mDatabase.child("Users").child(userid);
+        pRef = mUsers.child("Appoints").push();
     }
 
     @Override
@@ -50,6 +51,9 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
 
         AppointInfo AppointInfo = new AppointInfo(name, hostpial, date);
 
-        mUsers.child("Appoints").push().setValue(AppointInfo);
+        pRef.setValue(AppointInfo);
+        Toast.makeText(AddAppoint.this, "Consulta adicionada com sucesso!", Toast.LENGTH_SHORT).show();
+        Intent Home = new Intent(AddAppoint.this, MainActivity.class);
+        startActivity(Home);
     }
 }

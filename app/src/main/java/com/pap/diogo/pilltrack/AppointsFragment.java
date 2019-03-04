@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 public class AppointsFragment extends Fragment {
     private ImageButton add_appoint;
     private RecyclerView EAppoints;
-    private FirebaseRecyclerAdapter<Account, EAppointsInfo> EAppointsAdapter;
+    private FirebaseRecyclerAdapter<Appoint, EAppointsInfo> EAppointsAdapter;
 
     @Nullable
     @Override
@@ -61,9 +62,9 @@ public class AppointsFragment extends Fragment {
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
 
-        FirebaseRecyclerOptions<Account> AccountQ = new FirebaseRecyclerOptions.Builder<Account>().setQuery(ref, Account.class).setLifecycleOwner(this).build();
+        FirebaseRecyclerOptions<Appoint> AccountQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(ref, Appoint.class).setLifecycleOwner(this).build();
 
-        EAppointsAdapter = new FirebaseRecyclerAdapter<Account, EAppointsInfo>(AccountQ){
+        EAppointsAdapter = new FirebaseRecyclerAdapter<Appoint, EAppointsInfo>(AccountQ){
 
             @NonNull
             @Override
@@ -72,14 +73,19 @@ public class AppointsFragment extends Fragment {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull final EAppointsInfo holder, int position, @NonNull final Account model) {
-                ref.child(userid).addValueEventListener(new ValueEventListener() {
+            protected void onBindViewHolder(@NonNull final EAppointsInfo holder, int position, @NonNull final Appoint model) {
+                ref.child(userid).child("Appoints").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        final String name = dataSnapshot.child("name").getValue().toString();
-                        final String age = dataSnapshot.child("idade").getValue().toString();
-                        holder.setName(name);
-                        holder.setAge(age);
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Appoint Appoint = snapshot.getValue(Appoint.class);
+                            final String name = Appoint.getName();
+                            final String date = Appoint.getDate();
+                            final String hospital = Appoint.getHospital();
+                            holder.setName(name);
+                            holder.setDate(date);
+                            holder.setHospital(hospital);
+                        }
                     }
 
                     @Override
@@ -111,13 +117,18 @@ public class AppointsFragment extends Fragment {
         }
 
         public void setName(String name){
-            TextView AccountName = EAppointsL.findViewById(R.id.EAppointName);
-            AccountName.setText(name);
+            TextView AppointName = EAppointsL.findViewById(R.id.EAppointName);
+            AppointName.setText(name);
         }
 
-        public void setAge(String age){
-            TextView AccountAge = EAppointsL.findViewById(R.id.EAppointDate);
-            AccountAge.setText(age + " anos");
+        public void setDate(String date){
+            TextView AppointDate = EAppointsL.findViewById(R.id.EAppointDate);
+            AppointDate.setText(date);
+        }
+
+        public void setHospital(String hospital){
+            TextView AppointHospital = EAppointsL.findViewById(R.id.EAppointHospital);
+            AppointHospital.setText(hospital);
         }
     }
 }
