@@ -30,6 +30,7 @@
         <activity android:name=".Register" />
         <activity android:name=".Login"/>
         <activity android:name=".ChangePW"/>
+        <activity android:name=".AddAppoint" />
     </application>
 
 </manifest>
