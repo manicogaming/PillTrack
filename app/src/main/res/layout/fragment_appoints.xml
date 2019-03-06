@@ -14,7 +14,7 @@
         android:layout_below="@+id/eappointslist">
 
         <ImageButton
-            android:id="@+id/add"
+            android:id="@+id/add_appoint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"

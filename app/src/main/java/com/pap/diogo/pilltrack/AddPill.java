@@ -18,9 +18,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class AddAppoint extends AppCompatActivity implements View.OnClickListener{
-    private EditText txtNameAppoint, txtHospital, txtDate;
-    private Button btnAddAppoint;
+public class AddPill extends AppCompatActivity implements View.OnClickListener{
+    private EditText txtNamePill, txtPillFunc, txtInterval;
+    private Button btnAddPill;
     private FirebaseUser user;
     private DatabaseReference mDatabase, pRef;
     private String userid;
@@ -28,30 +28,30 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.addappoint);
+        setContentView(R.layout.addpill);
 
-        txtNameAppoint = findViewById(R.id.txtNameAppoint);
-        txtHospital = findViewById(R.id.txtHospital);
-        txtDate = findViewById(R.id.txtDate);
-        btnAddAppoint = findViewById(R.id.btnAddAppoint);
-        btnAddAppoint.setOnClickListener(this);
+        txtNamePill = findViewById(R.id.txtNamePill);
+        txtPillFunc = findViewById(R.id.txtPillFunc);
+        txtInterval = findViewById(R.id.txtInterval);
+        btnAddPill = findViewById(R.id.btnAddPill);
+        btnAddPill.setOnClickListener(this);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
+        pRef = FirebaseDatabase.getInstance().getReference().child("Pills").child(userid);
     }
 
     @Override
     public void onClick(View v) {
-        String name = txtNameAppoint.getText().toString().trim();
-        String hostpial = txtHospital.getText().toString().trim();
-        String date = txtDate.getText().toString().trim();
+        String name = txtNamePill.getText().toString().trim();
+        String pillfunc = txtPillFunc.getText().toString().trim();
+        String interval = txtInterval.getText().toString().trim();
 
-        AppointInfo AppointInfo = new AppointInfo(name, hostpial, date);
-        pRef.child(name).setValue(AppointInfo);
-        Toast.makeText(AddAppoint.this, "Consulta adicionada com sucesso!", Toast.LENGTH_SHORT).show();
-        Intent Home = new Intent(AddAppoint.this, MainActivity.class);
+        PillInfo PillInfo = new PillInfo(name, pillfunc, interval);
+        pRef.child(name).setValue(PillInfo);
+        Toast.makeText(AddPill.this, "Medicamento adicionado com sucesso!", Toast.LENGTH_SHORT).show();
+        Intent Home = new Intent(AddPill.this, MainActivity.class);
         startActivity(Home);
     }
 }

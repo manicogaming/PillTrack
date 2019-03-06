@@ -50,7 +50,7 @@ public class AppointsFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         EAppoints.setLayoutManager(linearLayoutManager);
 
-        add_appoint = mMainView.findViewById(R.id.add);
+        add_appoint = mMainView.findViewById(R.id.add_appoint);
 
 
         add_appoint.setOnClickListener(new View.OnClickListener() {
@@ -69,9 +69,9 @@ public class AppointsFragment extends Fragment {
         super.onStart();
 
 
-        FirebaseRecyclerOptions<Appoint> AccountQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(pRef, Appoint.class).setLifecycleOwner(this).build();
+        FirebaseRecyclerOptions<Appoint> AppointQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(pRef, Appoint.class).setLifecycleOwner(this).build();
 
-        EAppointsAdapter = new FirebaseRecyclerAdapter<Appoint, EAppointsInfo>(AccountQ){
+        EAppointsAdapter = new FirebaseRecyclerAdapter<Appoint, EAppointsInfo>(AppointQ){
 
             @NonNull
             @Override
