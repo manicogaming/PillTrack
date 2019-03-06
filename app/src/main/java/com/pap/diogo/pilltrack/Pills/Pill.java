@@ -1,11 +1,13 @@
-package com.pap.diogo.pilltrack;
+package com.pap.diogo.pilltrack.Pills;
 
-public class PillInfo {
-    public String name;
-    public String pillfunc;
-    public String interval;
+public class Pill {
+    private String name, pillfunc, interval;
 
-    public PillInfo(String name, String pillfunc, String interval) {
+    public Pill(){
+
+    }
+
+    public Pill(String name, String pillfunc, String interval) {
         this.name = name;
         this.pillfunc = pillfunc;
         this.interval = interval;

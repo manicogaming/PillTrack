@@ -1,4 +1,4 @@
-package com.pap.diogo.pilltrack;
+package com.pap.diogo.pilltrack.Appoints;
 
 public class AppointInfo {
     public String name;

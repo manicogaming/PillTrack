@@ -1,4 +1,4 @@
-package com.pap.diogo.pilltrack;
+package com.pap.diogo.pilltrack.Pills;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pap.diogo.pilltrack.R;
 
 public class PillsFragment extends Fragment {
     private ImageButton add_pill;

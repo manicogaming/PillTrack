@@ -1,13 +1,10 @@
-package com.pap.diogo.pilltrack;
+package com.pap.diogo.pilltrack.Accounts;
 
-public class Account {
-    private String name, idade;
+public class RegisterInfo {
+    public String name;
+    public String idade;
 
-    public Account() {
-
-    }
-
-    public Account(String name, String idade) {
+    public RegisterInfo(String name, String idade) {
         this.name = name;
         this.idade = idade;
     }

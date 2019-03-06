@@ -8,6 +8,8 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.pap.diogo.pilltrack.Accounts.Login;
+import com.pap.diogo.pilltrack.Accounts.Register;
 
 public class Launcher extends AppCompatActivity implements View.OnClickListener{
     private Button btnNovo;

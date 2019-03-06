@@ -27,11 +27,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Register" />
-        <activity android:name=".Login"/>
-        <activity android:name=".ChangePW"/>
-        <activity android:name=".AddAppoint" />
-        <activity android:name=".AddPill" />
+        <activity android:name=".Accounts.Register" />
+        <activity android:name=".Accounts.Login"/>
+        <activity android:name=".Accounts.ChangePW"/>
+        <activity android:name=".Appoints.AddAppoint" />
+        <activity android:name=".Pills.AddPill" />
     </application>
 
 </manifest>
