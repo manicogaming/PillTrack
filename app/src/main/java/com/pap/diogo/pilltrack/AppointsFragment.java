@@ -30,10 +30,18 @@ public class AppointsFragment extends Fragment {
     private RecyclerView EAppoints;
     private FirebaseRecyclerAdapter<Appoint, EAppointsInfo> EAppointsAdapter;
 
+    private FirebaseAuth mAuth;
+    DatabaseReference  pRef;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mMainView = inflater.inflate(R.layout.fragment_appoints, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        String userid = mAuth.getCurrentUser().getUid();
+
+        pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
 
         EAppoints = mMainView.findViewById(R.id.eappointslist);
 
@@ -57,12 +65,8 @@ public class AppointsFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final String userid = user.getUid();
 
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
-
-        FirebaseRecyclerOptions<Appoint> AccountQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(ref, Appoint.class).setLifecycleOwner(this).build();
+        FirebaseRecyclerOptions<Appoint> AccountQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(pRef/*ref*/, Appoint.class).setLifecycleOwner(this).build();
 
         EAppointsAdapter = new FirebaseRecyclerAdapter<Appoint, EAppointsInfo>(AccountQ){
 
@@ -74,18 +78,12 @@ public class AppointsFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull final EAppointsInfo holder, int position, @NonNull final Appoint model) {
-                ref.child(userid).child("Appoints").addValueEventListener(new ValueEventListener() {
+                pRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Appoint Appoint = snapshot.getValue(Appoint.class);
-                            final String name = Appoint.getName();
-                            final String date = Appoint.getDate();
-                            final String hospital = Appoint.getHospital();
-                            holder.setName(name);
-                            holder.setDate(date);
-                            holder.setHospital(hospital);
-                        }
+                            holder.setName(model.getName());
+                            holder.setDate(model.getDate());
+                            holder.setHospital(model.getHospital());
                     }
 
                     @Override
@@ -98,13 +96,6 @@ public class AppointsFragment extends Fragment {
 
         };
         EAppoints.setAdapter(EAppointsAdapter);
-        EAppointsAdapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EAppointsAdapter.stopListening();
     }
 
     public static class EAppointsInfo extends RecyclerView.ViewHolder{

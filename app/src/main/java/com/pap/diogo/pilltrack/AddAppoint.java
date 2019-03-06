@@ -40,7 +40,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         userid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mUsers = mDatabase.child("Users").child(userid);
-        pRef = mUsers.child("Appoints").push();
+        pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
     }
 
     @Override
@@ -50,8 +50,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         String date = txtDate.getText().toString().trim();
 
         AppointInfo AppointInfo = new AppointInfo(name, hostpial, date);
-
-        pRef.setValue(AppointInfo);
+        pRef.child(name).setValue(AppointInfo);
         Toast.makeText(AddAppoint.this, "Consulta adicionada com sucesso!", Toast.LENGTH_SHORT).show();
         Intent Home = new Intent(AddAppoint.this, MainActivity.class);
         startActivity(Home);

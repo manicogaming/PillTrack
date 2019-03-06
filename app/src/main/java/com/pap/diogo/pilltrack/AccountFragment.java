@@ -80,13 +80,6 @@ public class AccountFragment extends Fragment {
 
         };
         AccountUsers.setAdapter(AccountAdapter);
-        AccountAdapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        AccountAdapter.stopListening();
     }
 
     public static class AccountInfo extends RecyclerView.ViewHolder{
