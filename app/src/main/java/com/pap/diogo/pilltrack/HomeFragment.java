@@ -23,11 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class HomeFragment extends Fragment {
-    private RecyclerView Pills;
+    private RecyclerView Pills, Appoints;
     private FirebaseRecyclerAdapter<Pill, PillsInfo> PillsAdapter;
+    private FirebaseRecyclerAdapter<Appoint, AppointsInfo> AppointsAdapter;
 
     private FirebaseAuth mAuth;
-    DatabaseReference pRef;
+    DatabaseReference pRef, aRef;
 
     @Nullable
     @Override
@@ -39,11 +40,15 @@ public class HomeFragment extends Fragment {
         String userid = mAuth.getCurrentUser().getUid();
 
         pRef = FirebaseDatabase.getInstance().getReference().child("Pills").child(userid);
+        aRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
 
+        Appoints = mMainView.findViewById(R.id.appointslist);
         Pills = mMainView.findViewById(R.id.pillslist);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        Pills.setLayoutManager(linearLayoutManager);
+        LinearLayoutManager lAppoints = new LinearLayoutManager(getContext());
+        LinearLayoutManager lPills = new LinearLayoutManager(getContext());
+        Appoints.setLayoutManager(lAppoints);
+        Pills.setLayoutManager(lPills);
 
         return mMainView;
     }
@@ -53,7 +58,40 @@ public class HomeFragment extends Fragment {
         super.onStart();
 
         ShowPills();
+        ShowAppoints();
 
+    }
+
+    private void ShowAppoints() {
+        FirebaseRecyclerOptions<Appoint> AppointQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(aRef, Appoint.class).setLifecycleOwner(this).build();
+
+        AppointsAdapter = new FirebaseRecyclerAdapter<Appoint, AppointsInfo>(AppointQ){
+
+            @NonNull
+            @Override
+            public AppointsInfo onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                return new AppointsInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.appoints, viewGroup, false));
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull final AppointsInfo holder, int position, @NonNull final Appoint model) {
+                aRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        holder.setName(model.getName());
+                        holder.setDate(model.getDate());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+
+        };
+        Appoints.setAdapter(AppointsAdapter);
     }
 
     private void ShowPills() {
@@ -112,6 +150,26 @@ public class HomeFragment extends Fragment {
         public void setInterval(String interval){
             TextView PillInterval = PillsL.findViewById(R.id.NextPill);
             PillInterval.setText(interval);
+        }
+    }
+
+    public static class AppointsInfo extends RecyclerView.ViewHolder{
+        View AppointsL;
+
+        public AppointsInfo(@NonNull View itemView) {
+            super(itemView);
+
+            AppointsL = itemView;
+        }
+
+        public void setName(String name){
+            TextView AppointName = AppointsL.findViewById(R.id.AppointName);
+            AppointName.setText(name);
+        }
+
+        public void setDate(String date){
+            TextView AppointDate = AppointsL.findViewById(R.id.AppointDate);
+            AppointDate.setText(date);
         }
     }
 }
