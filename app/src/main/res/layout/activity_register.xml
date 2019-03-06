@@ -99,7 +99,7 @@
             android:textSize="22sp"
             android:layout_marginTop="15dp"
             android:padding="15dp"
-            android:background="@drawable/custom_button"
+            android:background="@drawable/dark_button"
             android:textColor="@color/colorWhite"/>
 
     </RelativeLayout>

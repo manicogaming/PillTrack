@@ -89,7 +89,7 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="18dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/custom_button"
+            android:background="@drawable/dark_button"
             android:padding="15dp"
             android:text="Confirmar"
             android:textColor="@color/colorWhite"

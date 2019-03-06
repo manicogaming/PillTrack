@@ -63,7 +63,7 @@
             android:text="Login"
             android:textSize="22sp"
             android:padding="15dp"
-            android:background="@drawable/custom_button"
+            android:background="@drawable/dark_button"
             android:textColor="@color/colorWhite"/>
 
     </RelativeLayout>
