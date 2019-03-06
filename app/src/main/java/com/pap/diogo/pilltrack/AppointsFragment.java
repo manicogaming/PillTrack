@@ -1,6 +1,7 @@
 package com.pap.diogo.pilltrack;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,6 +33,7 @@ public class AppointsFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     DatabaseReference  pRef;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class AppointsFragment extends Fragment {
 
         add_appoint = mMainView.findViewById(R.id.add);
 
+
         add_appoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +69,7 @@ public class AppointsFragment extends Fragment {
         super.onStart();
 
 
-        FirebaseRecyclerOptions<Appoint> AccountQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(pRef/*ref*/, Appoint.class).setLifecycleOwner(this).build();
+        FirebaseRecyclerOptions<Appoint> AccountQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(pRef, Appoint.class).setLifecycleOwner(this).build();
 
         EAppointsAdapter = new FirebaseRecyclerAdapter<Appoint, EAppointsInfo>(AccountQ){
 
@@ -84,6 +87,13 @@ public class AppointsFragment extends Fragment {
                             holder.setName(model.getName());
                             holder.setDate(model.getDate());
                             holder.setHospital(model.getHospital());
+
+                            holder.EAppointDelete.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    pRef.child(model.getName()).removeValue();
+                                }
+                            });
                     }
 
                     @Override
@@ -100,11 +110,13 @@ public class AppointsFragment extends Fragment {
 
     public static class EAppointsInfo extends RecyclerView.ViewHolder{
         View EAppointsL;
+        ImageButton EAppointDelete;
 
         public EAppointsInfo(@NonNull View itemView) {
             super(itemView);
 
             EAppointsL = itemView;
+            EAppointDelete = EAppointsL.findViewById(R.id.EAppointDelete);
         }
 
         public void setName(String name){
