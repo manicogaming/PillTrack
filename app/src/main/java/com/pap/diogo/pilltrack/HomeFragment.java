@@ -1,10 +1,8 @@
 package com.pap.diogo.pilltrack;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -158,17 +156,17 @@ public class HomeFragment extends Fragment {
         }
 
         public void setName(String name){
-            TextView PillName = PillsL.findViewById(R.id.PillName);
-            PillName.setText(name);
+            TextView pName = PillsL.findViewById(R.id.pName);
+            pName.setText(name);
         }
 
         public void setPillFunc(String pillfunc){
-            TextView PillFunc = PillsL.findViewById(R.id.PillFunc);
-            PillFunc.setText(pillfunc);
+            TextView pFunc = PillsL.findViewById(R.id.pFunc);
+            pFunc.setText(pillfunc);
         }
 
         public void setInterval(String interval){
-            TextView PillInterval = PillsL.findViewById(R.id.NextPill);
+            TextView PillInterval = PillsL.findViewById(R.id.pNext);
             PillInterval.setText(interval);
         }
     }
@@ -185,13 +183,13 @@ public class HomeFragment extends Fragment {
         }
 
         public void setName(String name){
-            TextView AppointName = AppointsL.findViewById(R.id.AppointName);
-            AppointName.setText(name);
+            TextView aName = AppointsL.findViewById(R.id.aName);
+            aName.setText(name);
         }
 
         public void setDate(String date){
-            TextView AppointDate = AppointsL.findViewById(R.id.AppointDate);
-            AppointDate.setText(date);
+            TextView aDate = AppointsL.findViewById(R.id.aDate);
+            aDate.setText(date);
         }
     }
 }

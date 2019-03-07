@@ -19,7 +19,7 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/PillName"
+                android:id="@+id/pName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
@@ -29,7 +29,7 @@
                 android:textColor="@color/colorWhite"/>
 
             <TextView
-                android:id="@+id/PillFunc"
+                android:id="@+id/pFunc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -38,7 +38,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/PillName"
+                android:layout_toEndOf="@+id/pName"
                 android:textSize="20sp"
                 android:textColor="@color/colorWhite"/>
         </RelativeLayout>
@@ -51,7 +51,7 @@
             android:layout_below="@+id/PillNames">
 
             <TextView
-                android:id="@+id/NextPill"
+                android:id="@+id/pNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
