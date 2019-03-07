@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -15,6 +16,7 @@ import com.pap.diogo.pilltrack.Appoints.AppointsFragment;
 import com.pap.diogo.pilltrack.Pills.PillsFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private BottomNavigationView navigation;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -55,9 +57,21 @@ public class MainActivity extends AppCompatActivity {
             startActivity(VerifyLogin);
         }
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+    }
+
+    public void setNavItem(int item){
+        switch(item)
+        {
+            case 1:
+                navigation.setSelectedItemId(R.id.navigation_pills);
+                break;
+            case 2:
+                navigation.setSelectedItemId(R.id.navigation_appointment);
+                break;
+        }
     }
 };

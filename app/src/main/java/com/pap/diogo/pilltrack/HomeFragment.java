@@ -1,14 +1,17 @@
 package com.pap.diogo.pilltrack;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -80,6 +83,13 @@ public class HomeFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
+
+                        holder.EditAppoint.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ((MainActivity)getActivity()).setNavItem(2);
+                            }
+                        });
                     }
 
                     @Override
@@ -95,6 +105,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void ShowPills() {
+
         FirebaseRecyclerOptions<Pill> PillQ = new FirebaseRecyclerOptions.Builder<Pill>().setQuery(pRef, Pill.class).setLifecycleOwner(this).build();
 
         PillsAdapter = new FirebaseRecyclerAdapter<Pill, PillsInfo>(PillQ){
@@ -113,6 +124,13 @@ public class HomeFragment extends Fragment {
                         holder.setName(model.getName());
                         holder.setPillFunc(model.getPillfunc());
                         holder.setInterval(model.getInterval());
+
+                        holder.EditPill.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ((MainActivity)getActivity()).setNavItem(1);
+                            }
+                        });
                     }
 
                     @Override
@@ -130,11 +148,13 @@ public class HomeFragment extends Fragment {
 
     public static class PillsInfo extends RecyclerView.ViewHolder{
         View PillsL;
+        ImageButton EditPill;
 
         public PillsInfo(@NonNull View itemView) {
             super(itemView);
 
             PillsL = itemView;
+            EditPill = PillsL.findViewById(R.id.EditPill);
         }
 
         public void setName(String name){
@@ -155,11 +175,13 @@ public class HomeFragment extends Fragment {
 
     public static class AppointsInfo extends RecyclerView.ViewHolder{
         View AppointsL;
+        ImageButton EditAppoint;
 
         public AppointsInfo(@NonNull View itemView) {
             super(itemView);
 
             AppointsL = itemView;
+            EditAppoint = AppointsL.findViewById(R.id.EditAppoint);
         }
 
         public void setName(String name){
