@@ -1,5 +1,6 @@
 package com.pap.diogo.pilltrack;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -147,7 +149,6 @@ public class HomeFragment extends Fragment {
     public static class PillsInfo extends RecyclerView.ViewHolder{
         View PillsL;
         ImageButton EditPill;
-
         public PillsInfo(@NonNull View itemView) {
             super(itemView);
 
@@ -174,12 +175,21 @@ public class HomeFragment extends Fragment {
     public static class AppointsInfo extends RecyclerView.ViewHolder{
         View AppointsL;
         ImageButton EditAppoint;
+        Button MapsLoc;
 
         public AppointsInfo(@NonNull View itemView) {
             super(itemView);
 
             AppointsL = itemView;
             EditAppoint = AppointsL.findViewById(R.id.EditAppoint);
+            MapsLoc = AppointsL.findViewById(R.id.MapsLoc);
+
+            MapsLoc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AppointsL.getContext().startActivity(new Intent(AppointsL.getContext(), MapsActivity.class));
+                }
+            });
         }
 
         public void setName(String name){
