@@ -86,7 +86,8 @@
                 android:inputType="date"
                 android:padding="10dp"
                 android:textColor="@color/colorWhite"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                android:focusable="false"/>
         </android.support.design.widget.TextInputLayout>
 
 

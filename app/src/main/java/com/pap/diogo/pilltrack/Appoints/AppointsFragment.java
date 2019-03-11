@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -135,7 +136,7 @@ public class AppointsFragment extends Fragment {
                             String date = holder.AppointDate.getText().toString().trim();
                             String hospital = holder.AppointHospital.getText().toString().trim();
 
-                            AppointInfo AppointInfo = new AppointInfo(newname, date, hospital);
+                            AppointInfo AppointInfo = new AppointInfo(newname, hospital, date);
                             pRef.child(newname).setValue(AppointInfo);
                         }
                     }
@@ -150,23 +151,11 @@ public class AppointsFragment extends Fragment {
                 holder.EAppointDate.setVisibility(View.VISIBLE);
                 holder.EAppointDate.requestFocus();
 
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                DialogFragment newFragment = new EditDateFragment();
+                newFragment.show(getFragmentManager(), "DatePicker");
 
-                holder.EAppointDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if(!hasFocus)
-                        {
-                            holder.AppointDate.setVisibility(View.VISIBLE);
-                            holder.EAppointDate.setVisibility(View.GONE);
-
-                            String newdate = holder.EAppointDate.getText().toString().trim();
-
-                            pRef.child(model.getName()).child("date").setValue(newdate);
-                        }
-                    }
-                });
+                holder.AppointDate.setVisibility(View.VISIBLE);
+                holder.EAppointDate.setVisibility(View.GONE);
             }
         });
 
