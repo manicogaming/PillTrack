@@ -20,7 +20,9 @@
                 android:text="Medicamentos"
                 android:textSize="24sp"
                 android:textAlignment="center"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"/>
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -41,7 +43,9 @@
                 android:text="Consultas"
                 android:textSize="24sp"
                 android:textAlignment="center"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"/>
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView

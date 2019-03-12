@@ -22,7 +22,7 @@
 
             <EditText
                 android:id="@+id/txtNameAppoint"
-                android:layout_width="275dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
@@ -46,9 +46,9 @@
             app:hintTextAppearance="@style/TextLabel"
             android:layout_below="@id/name">
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/txtHospital"
-                android:layout_width="275dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
@@ -74,7 +74,7 @@
 
             <EditText
                 android:id="@+id/txtDate"
-                android:layout_width="275dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"

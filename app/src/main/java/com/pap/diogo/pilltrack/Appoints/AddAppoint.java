@@ -4,10 +4,14 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,10 +26,11 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class AddAppoint extends AppCompatActivity implements View.OnClickListener{
-    private EditText txtNameAppoint, txtHospital, txtDate;
+    private EditText txtNameAppoint, txtDate;
+    private AutoCompleteTextView txtHospital;
     private Button btnAddAppoint;
     private FirebaseUser user;
-    private DatabaseReference mDatabase, pRef;
+    private DatabaseReference pRef;
     private String userid;
 
     @Override
@@ -41,8 +46,15 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userid = user.getUid();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
+
+        String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>
+                (this, android.R.layout.select_dialog_item, fruits);
+
+        txtHospital.setThreshold(1);
+        txtHospital.setAdapter(adapter);
 
         final Calendar myCalendar = Calendar.getInstance();
 
@@ -74,16 +86,57 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
+        txtHospital.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus)
+                {
+                    String str = txtHospital.getText().toString();
+
+                    ListAdapter listAdapter = txtHospital.getAdapter();
+                    for(int i = 0; i < listAdapter.getCount(); i++) {
+                        String temp = listAdapter.getItem(i).toString();
+                        if(str.compareTo(temp) == 0) {
+                            return;
+                        }
+                    }
+                    txtHospital.setText("");
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         String name = txtNameAppoint.getText().toString().trim();
-        String hostpial = txtHospital.getText().toString().trim();
+        String hospital = txtHospital.getText().toString().trim();
         String txtdate = txtDate.getText().toString().trim();
 
+        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))
+        {
+            Toast.makeText(this, "Os campos não podem ficar vazios", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        AppointInfo AppointInfo = new AppointInfo(name, hostpial, txtdate);
+        if (TextUtils.isEmpty(name))
+        {
+            Toast.makeText(this, "Nome não pode ficar vazio", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(hospital))
+        {
+            Toast.makeText(this, "Hospital não pode ficar vazio", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(txtdate))
+        {
+            Toast.makeText(this, "Data não pode ficar vazia", Toast.LENGTH_SHORT).show();
+        }
+
+        AppointInfo AppointInfo = new AppointInfo(name, hospital, txtdate);
         pRef.child(name).setValue(AppointInfo);
         Toast.makeText(AddAppoint.this, "Consulta adicionada com sucesso!", Toast.LENGTH_SHORT).show();
         Intent Home = new Intent(AddAppoint.this, MainActivity.class);

@@ -13,8 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -26,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pap.diogo.pilltrack.R;
+
+import java.util.ArrayList;
 
 public class AppointsFragment extends Fragment {
     private ImageButton add_appoint;
@@ -166,6 +171,16 @@ public class AppointsFragment extends Fragment {
                 holder.EAppointHospital.setVisibility(View.VISIBLE);
                 holder.EAppointHospital.requestFocus();
 
+                final String currhospital = holder.AppointHospital.getText().toString();
+
+                String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>
+                        (getActivity(), android.R.layout.select_dialog_item, fruits);
+
+                holder.EAppointHospital.setThreshold(1);
+                holder.EAppointHospital.setAdapter(adapter);
+
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
@@ -174,12 +189,23 @@ public class AppointsFragment extends Fragment {
                     public void onFocusChange(View v, boolean hasFocus) {
                         if(!hasFocus)
                         {
+                            String str = holder.EAppointHospital.getText().toString();
+
+                            ListAdapter listAdapter = holder.EAppointHospital.getAdapter();
+                            for(int i = 0; i < listAdapter.getCount(); i++) {
+                                String temp = listAdapter.getItem(i).toString();
+                                if(str.compareTo(temp) == 0) {
+                                    holder.AppointHospital.setVisibility(View.VISIBLE);
+                                    holder.EAppointHospital.setVisibility(View.GONE);
+
+                                    String newhospital = str.trim();
+
+                                    pRef.child(model.getName()).child("hospital").setValue(newhospital);
+                                }
+                            }
+                            holder.EAppointHospital.setText(currhospital);
                             holder.AppointHospital.setVisibility(View.VISIBLE);
                             holder.EAppointHospital.setVisibility(View.GONE);
-
-                            String newhospital = holder.EAppointHospital.getText().toString().trim();
-
-                            pRef.child(model.getName()).child("hospital").setValue(newhospital);
                         }
                     }
                 });
@@ -191,7 +217,8 @@ public class AppointsFragment extends Fragment {
         View EAppointsL;
         ImageButton EAppointDelete;
         TextView AppointName, AppointDate, AppointHospital;
-        EditText EAppointName, EAppointDate, EAppointHospital;
+        EditText EAppointName, EAppointDate;
+        AutoCompleteTextView EAppointHospital;
 
         public EAppointsInfo(@NonNull View itemView) {
             super(itemView);

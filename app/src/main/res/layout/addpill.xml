@@ -22,7 +22,7 @@
 
             <EditText
                 android:id="@+id/txtNamePill"
-                android:layout_width="275dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
@@ -48,7 +48,7 @@
 
             <EditText
                 android:id="@+id/txtPillFunc"
-                android:layout_width="275dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
@@ -74,7 +74,7 @@
 
             <EditText
                 android:id="@+id/txtInterval"
-                android:layout_width="275dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"

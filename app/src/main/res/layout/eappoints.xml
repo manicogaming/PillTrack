@@ -98,7 +98,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/EAppointHospital"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
