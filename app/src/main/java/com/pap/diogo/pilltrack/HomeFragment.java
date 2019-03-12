@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,18 @@ import com.google.firebase.database.ValueEventListener;
 import com.pap.diogo.pilltrack.Appoints.Appoint;
 import com.pap.diogo.pilltrack.Pills.Pill;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+
 public class HomeFragment extends Fragment {
     private RecyclerView Pills, Appoints;
     private FirebaseRecyclerAdapter<Pill, PillsInfo> PillsAdapter;
@@ -32,6 +45,8 @@ public class HomeFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     DatabaseReference pRef, aRef;
+    DateTime date;
+    LocalDate cDate, mDate;
 
     @Nullable
     @Override
@@ -83,6 +98,19 @@ public class HomeFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
+
+                        String dtStart = model.getDate();
+
+                        DateTimeFormatter format = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
+                        mDate = org.joda.time.LocalDate.parse(dtStart, format);
+
+                        cDate = new LocalDate();
+
+                        int days = Days.daysBetween(cDate, mDate).getDays();
+
+                        String rDays = String.valueOf(days);
+
+                        holder.setDate("Faltam " + rDays + " dias.");
 
                         holder.EditAppoint.setOnClickListener(new View.OnClickListener() {
                             @Override

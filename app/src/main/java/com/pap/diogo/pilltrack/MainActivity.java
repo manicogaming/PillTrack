@@ -20,6 +20,8 @@ import com.pap.diogo.pilltrack.Accounts.AccountFragment;
 import com.pap.diogo.pilltrack.Appoints.AppointsFragment;
 import com.pap.diogo.pilltrack.Pills.PillsFragment;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
 
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        JodaTimeAndroid.init(this);
         setContentView(R.layout.activity_main);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
