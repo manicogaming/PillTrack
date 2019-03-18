@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ripple
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="#88FFFFFF"> <!-- Ripple color :: WHITE -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="#88FFFFFF"
+    tools:ignore="NewApi"> <!-- Ripple color :: WHITE -->
 
 
     <!-- Make sure the ripple doesn't exceed the bounds -->

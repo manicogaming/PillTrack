@@ -1,41 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Launcher"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    tools:context=".Launcher">
 
     <RelativeLayout
         android:id="@+id/linear1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_centerInParent="true">
+        android:layout_centerVertical="true">
 
         <Button
             android:id="@+id/btnNovo"
             android:layout_width="250dp"
             android:layout_height="65dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/dark_button"
             android:text="Utente Novo"
             android:textAllCaps="false"
-            android:textSize="26sp"
-            android:layout_marginBottom="20dp"
             android:textColor="@color/colorWhite"
-            android:background="@drawable/dark_button"/>
+            android:textSize="26sp" />
 
         <Button
             android:id="@+id/btnExistente"
             android:layout_width="250dp"
             android:layout_height="65dp"
-            android:text="Utente Existente"
-            android:textSize="26sp"
-            android:textAllCaps="false"
             android:layout_below="@+id/btnNovo"
+            android:background="@drawable/dark_button"
+            android:text="Utente Existente"
+            android:textAllCaps="false"
             android:textColor="@color/colorWhite"
-            android:background="@drawable/dark_button"/>
+            android:textSize="26sp" />
 
     </RelativeLayout>
 

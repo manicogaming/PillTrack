@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -83,7 +84,7 @@ public class HomeFragment extends Fragment {
     private void ShowAppoints() {
         FirebaseRecyclerOptions<Appoint> AppointQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(aRef, Appoint.class).setLifecycleOwner(this).build();
 
-        AppointsAdapter = new FirebaseRecyclerAdapter<Appoint, AppointsInfo>(AppointQ){
+        AppointsAdapter = new FirebaseRecyclerAdapter<Appoint, AppointsInfo>(AppointQ) {
 
             @NonNull
             @Override
@@ -100,22 +101,26 @@ public class HomeFragment extends Fragment {
                         holder.setDate(model.getDate());
 
                         String dtStart = model.getDate();
-
                         DateTimeFormatter format = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
                         mDate = org.joda.time.LocalDate.parse(dtStart, format);
-
                         cDate = new LocalDate();
-
                         int days = Days.daysBetween(cDate, mDate).getDays();
-
                         String rDays = String.valueOf(days);
-
                         holder.setDate("Faltam " + rDays + " dias.");
+
+                        holder.MapsLoc.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(getActivity(), MapsActivity.class);
+                                i.putExtra("GPSLocation", model.getHlocation());
+                                startActivity(i);
+                            }
+                        });
 
                         holder.EditAppoint.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                ((MainActivity)getActivity()).setNavItem(2);
+                                ((MainActivity) getActivity()).setNavItem(2);
                             }
                         });
                     }
@@ -136,7 +141,7 @@ public class HomeFragment extends Fragment {
 
         FirebaseRecyclerOptions<Pill> PillQ = new FirebaseRecyclerOptions.Builder<Pill>().setQuery(pRef, Pill.class).setLifecycleOwner(this).build();
 
-        PillsAdapter = new FirebaseRecyclerAdapter<Pill, PillsInfo>(PillQ){
+        PillsAdapter = new FirebaseRecyclerAdapter<Pill, PillsInfo>(PillQ) {
 
             @NonNull
             @Override
@@ -156,7 +161,7 @@ public class HomeFragment extends Fragment {
                         holder.EditPill.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                ((MainActivity)getActivity()).setNavItem(1);
+                                ((MainActivity) getActivity()).setNavItem(1);
                             }
                         });
                     }
@@ -174,9 +179,10 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public static class PillsInfo extends RecyclerView.ViewHolder{
+    public static class PillsInfo extends RecyclerView.ViewHolder {
         View PillsL;
         ImageButton EditPill;
+
         public PillsInfo(@NonNull View itemView) {
             super(itemView);
 
@@ -184,23 +190,23 @@ public class HomeFragment extends Fragment {
             EditPill = PillsL.findViewById(R.id.EditPill);
         }
 
-        public void setName(String name){
+        public void setName(String name) {
             TextView pName = PillsL.findViewById(R.id.pName);
             pName.setText(name);
         }
 
-        public void setPillFunc(String pillfunc){
+        public void setPillFunc(String pillfunc) {
             TextView pFunc = PillsL.findViewById(R.id.pFunc);
             pFunc.setText(pillfunc);
         }
 
-        public void setInterval(String interval){
+        public void setInterval(String interval) {
             TextView PillInterval = PillsL.findViewById(R.id.pNext);
             PillInterval.setText(interval);
         }
     }
 
-    public static class AppointsInfo extends RecyclerView.ViewHolder{
+    public static class AppointsInfo extends RecyclerView.ViewHolder {
         View AppointsL;
         ImageButton EditAppoint;
         Button MapsLoc;
@@ -211,21 +217,14 @@ public class HomeFragment extends Fragment {
             AppointsL = itemView;
             EditAppoint = AppointsL.findViewById(R.id.EditAppoint);
             MapsLoc = AppointsL.findViewById(R.id.MapsLoc);
-
-            MapsLoc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AppointsL.getContext().startActivity(new Intent(AppointsL.getContext(), MapsActivity.class));
-                }
-            });
         }
 
-        public void setName(String name){
+        public void setName(String name) {
             TextView aName = AppointsL.findViewById(R.id.aName);
             aName.setText(name);
         }
 
-        public void setDate(String date){
+        public void setDate(String date) {
             TextView aDate = AppointsL.findViewById(R.id.aDate);
             aDate.setText(date);
         }

@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
-public class ChangePW extends AppCompatActivity implements View.OnClickListener{
+public class ChangePW extends AppCompatActivity implements View.OnClickListener {
     private EditText txtOldPassword, txtNewPassword, txtEmailCHPW;
     private FirebaseUser user;
 
@@ -41,8 +41,7 @@ public class ChangePW extends AppCompatActivity implements View.OnClickListener{
         final String email = txtEmailCHPW.getText().toString().trim();
         String userEmail = user.getEmail();
 
-        if (email.equals(userEmail))
-        {
+        if (email.equals(userEmail)) {
             AuthCredential credential = EmailAuthProvider
                     .getCredential(email, oldPassword);
 
@@ -67,9 +66,7 @@ public class ChangePW extends AppCompatActivity implements View.OnClickListener{
                             }
                         }
                     });
-        }
-        else
-        {
+        } else {
             Toast.makeText(ChangePW.this, "Este Email não pertence à conta!", Toast.LENGTH_SHORT).show();
         }
     }

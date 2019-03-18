@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/changepw_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_centerInParent="true">
+        android:layout_centerVertical="true">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="false"
-            app:hintTextAppearance="@style/TextLabel">
+            app:hintTextAppearance="@style/TextLabel"
+            app:passwordToggleEnabled="false">
 
             <EditText
                 android:id="@+id/txtNameAppoint"
-                android:layout_width="300dp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
@@ -31,10 +31,10 @@
                 android:layout_marginRight="15dp"
                 android:background="@color/colorDarkRed"
                 android:hint="Nome da Consulta"
+                android:inputType="text"
                 android:padding="10dp"
                 android:textColor="@color/colorWhite"
-                android:textSize="22sp"
-                android:inputType="text"/>
+                android:textSize="22sp" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -42,13 +42,13 @@
             android:id="@+id/hospital"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="false"
+            android:layout_below="@id/name"
             app:hintTextAppearance="@style/TextLabel"
-            android:layout_below="@id/name">
+            app:passwordToggleEnabled="false">
 
             <AutoCompleteTextView
                 android:id="@+id/txtHospital"
-                android:layout_width="300dp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
@@ -67,14 +67,14 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="false"
+            android:layout_below="@id/hospital"
             app:hintTextAppearance="@style/TextLabel"
-            android:layout_below="@id/hospital">
+            app:passwordToggleEnabled="false">
 
 
             <EditText
                 android:id="@+id/txtDate"
-                android:layout_width="300dp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
@@ -82,12 +82,12 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@color/colorDarkRed"
+                android:focusable="false"
                 android:hint="Data"
                 android:inputType="date"
                 android:padding="10dp"
                 android:textColor="@color/colorWhite"
-                android:textSize="22sp"
-                android:focusable="false"/>
+                android:textSize="22sp" />
         </android.support.design.widget.TextInputLayout>
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -27,7 +27,7 @@
 
                 <TextView
                     android:id="@+id/PillName"
-                    android:layout_width="200dp"
+                    android:layout_width="275dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
@@ -38,7 +38,7 @@
 
                 <EditText
                     android:id="@+id/EPillName"
-                    android:layout_width="200dp"
+                    android:layout_width="275dp"
                     android:layout_height="wrap_content"
                     android:paddingStart="0dp"
                     android:paddingTop="5dp"
@@ -47,7 +47,7 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -59,7 +59,7 @@
 
                 <TextView
                     android:id="@+id/PillFunc"
-                    android:layout_width="200dp"
+                    android:layout_width="275dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
@@ -70,7 +70,7 @@
 
                 <EditText
                     android:id="@+id/EPillFunc"
-                    android:layout_width="200dp"
+                    android:layout_width="275dp"
                     android:layout_height="wrap_content"
                     android:paddingStart="0dp"
                     android:paddingTop="5dp"
@@ -79,7 +79,7 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -90,7 +90,7 @@
 
                 <TextView
                     android:id="@+id/PillInterval"
-                    android:layout_width="200dp"
+                    android:layout_width="275dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
@@ -101,7 +101,7 @@
 
                 <EditText
                     android:id="@+id/EPillInterval"
-                    android:layout_width="200dp"
+                    android:layout_width="275dp"
                     android:layout_height="wrap_content"
                     android:paddingStart="0dp"
                     android:paddingTop="5dp"
@@ -110,7 +110,7 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </RelativeLayout>
 
         </RelativeLayout>
@@ -119,16 +119,13 @@
             android:id="@+id/EPillDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginEnd="0dp"
             android:background="@drawable/icon_button"
             android:padding="15dp"
-            android:src="@drawable/ic_delete"
-            android:layout_alignParentEnd="true"/>
+            android:src="@drawable/ic_delete" />
 
     </RelativeLayout>
 

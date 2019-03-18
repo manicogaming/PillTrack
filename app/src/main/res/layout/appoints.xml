@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/AppointRelative"
@@ -19,8 +20,8 @@
             android:layout_marginBottom="15dp"
             android:text="Consulta1"
             android:textAlignment="center"
-            android:textSize="20sp"
-            android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:id="@+id/AppointInfos"
@@ -32,11 +33,11 @@
                 android:id="@+id/aDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_margin="15dp"
                 android:text="Data"
-                android:layout_centerVertical="true"
-                android:textSize="20sp"
-                android:textColor="@color/colorWhite"/>
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
 
             <ImageButton
                 android:layout_width="65dp"
@@ -44,8 +45,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="85dp"
-                android:src="@drawable/ic_notifications"
-                android:background="@drawable/icon_button"/>
+                android:background="@drawable/icon_button"
+                android:src="@drawable/ic_notifications" />
 
             <ImageButton
                 android:id="@+id/EditAppoint"
@@ -54,22 +55,22 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="15dp"
-                android:src="@drawable/ic_edit"
-                android:background="@drawable/icon_button"/>
+                android:background="@drawable/icon_button"
+                android:src="@drawable/ic_edit" />
         </RelativeLayout>
 
         <Button
             android:id="@+id/MapsLoc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ver a localização no Google Maps"
             android:layout_below="@id/AppointInfos"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp"
             android:background="@drawable/dark_button"
+            android:text="Ver a localização no Google Maps"
             android:textColor="@color/colorWhite"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </RelativeLayout>

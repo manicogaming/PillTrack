@@ -29,8 +29,9 @@ public class EditDateFragment extends DialogFragment implements DatePickerDialog
     }
 
     public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-        populateSetDate(yy, mm+1, dd);
+        populateSetDate(yy, mm + 1, dd);
     }
+
     public void populateSetDate(int year, int month, int day) {
         EditText AppointDate = getActivity().findViewById(R.id.EAppointDate);
         TextView AppointName = getActivity().findViewById(R.id.AppointName);
@@ -39,7 +40,7 @@ public class EditDateFragment extends DialogFragment implements DatePickerDialog
         String userid = mAuth.getCurrentUser().getUid();
         pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
 
-        AppointDate.setText(day+"/"+month+"/"+year);
+        AppointDate.setText(day + "/" + month + "/" + year);
 
         String name = AppointName.getText().toString().trim();
         String newdate = AppointDate.getText().toString().trim();

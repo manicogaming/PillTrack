@@ -52,7 +52,7 @@ public class AccountFragment extends Fragment {
 
         FirebaseRecyclerOptions<Account> AccountQ = new FirebaseRecyclerOptions.Builder<Account>().setQuery(ref, Account.class).setLifecycleOwner(this).build();
 
-        AccountAdapter = new FirebaseRecyclerAdapter<Account, AccountInfo>(AccountQ){
+        AccountAdapter = new FirebaseRecyclerAdapter<Account, AccountInfo>(AccountQ) {
 
             @NonNull
             @Override
@@ -83,7 +83,7 @@ public class AccountFragment extends Fragment {
         AccountUsers.setAdapter(AccountAdapter);
     }
 
-    public static class AccountInfo extends RecyclerView.ViewHolder{
+    public static class AccountInfo extends RecyclerView.ViewHolder {
         View AccountL;
         Button btnChangePass;
 
@@ -101,12 +101,12 @@ public class AccountFragment extends Fragment {
             });
         }
 
-        public void setName(String name){
+        public void setName(String name) {
             TextView AccountName = AccountL.findViewById(R.id.AccountName);
             AccountName.setText(name);
         }
 
-        public void setAge(String age){
+        public void setAge(String age) {
             TextView AccountAge = AccountL.findViewById(R.id.AccountAge);
             AccountAge.setText(age + " anos");
         }

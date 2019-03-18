@@ -11,9 +11,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.pap.diogo.pilltrack.Accounts.Login;
 import com.pap.diogo.pilltrack.Accounts.Register;
 
-public class Launcher extends AppCompatActivity implements View.OnClickListener{
+public class Launcher extends AppCompatActivity implements View.OnClickListener {
     private Button btnNovo;
     private Button btnExistente;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +34,12 @@ public class Launcher extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        if (v == btnNovo)
-        {
-            Intent register = new Intent(this,Register.class);
+        if (v == btnNovo) {
+            Intent register = new Intent(this, Register.class);
             startActivity(register);
         }
         if (v == btnExistente) {
-            Intent login = new Intent(Launcher.this,Login.class);
+            Intent login = new Intent(Launcher.this, Login.class);
             startActivity(login);
         }
     }

@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private LatLng mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String gpslocation = extras.getString("GPSLocation");
+            String[] latLng = gpslocation.split(",");
+            double latitude = Double.parseDouble(latLng[0]);
+            double longitude = Double.parseDouble(latLng[1]);
+            mLocation = new LatLng(latitude, longitude);
+        }
     }
 
 
@@ -34,13 +44,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.addMarker(new MarkerOptions().position(mLocation).title("Local"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mLocation));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 12));
     }
 }

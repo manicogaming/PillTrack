@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
-public class Register extends AppCompatActivity implements View.OnClickListener{
+public class Register extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnRegister;
     private EditText txtName, txtEmail, txtPassword, txtAge;
@@ -48,7 +48,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         final String Name = txtName.getText().toString().trim();
         final String Age = txtAge.getText().toString().trim();
 
-        Register.createUserWithEmailAndPassword(Email,Password)
+        Register.createUserWithEmailAndPassword(Email, Password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -60,7 +60,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(Register.this, "Registo com sucesso!", Toast.LENGTH_SHORT).show();
-                                        Intent home = new Intent(Register.this,MainActivity.class);
+                                        Intent home = new Intent(Register.this, MainActivity.class);
                                         home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(home);
                                         finish(); // call this to finish the current activity

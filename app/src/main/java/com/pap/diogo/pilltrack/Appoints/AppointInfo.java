@@ -4,11 +4,13 @@ public class AppointInfo {
     public String name;
     public String hospital;
     public String date;
+    public String hlocation;
 
-    public AppointInfo(String name, String hospital, String date) {
+    public AppointInfo(String name, String hospital, String date, String hlocation) {
         this.name = name;
         this.hospital = hospital;
         this.date = date;
+        this.hlocation = hlocation;
     }
 
     public String getName() {
@@ -33,5 +35,13 @@ public class AppointInfo {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getHlocation() {
+        return hlocation;
+    }
+
+    public void setHlocation(String hlocation) {
+        this.hlocation = hlocation;
     }
 }
