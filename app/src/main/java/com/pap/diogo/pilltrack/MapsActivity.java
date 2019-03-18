@@ -50,6 +50,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.addMarker(new MarkerOptions().position(mLocation).title("Local"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(mLocation));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 12));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 14));
     }
 }
