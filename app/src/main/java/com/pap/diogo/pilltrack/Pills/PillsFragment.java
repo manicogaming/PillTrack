@@ -12,8 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -30,6 +33,7 @@ public class PillsFragment extends Fragment {
     private ImageButton add_pill;
     private RecyclerView EPills;
     private FirebaseRecyclerAdapter<Pill, EPillsInfo> EAppointsAdapter;
+    private boolean isSpinnerInitial = true;
 
     private FirebaseAuth mAuth;
     DatabaseReference pRef;
@@ -71,7 +75,7 @@ public class PillsFragment extends Fragment {
 
         FirebaseRecyclerOptions<Pill> PillQ = new FirebaseRecyclerOptions.Builder<Pill>().setQuery(pRef, Pill.class).setLifecycleOwner(this).build();
 
-        EAppointsAdapter = new FirebaseRecyclerAdapter<Pill, EPillsInfo>(PillQ){
+        EAppointsAdapter = new FirebaseRecyclerAdapter<Pill, EPillsInfo>(PillQ) {
 
             @NonNull
             @Override
@@ -124,8 +128,7 @@ public class PillsFragment extends Fragment {
                 holder.EPillName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        if(!hasFocus)
-                        {
+                        if (!hasFocus) {
                             holder.PillName.setVisibility(View.VISIBLE);
                             holder.EPillName.setVisibility(View.GONE);
 
@@ -156,8 +159,7 @@ public class PillsFragment extends Fragment {
                 holder.EPillFunc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        if(!hasFocus)
-                        {
+                        if (!hasFocus) {
                             holder.PillFunc.setVisibility(View.VISIBLE);
                             holder.EPillFunc.setVisibility(View.GONE);
 
@@ -175,61 +177,88 @@ public class PillsFragment extends Fragment {
             public void onClick(View v) {
                 holder.PillInterval.setVisibility(View.GONE);
                 holder.EPillInterval.setVisibility(View.VISIBLE);
-                holder.EPillInterval.requestFocus();
 
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item_edit, holder.arraySpinner);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                holder.EPillInterval.setAdapter(adapter);
 
-                holder.EPillInterval.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                holder.EPillInterval.setSelection(getIndex(holder.EPillInterval, model.getInterval()));
+
+                holder.EPillInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if(!hasFocus)
-                        {
-                            holder.PillInterval.setVisibility(View.VISIBLE);
-                            holder.EPillInterval.setVisibility(View.GONE);
-
-                            String newinterval = holder.EPillInterval.getText().toString().trim();
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (isSpinnerInitial) {
+                            isSpinnerInitial = false;
+                        } else {
+                            String newinterval = holder.EPillInterval.getSelectedItem().toString().trim();
 
                             pRef.child(model.getName()).child("interval").setValue(newinterval);
+
+                            holder.PillInterval.setVisibility(View.VISIBLE);
+                            holder.EPillInterval.setVisibility(View.GONE);
+                            isSpinnerInitial = true;
                         }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        holder.PillInterval.setVisibility(View.VISIBLE);
+                        holder.EPillInterval.setVisibility(View.GONE);
                     }
                 });
             }
         });
     }
 
-    public static class EPillsInfo extends RecyclerView.ViewHolder{
+    private int getIndex(Spinner s1, String dbInterval) {
+
+        int index = 0;
+
+        for (int i = 0; i < s1.getCount(); i++) {
+            if (s1.getItemAtPosition(i).equals(dbInterval)) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    public static class EPillsInfo extends RecyclerView.ViewHolder {
         View EPillsL;
         ImageButton EPillDelete;
         TextView PillName, PillFunc, PillInterval;
-        EditText EPillName, EPillFunc, EPillInterval;
+        EditText EPillName, EPillFunc;
+        Spinner EPillInterval;
+
+        String[] arraySpinner = new String[]{
+                "4 em 4 horas", "8 em 8 horas", "12 em 12 horas", "De manhã e à noite", "De manhã", "À noite"
+        };
 
         public EPillsInfo(@NonNull View itemView) {
             super(itemView);
 
             EPillsL = itemView;
             EPillDelete = EPillsL.findViewById(R.id.EPillDelete);
+            EPillInterval = EPillsL.findViewById(R.id.EPillInterval);
         }
 
-        public void setName(String name){
+        public void setName(String name) {
             PillName = EPillsL.findViewById(R.id.PillName);
             EPillName = EPillsL.findViewById(R.id.EPillName);
             PillName.setText(name);
             EPillName.setText(name);
         }
 
-        public void setPillFunc(String pillfunc){
+        public void setPillFunc(String pillfunc) {
             PillFunc = EPillsL.findViewById(R.id.PillFunc);
             EPillFunc = EPillsL.findViewById(R.id.EPillFunc);
             PillFunc.setText(pillfunc);
             EPillFunc.setText(pillfunc);
         }
 
-        public void setInterval(String interval){
+        public void setInterval(String interval) {
             PillInterval = EPillsL.findViewById(R.id.PillInterval);
             EPillInterval = EPillsL.findViewById(R.id.EPillInterval);
             PillInterval.setText(interval);
-            EPillInterval.setText(interval);
         }
     }
 }

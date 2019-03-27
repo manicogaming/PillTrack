@@ -99,18 +99,11 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/EPillInterval"
                     android:layout_width="275dp"
                     android:layout_height="wrap_content"
-                    android:paddingStart="0dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="Intervalo"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
             </RelativeLayout>
 
         </RelativeLayout>
