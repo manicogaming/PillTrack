@@ -9,14 +9,13 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true">
+        android:layout_centerInParent="true">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             app:hintTextAppearance="@style/TextLabel"
             app:passwordToggleEnabled="false">
 
@@ -24,11 +23,6 @@
                 android:id="@+id/txtNamePill"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
                 android:background="@color/colorDarkRed"
                 android:hint="Nome do Medicamento"
                 android:inputType="text"
@@ -43,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
+            android:layout_centerHorizontal="true"
             app:hintTextAppearance="@style/TextLabel"
             app:passwordToggleEnabled="false">
 
@@ -50,11 +45,6 @@
                 android:id="@+id/txtPillFunc"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
                 android:background="@color/colorDarkRed"
                 android:hint="Função"
                 android:padding="10dp"
@@ -63,31 +53,20 @@
         </android.support.design.widget.TextInputLayout>
 
 
-        <android.support.design.widget.TextInputLayout
+        <RelativeLayout
             android:id="@+id/interval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/apillfunc"
-            app:hintTextAppearance="@style/TextLabel"
-            app:passwordToggleEnabled="false">
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp">
 
-
-            <EditText
+            <Spinner
                 android:id="@+id/txtInterval"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:background="@color/colorDarkRed"
-                android:hint="Intervalo"
-                android:inputType="number"
-                android:padding="10dp"
-                android:textColor="@color/colorWhite"
-                android:textSize="22sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:background="@color/colorDarkRed" />
+        </RelativeLayout>
 
 
         <Button
@@ -97,7 +76,6 @@
             android:layout_below="@+id/interval"
             android:layout_centerInParent="true"
             android:layout_marginTop="18dp"
-            android:layout_marginBottom="20dp"
             android:background="@drawable/dark_button"
             android:padding="15dp"
             android:text="Adicionar"

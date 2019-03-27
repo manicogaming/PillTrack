@@ -157,7 +157,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            Toast.makeText(getApplicationContext(), "Todas as permissões aceites!", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "All permissions granted.");
                         }
 
                         // check for permanent denial of any permission
@@ -211,17 +211,17 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-        final String message = "Pretende ir às definições para ativar o GPS?";
+        final String message = "Precisa de GPS para utilizar os Mapas.";
 
         builder.setMessage(message)
-                .setPositiveButton("Sim",
+                .setPositiveButton("Definições",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface d, int id) {
                                 activity.startActivity(new Intent(action));
                                 d.dismiss();
                             }
                         })
-                .setNegativeButton("Não",
+                .setNegativeButton("Cancelar",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface d, int id) {
                                 d.cancel();
