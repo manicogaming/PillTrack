@@ -39,7 +39,7 @@ public class Launcher extends AppCompatActivity implements View.OnClickListener 
             startActivity(register);
         }
         if (v == btnExistente) {
-            Intent login = new Intent(Launcher.this, Login.class);
+            Intent login = new Intent(this, Login.class);
             startActivity(login);
         }
     }
