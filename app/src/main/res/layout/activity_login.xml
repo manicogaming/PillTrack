@@ -8,12 +8,9 @@
     tools:context=".Accounts.Register">
 
     <RelativeLayout
-        android:id="@+id/linear3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true">
+        android:layout_centerInParent="true">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/layout"
@@ -25,7 +22,6 @@
                 android:id="@+id/txtEmail"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:hint="E-mail"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/colorWhite"
@@ -44,8 +40,6 @@
                 android:id="@+id/txtPassword"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:ems="10"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:textColor="@color/colorWhite"

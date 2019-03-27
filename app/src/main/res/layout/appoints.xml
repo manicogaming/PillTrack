@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:text="Consulta1"
+            android:text="Consulta"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
             android:textSize="20sp" />
