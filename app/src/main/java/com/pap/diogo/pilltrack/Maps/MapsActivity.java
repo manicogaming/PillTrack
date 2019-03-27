@@ -1,10 +1,13 @@
 package com.pap.diogo.pilltrack.Maps;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -58,13 +61,14 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     //variables for current location
     private static final String TAG = "MapsActivity";
 
-    private TextView tvLocation;
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
     private LocationRequest mLocationRequest;
     private com.google.android.gms.location.LocationListener listener;
     private long UPDATE_INTERVAL = 2 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    private LocationManager manager;
+    private boolean statusOfGPS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,12 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         //code for getting current location
         requestMultiplePermissions();
 
-        tvLocation = (TextView) findViewById((R.id.tv));
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if (!statusOfGPS) {
+            displayPromptForEnablingGPS(MapsActivity.this);
+        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -112,7 +121,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         CameraPosition googlePlex = CameraPosition.builder()
                 .target(LatLocation)
-                .zoom(7)
+                .zoom(8)
                 .bearing(0)
                 .tilt(45)
                 .build();
@@ -198,6 +207,29 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
     }
 
+    public static void displayPromptForEnablingGPS(final Activity activity) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+        final String message = "Pretende ir às definições para ativar o GPS?";
+
+        builder.setMessage(message)
+                .setPositiveButton("Sim",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                activity.startActivity(new Intent(action));
+                                d.dismiss();
+                            }
+                        })
+                .setNegativeButton("Não",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                d.cancel();
+                            }
+                        });
+        builder.create().show();
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -278,13 +310,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
     @Override
     public void onLocationChanged(Location location) {
-        String msg = "Localização atualizada: " +
-                Double.toString(location.getLatitude()) + "," +
-                Double.toString(location.getLongitude());
-
-        tvLocation.setText(String.valueOf(location.getLatitude() + "    " + String.valueOf(location.getLongitude())));
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-
         if (isFirstTime) {
             //code to draw path on map
 
