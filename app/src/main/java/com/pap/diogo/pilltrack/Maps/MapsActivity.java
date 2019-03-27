@@ -321,8 +321,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 }
             });
 
-            place1 = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Location 1");
-            place2 = new MarkerOptions().position(LatLocation).title("Location 2");
+            place1 = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Localização Atual");
+            place2 = new MarkerOptions().position(LatLocation).title("Hospital");
             mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
             isFirstTime = false;
