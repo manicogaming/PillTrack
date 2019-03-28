@@ -35,9 +35,9 @@ public class HomeFragment extends Fragment {
     private RecyclerView Pills, Appoints;
     private FirebaseRecyclerAdapter<Pill, PillsInfo> PillsAdapter;
     private FirebaseRecyclerAdapter<Appoint, AppointsInfo> AppointsAdapter;
-
     private FirebaseAuth mAuth;
     DatabaseReference pRef, aRef;
+
     LocalDate cDate, mDate;
 
     @Nullable
@@ -99,6 +99,11 @@ public class HomeFragment extends Fragment {
                         String rDays = String.valueOf(days);
                         holder.setDate("Faltam " + rDays + " dias.");
 
+                        if(rDays.equals("1"))
+                        {
+                            showNotification();
+                        }
+
                         holder.MapsLoc.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -126,6 +131,9 @@ public class HomeFragment extends Fragment {
 
         };
         Appoints.setAdapter(AppointsAdapter);
+    }
+
+    private void showNotification() {
     }
 
     private void ShowPills() {
