@@ -26,7 +26,6 @@ import com.pap.diogo.pilltrack.Appoints.Appoint;
 import com.pap.diogo.pilltrack.Maps.MapsActivity;
 import com.pap.diogo.pilltrack.Pills.Pill;
 
-import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
@@ -99,11 +98,6 @@ public class HomeFragment extends Fragment {
                         String rDays = String.valueOf(days);
                         holder.setDate("Faltam " + rDays + " dias.");
 
-                        if(rDays.equals("1"))
-                        {
-                            showNotification();
-                        }
-
                         holder.MapsLoc.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -131,9 +125,6 @@ public class HomeFragment extends Fragment {
 
         };
         Appoints.setAdapter(AppointsAdapter);
-    }
-
-    private void showNotification() {
     }
 
     private void ShowPills() {

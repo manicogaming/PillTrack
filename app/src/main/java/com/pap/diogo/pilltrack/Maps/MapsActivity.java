@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -35,6 +34,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -55,7 +59,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     Button getDirection;
     private Polyline currentPolyline;
     private MapFragment mapFragment;
-    private LatLng LatLocation;
     private boolean isFirstTime = true;
 
     //variables for current location
@@ -69,6 +72,9 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     private LocationManager manager;
     private boolean statusOfGPS;
+
+    private String gpslocation;
+    private LatLng LatLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String gpslocation = extras.getString("GPSLocation");
+            gpslocation = extras.getString("GPSLocation");
             String[] latLng = gpslocation.split(",");
             double latitude = Double.parseDouble(latLng[0]);
             double longitude = Double.parseDouble(latLng[1]);

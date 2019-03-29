@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -20,8 +21,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
@@ -35,7 +39,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
     private Button btnAddAppoint;
     private FirebaseUser user;
     private DatabaseReference pRef;
-    private String userid, HospitalLocation;
+    private String userid, HospitalLocation, HName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +56,24 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         userid = user.getUid();
         pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
 
-        String[] hospitals = {"Baixo Vouga", "Entre o Douro e Vouga", "Dr. Francisco Zagalo", "José Joaquim Fernandes", "Escala Braga", "Senhora Oliveira Guimarães", "Santa Maria Maior",
-                "Nordeste", "Cova da Beira", "Castelo Branco", "Coimbra", "Figueira da Foz", "Coimbra Francisco Gentil", "Espírito Santo - Évora", "Algarve", "Guarda", "Leiria",
-                "Oeste", "Lisboa Central", "Lisboa Norte", "Lisboa Ocidental", "Psiquiátrico de Lisboa", "Vila Franca de Xira", "Beatriz Ângelo", "Cascais",
-                "Prof. Dr. Fernando Fonseca", "Lisboa Francisco Gentil", "Norte Alentejano", "São João", "Eduardo Santos Silva", "Médio Ave", "Porto", "Tâmega e Sousa", "Vila do Conde",
-                "Magalhães Lemos", "Porto Francisco Gentil", "Pedro Hispano", "Médio Tejo", "Santarém", "Barreiro Montijo", "Setúbal", "Garcia de Orta", "Litoral Alentejano",
-                "Alto Minho", "Trás-os-montes e Alto Douro", "Tondela-Viseu"};
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Hospitals");
+        final ArrayAdapter<String> autoComplete = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot hospitals : dataSnapshot.getChildren()) {
+                    HName = hospitals.child("name").getValue(String.class);
+                    autoComplete.add(HName);
+                }
+            }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>
-                (this, android.R.layout.select_dialog_item, hospitals);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
         txtHospital.setThreshold(1);
-        txtHospital.setAdapter(adapter);
+        txtHospital.setAdapter(autoComplete);
 
         final Calendar myCalendar = Calendar.getInstance();
 
@@ -90,9 +100,9 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         txtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(AddAppoint.this, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddAppoint.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePickerDialog.show();
             }
         });
 
@@ -167,142 +177,142 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
 
     public void getHospitalLocation() {
         if (txtHospital.getText().toString().matches("Baixo Vouga")) {
-            HospitalLocation = "40.6336036,-8.6572487";
+            HospitalLocation = "40.633787, -8.654963";
         }
         if (txtHospital.getText().toString().matches("Entre o Douro e Vouga")) {
-            HospitalLocation = "40.9302165,-8.5496593";
+            HospitalLocation = "40.930216, -8.547473";
         }
-        if (txtHospital.getText().toString().matches("Dr. Francisco Zagalo")) {
-            HospitalLocation = "40.857524,-8.6335287";
+        if (txtHospital.getText().toString().matches("Francisco Zagalo")) {
+            HospitalLocation = "40.857527, -8.631336";
         }
         if (txtHospital.getText().toString().matches("José Joaquim Fernandes")) {
-            HospitalLocation = "38.0141498,-7.8719438";
+            HospitalLocation = "38.014149, -7.869755";
         }
         if (txtHospital.getText().toString().matches("Escala Brage")) {
-            HospitalLocation = "41.5679778,-8.4012003";
+            HospitalLocation = "41.567980, -8.399012";
         }
         if (txtHospital.getText().toString().matches("Senhora Oliveira Guimarães")) {
-            HospitalLocation = "41.44191,-8.3074347";
+            HospitalLocation = "41.441908, -8.305245";
         }
         if (txtHospital.getText().toString().matches("Santa Maria Maior")) {
-            HospitalLocation = "41.533184,-8.6185787";
+            HospitalLocation = "41.533183, -8.616388";
         }
         if (txtHospital.getText().toString().matches("Nordeste")) {
-            HospitalLocation = "41.8019098,-6.7688308";
+            HospitalLocation = "41.802219, -6.768147";
         }
         if (txtHospital.getText().toString().matches("Cova da Beira")) {
-            HospitalLocation = "40.2662442,-7.4955216";
+            HospitalLocation = "40.266136, -7.492287";
         }
         if (txtHospital.getText().toString().matches("Castelo Branco")) {
-            HospitalLocation = "39.821828,-7.500954";
+            HospitalLocation = "39.822492, -7.499889";
         }
         if (txtHospital.getText().toString().matches("Coimbra")) {
-            HospitalLocation = "40.220667,-8.4151661";
+            HospitalLocation = "40.220665, -8.412978";
         }
         if (txtHospital.getText().toString().matches("Figueira da Foz")) {
-            HospitalLocation = "40.130863,-8.8622816";
+            HospitalLocation = "40.130862, -8.860094";
         }
         if (txtHospital.getText().toString().matches("Coimbra Francisco Gentil")) {
-            HospitalLocation = "40.2171298,-8.4120016";
+            HospitalLocation = "40.217128, -8.409814";
         }
         if (txtHospital.getText().toString().matches("Espírito Santo - Évora")) {
-            HospitalLocation = "38.5685733,-7.9052961";
+            HospitalLocation = "38.568572, -7.903106";
         }
         if (txtHospital.getText().toString().matches("Algarve")) {
-            HospitalLocation = "37.0245733,-7.931173";
+            HospitalLocation = "37.024569, -7.928985";
         }
         if (txtHospital.getText().toString().matches("Guarda")) {
-            HospitalLocation = "40.5309052,-7.2777112";
+            HospitalLocation = "40.530903, -7.275523";
         }
         if (txtHospital.getText().toString().matches("Leiria")) {
-            HospitalLocation = "39.7433166,-8.7964385";
+            HospitalLocation = "39.743314, -8.794250";
         }
         if (txtHospital.getText().toString().matches("Oeste")) {
-            HospitalLocation = "39.4046223,-9.1318501";
+            HospitalLocation = "39.404620, -9.129661";
         }
         if (txtHospital.getText().toString().matches("Lisboa Central")) {
-            HospitalLocation = "38.7170859,-9.1379516";
+            HospitalLocation = "38.717123, -9.137085";
         }
         if (txtHospital.getText().toString().matches("Lisboa Norte")) {
-            HospitalLocation = "38.765411,-9.1617467";
+            HospitalLocation = "38.765411, -9.159559";
         }
         if (txtHospital.getText().toString().matches("Lisboa Ocidental")) {
-            HospitalLocation = "38.7654768,-9.1945774";
+            HospitalLocation = "38.726995, -9.233875";
         }
         if (txtHospital.getText().toString().matches("Psiquiátrico de Lisboa")) {
-            HospitalLocation = "38.7576872,-9.14862";
+            HospitalLocation = "38.757685, -9.146433";
         }
         if (txtHospital.getText().toString().matches("Vila Franca de Xira")) {
-            HospitalLocation = "38.9771976,-8.9871135";
+            HospitalLocation = "38.977198, -8.984925";
         }
         if (txtHospital.getText().toString().matches("Beatriz Ângelo")) {
-            HospitalLocation = "38.8215556,-9.1785221";
+            HospitalLocation = "38.821554, -9.176333";
         }
         if (txtHospital.getText().toString().matches("Cascais")) {
-            HospitalLocation = "38.7300133,-9.4203311";
+            HospitalLocation = "38.730010, -9.418145";
         }
-        if (txtHospital.getText().toString().matches("Prof. Dr. Fernando Fonseca")) {
-            HospitalLocation = "38.7435637,-9.2480437";
+        if (txtHospital.getText().toString().matches("Professor Fernando Fonseca")) {
+            HospitalLocation = "38.743577, -9.245854";
         }
         if (txtHospital.getText().toString().matches("Lisboa Francisco Gentil")) {
-            HospitalLocation = "38.7398702,-9.1635497";
+            HospitalLocation = "38.739869, -9.161362";
         }
         if (txtHospital.getText().toString().matches("Norte Alentejano")) {
-            HospitalLocation = "39.3002158,-7.4296425";
+            HospitalLocation = "39.300215, -7.427454";
         }
         if (txtHospital.getText().toString().matches("São João")) {
-            HospitalLocation = "41.1814421,-8.6032293";
+            HospitalLocation = "41.181343, -8.600669";
         }
         if (txtHospital.getText().toString().matches("Eduardo Santos Silva")) {
-            HospitalLocation = "41.1815541,-8.6710803";
+            HospitalLocation = "41.106352, -8.592435";
         }
         if (txtHospital.getText().toString().matches("Médio Ave")) {
-            HospitalLocation = "41.377521,-8.5360971";
+            HospitalLocation = "41.412913, -8.521811";
         }
         if (txtHospital.getText().toString().matches("Porto")) {
-            HospitalLocation = "41.1472309,-8.6217242";
+            HospitalLocation = "41.147228, -8.619534";
         }
         if (txtHospital.getText().toString().matches("Tâmega e Sousa")) {
-            HospitalLocation = "41.1970225,-8.3117171";
+            HospitalLocation = "41.197027, -8.309523";
         }
         if (txtHospital.getText().toString().matches("Vila do Conde")) {
-            HospitalLocation = "41.3689037,-8.7692049";
+            HospitalLocation = "41.382959, -8.758802";
         }
         if (txtHospital.getText().toString().matches("Magalhães Lemos")) {
-            HospitalLocation = "41.1775305,-8.6685679";
+            HospitalLocation = "41.177631, -8.663650";
         }
         if (txtHospital.getText().toString().matches("Porto Francisco Gentil")) {
-            HospitalLocation = "41.1823645,-8.6080161";
+            HospitalLocation = "41.182737, -8.604551";
         }
         if (txtHospital.getText().toString().matches("Pedro Hispano")) {
-            HospitalLocation = "41.1818182,-8.6655801";
+            HospitalLocation = "41.181819, -8.663393";
         }
         if (txtHospital.getText().toString().matches("Médio Tejo")) {
-            HospitalLocation = "39.5388913,-8.536345";
+            HospitalLocation = "39.467919, -8.537029";
         }
         if (txtHospital.getText().toString().matches("Santarém")) {
-            HospitalLocation = "39.2410796,-8.6988352";
+            HospitalLocation = "39.241077, -8.696647";
         }
         if (txtHospital.getText().toString().matches("Barreiro Montijo")) {
-            HospitalLocation = "38.6546747,-9.0604176";
+            HospitalLocation = "38.654673, -9.058227";
         }
         if (txtHospital.getText().toString().matches("Setúbal")) {
-            HospitalLocation = "38.5090454,-8.9251669";
+            HospitalLocation = "38.529196, -8.881083";
         }
         if (txtHospital.getText().toString().matches("Garcia de Orta")) {
-            HospitalLocation = "38.6740734,-9.179027";
+            HospitalLocation = "38.674072, -9.176839";
         }
         if (txtHospital.getText().toString().matches("Litoral Alentejano")) {
-            HospitalLocation = "38.0400042,-8.7346887";
+            HospitalLocation = "38.040003, -8.732500";
         }
         if (txtHospital.getText().toString().matches("Alto Minho")) {
-            HospitalLocation = "41.6877095,-8.8249634";
+            HospitalLocation = "41.697339, -8.832486";
         }
         if (txtHospital.getText().toString().matches("Trás-os-montes e Alto Douro")) {
-            HospitalLocation = "41.3101655,-7.7622813";
+            HospitalLocation = "41.310163, -7.760095";
         }
         if (txtHospital.getText().toString().matches("Tondela-Viseu")) {
-            HospitalLocation = "40.6505725,-7.9075104";
+            HospitalLocation = "40.650466, -7.905616";
         }
     }
 }
