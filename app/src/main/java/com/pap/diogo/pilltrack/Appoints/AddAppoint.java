@@ -41,6 +41,10 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
     private DatabaseReference pRef;
     private String userid, HospitalLocation, HName;
 
+    /*TODO
+    Adicionar a opção de ter exames ou consultas.
+    */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +135,10 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         String hospital = txtHospital.getText().toString().trim();
         String txtdate = txtDate.getText().toString().trim();
 
-        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate)) {
+        if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))
+                || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital))
+                || (TextUtils.isEmpty(name) && TextUtils.isEmpty(txtdate))
+                || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))) {
             Toast.makeText(this, "Os campos não podem ficar vazios", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -148,6 +155,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
 
         if (TextUtils.isEmpty(txtdate)) {
             Toast.makeText(this, "Data não pode ficar vazia", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         getHospitalLocation();

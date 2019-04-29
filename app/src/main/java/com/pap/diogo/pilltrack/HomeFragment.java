@@ -95,8 +95,15 @@ public class HomeFragment extends Fragment {
                         mDate = org.joda.time.LocalDate.parse(dtStart, format);
                         cDate = new LocalDate();
                         int days = Days.daysBetween(cDate, mDate).getDays();
-                        String rDays = String.valueOf(days);
-                        holder.setDate("Faltam " + rDays + " dias.");
+
+                        if (days < 0) {
+                            aRef.child(model.getName()).removeValue();
+                        } else if (days == 0) {
+                            holder.setDate("A consulta é hoje.");
+                        } else {
+                            String rDays = String.valueOf(days);
+                            holder.setDate("Faltam " + rDays + " dias.");
+                        }
 
                         holder.MapsLoc.setOnClickListener(new View.OnClickListener() {
                             @Override
