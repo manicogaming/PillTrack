@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,12 +35,12 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class AddAppoint extends AppCompatActivity implements View.OnClickListener {
-    private EditText txtNameAppoint, txtDate;
-    private AutoCompleteTextView txtHospital;
+    private EditText txtDate;
+    private AutoCompleteTextView txtHospital, txtSpecialty;
     private Button btnAddAppoint;
     private FirebaseUser user;
     private DatabaseReference pRef;
-    private String userid, HospitalLocation, HName;
+    private String userid, HospitalLocation, HName, eName;
 
     /*TODO
     Adicionar a opção de ter exames ou consultas.
@@ -50,7 +51,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addappoint);
 
-        txtNameAppoint = findViewById(R.id.txtNameAppoint);
+        txtSpecialty = findViewById(R.id.txtSpecialty);
         txtHospital = findViewById(R.id.txtHospital);
         txtDate = findViewById(R.id.txtDate);
         btnAddAppoint = findViewById(R.id.btnAddAppoint);
@@ -60,9 +61,9 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         userid = user.getUid();
         pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Hospitals");
+        DatabaseReference hRef = FirebaseDatabase.getInstance().getReference("Hospitals");
         final ArrayAdapter<String> autoComplete = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
-        database.addValueEventListener(new ValueEventListener() {
+        hRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot hospitals : dataSnapshot.getChildren()) {
@@ -78,6 +79,25 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         });
         txtHospital.setThreshold(1);
         txtHospital.setAdapter(autoComplete);
+
+        DatabaseReference eRef = FirebaseDatabase.getInstance().getReference("Specialty");
+        final ArrayAdapter<String> arraySpinner = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
+        eRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot hospitals : dataSnapshot.getChildren()) {
+                    eName = hospitals.child("name").getValue(String.class);
+                    arraySpinner.add(eName);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        txtSpecialty.setThreshold(1);
+        txtSpecialty.setAdapter(arraySpinner);
 
         final Calendar myCalendar = Calendar.getInstance();
 
@@ -127,11 +147,29 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                 }
             }
         });
+
+        txtSpecialty.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String str = txtSpecialty.getText().toString();
+
+                    ListAdapter listAdapter = txtSpecialty.getAdapter();
+                    for (int i = 0; i < listAdapter.getCount(); i++) {
+                        String temp = listAdapter.getItem(i).toString();
+                        if (str.compareTo(temp) == 0) {
+                            return;
+                        }
+                    }
+                    txtSpecialty.setText("");
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
-        String name = txtNameAppoint.getText().toString().trim();
+        String name = txtSpecialty.getText().toString().trim();
         String hospital = txtHospital.getText().toString().trim();
         String txtdate = txtDate.getText().toString().trim();
 

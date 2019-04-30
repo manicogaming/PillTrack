@@ -20,7 +20,7 @@
 
             <EditText
                 android:id="@+id/txtEmailCHPW"
-                android:layout_width="300dp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:background="@color/colorDarkRed"
                 android:hint="Email"
@@ -42,7 +42,7 @@
 
             <EditText
                 android:id="@+id/txtOldPassword"
-                android:layout_width="300dp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:background="@color/colorDarkRed"
                 android:hint="Palavra-Passe Antiga"
@@ -64,7 +64,7 @@
 
             <EditText
                 android:id="@+id/txtNewPassword"
-                android:layout_width="300dp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:background="@color/colorDarkRed"
                 android:hint="Nova Palavra-Passe"
