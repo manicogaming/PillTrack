@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pap.diogo.pilltrack.Launcher;
 import com.pap.diogo.pilltrack.R;
 
 public class AccountFragment extends Fragment {
@@ -69,6 +70,14 @@ public class AccountFragment extends Fragment {
                         final String age = dataSnapshot.child("idade").getValue().toString();
                         holder.setName(name);
                         holder.setAge(age);
+
+                        holder.Logout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                FirebaseAuth.getInstance().signOut();
+                                getContext().startActivity(new Intent(getContext(), Launcher.class));
+                            }
+                        });
                     }
 
                     @Override
@@ -85,13 +94,14 @@ public class AccountFragment extends Fragment {
 
     public static class AccountInfo extends RecyclerView.ViewHolder {
         View AccountL;
-        Button btnChangePass;
+        Button btnChangePass, Logout;
 
         public AccountInfo(@NonNull View itemView) {
             super(itemView);
 
             AccountL = itemView;
             btnChangePass = AccountL.findViewById(R.id.AccountChangePass);
+            Logout = AccountL.findViewById(R.id.Logout);
 
             btnChangePass.setOnClickListener(new View.OnClickListener() {
                 @Override

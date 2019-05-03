@@ -27,12 +27,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
 public class PillsFragment extends Fragment {
     private ImageButton add_pill;
     private RecyclerView EPills;
-    private FirebaseRecyclerAdapter<Pill, EPillsInfo> EAppointsAdapter;
+    private FirebaseRecyclerAdapter<Pill, EPillsInfo> EPillsAdapter;
+    private TextView NoEPills;
     private boolean isSpinnerInitial = true;
 
     private FirebaseAuth mAuth;
@@ -50,6 +52,8 @@ public class PillsFragment extends Fragment {
         pRef = FirebaseDatabase.getInstance().getReference().child("Pills").child(userid);
 
         EPills = mMainView.findViewById(R.id.epillslist);
+
+        NoEPills = mMainView.findViewById(R.id.NoEPills);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         EPills.setLayoutManager(linearLayoutManager);
@@ -75,7 +79,7 @@ public class PillsFragment extends Fragment {
 
         FirebaseRecyclerOptions<Pill> PillQ = new FirebaseRecyclerOptions.Builder<Pill>().setQuery(pRef, Pill.class).setLifecycleOwner(this).build();
 
-        EAppointsAdapter = new FirebaseRecyclerAdapter<Pill, EPillsInfo>(PillQ) {
+        EPillsAdapter = new FirebaseRecyclerAdapter<Pill, EPillsInfo>(PillQ) {
 
             @NonNull
             @Override
@@ -88,6 +92,8 @@ public class PillsFragment extends Fragment {
                 pRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        NoEPills.setVisibility(View.GONE);
+
                         holder.setName(model.getName());
                         holder.setPillFunc(model.getPillfunc());
                         holder.setInterval(model.getInterval());
@@ -96,6 +102,7 @@ public class PillsFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 pRef.child(model.getName()).removeValue();
+                                ((MainActivity) getActivity()).setNavItem(1);
                             }
                         });
 
@@ -111,7 +118,12 @@ public class PillsFragment extends Fragment {
 
 
         };
-        EPills.setAdapter(EAppointsAdapter);
+
+        if (EPillsAdapter.getItemCount() == 0) {
+            NoEPills.setVisibility(View.VISIBLE);
+        }
+
+        EPills.setAdapter(EPillsAdapter);
     }
 
     private void EditPills(@NonNull final EPillsInfo holder, @NonNull final Pill model) {

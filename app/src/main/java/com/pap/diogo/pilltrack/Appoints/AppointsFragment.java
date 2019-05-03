@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
 public class AppointsFragment extends Fragment {
@@ -39,7 +40,7 @@ public class AppointsFragment extends Fragment {
     private RecyclerView EAppoints;
     private FirebaseRecyclerAdapter<Appoint, EAppointsInfo> EAppointsAdapter;
     private String HospitalLocation, HName;
-
+    private TextView NoEAppoints;
 
     private FirebaseAuth mAuth;
     DatabaseReference pRef;
@@ -56,6 +57,8 @@ public class AppointsFragment extends Fragment {
         pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
 
         EAppoints = mMainView.findViewById(R.id.eappointslist);
+
+        NoEAppoints = mMainView.findViewById(R.id.NoEAppoints);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         EAppoints.setLayoutManager(linearLayoutManager);
@@ -78,7 +81,6 @@ public class AppointsFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-
         FirebaseRecyclerOptions<Appoint> AppointQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(pRef, Appoint.class).setLifecycleOwner(this).build();
 
         EAppointsAdapter = new FirebaseRecyclerAdapter<Appoint, EAppointsInfo>(AppointQ) {
@@ -94,6 +96,8 @@ public class AppointsFragment extends Fragment {
                 pRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        NoEAppoints.setVisibility(View.GONE);
+
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
                         holder.setHospital(model.getHospital());
@@ -102,6 +106,7 @@ public class AppointsFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 pRef.child(model.getName()).removeValue();
+                                ((MainActivity) getActivity()).setNavItem(2);
                             }
                         });
 
@@ -117,6 +122,11 @@ public class AppointsFragment extends Fragment {
 
 
         };
+
+        if (EAppointsAdapter.getItemCount() == 0) {
+            NoEAppoints.setVisibility(View.VISIBLE);
+        }
+
         EAppoints.setAdapter(EAppointsAdapter);
     }
 

@@ -7,12 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -35,6 +37,8 @@ public class HomeFragment extends Fragment {
     private FirebaseRecyclerAdapter<Pill, PillsInfo> PillsAdapter;
     private FirebaseRecyclerAdapter<Appoint, AppointsInfo> AppointsAdapter;
     private FirebaseAuth mAuth;
+    private String userid;
+    private TextView NoAppoints, NoPills;
     DatabaseReference pRef, aRef;
 
     LocalDate cDate, mDate;
@@ -46,13 +50,16 @@ public class HomeFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
-        String userid = mAuth.getCurrentUser().getUid();
+        userid = mAuth.getCurrentUser().getUid();
 
         pRef = FirebaseDatabase.getInstance().getReference().child("Pills").child(userid);
         aRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
 
         Appoints = mMainView.findViewById(R.id.appointslist);
         Pills = mMainView.findViewById(R.id.pillslist);
+
+        NoAppoints = mMainView.findViewById(R.id.NoAppoints);
+        NoPills = mMainView.findViewById(R.id.NoPills);
 
         LinearLayoutManager lAppoints = new LinearLayoutManager(getContext());
         LinearLayoutManager lPills = new LinearLayoutManager(getContext());
@@ -87,6 +94,8 @@ public class HomeFragment extends Fragment {
                 aRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        NoAppoints.setVisibility(View.GONE);
+
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
 
@@ -128,9 +137,12 @@ public class HomeFragment extends Fragment {
                     }
                 });
             }
-
-
         };
+
+        if (AppointsAdapter.getItemCount() == 0) {
+            NoAppoints.setVisibility(View.VISIBLE);
+        }
+
         Appoints.setAdapter(AppointsAdapter);
     }
 
@@ -151,6 +163,8 @@ public class HomeFragment extends Fragment {
                 pRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        NoPills.setVisibility(View.GONE);
+
                         holder.setName(model.getName());
                         holder.setPillFunc(model.getPillfunc());
                         holder.setInterval(model.getInterval());
@@ -172,6 +186,11 @@ public class HomeFragment extends Fragment {
 
 
         };
+
+        if (PillsAdapter.getItemCount() == 0) {
+            NoPills.setVisibility(View.VISIBLE);
+        }
+
         Pills.setAdapter(PillsAdapter);
     }
 
