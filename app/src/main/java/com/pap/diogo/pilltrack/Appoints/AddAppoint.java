@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -16,6 +17,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -35,12 +37,14 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class AddAppoint extends AppCompatActivity implements View.OnClickListener {
-    private EditText txtDate;
+    private EditText txtDate, txtPreparation;
     private AutoCompleteTextView txtHospital, txtSpecialty;
     private Button btnAddAppoint;
     private FirebaseUser user;
-    private DatabaseReference pRef;
+    private DatabaseReference aRef, eRef;
     private String userid, HospitalLocation, HName, eName;
+    private ImageButton opt_appoint, opt_exam;
+    private TextInputLayout preparation;
 
     /*TODO
     Adicionar a opção de ter exames ou consultas.
@@ -54,12 +58,35 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         txtSpecialty = findViewById(R.id.txtSpecialty);
         txtHospital = findViewById(R.id.txtHospital);
         txtDate = findViewById(R.id.txtDate);
+        txtPreparation = findViewById(R.id.txtPreparation);
+
         btnAddAppoint = findViewById(R.id.btnAddAppoint);
         btnAddAppoint.setOnClickListener(this);
 
+        preparation = findViewById(R.id.preparation);
+
+        opt_appoint = findViewById(R.id.opt_appoint);
+        opt_exam = findViewById(R.id.opt_exam);
+        opt_appoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preparation.setVisibility(View.GONE);
+                txtPreparation.setVisibility(View.GONE);
+            }
+        });
+
+        opt_exam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preparation.setVisibility(View.VISIBLE);
+                txtPreparation.setVisibility(View.VISIBLE);
+            }
+        });
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         userid = user.getUid();
-        pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
+        aRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
+        eRef = FirebaseDatabase.getInstance().getReference().child("Exams").child(userid);
 
         DatabaseReference hRef = FirebaseDatabase.getInstance().getReference("Hospitals");
         final ArrayAdapter<String> autoComplete = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
@@ -80,9 +107,9 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         txtHospital.setThreshold(1);
         txtHospital.setAdapter(autoComplete);
 
-        DatabaseReference eRef = FirebaseDatabase.getInstance().getReference("Specialty");
+        DatabaseReference sRef = FirebaseDatabase.getInstance().getReference("Specialty");
         final ArrayAdapter<String> arraySpinner = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
-        eRef.addValueEventListener(new ValueEventListener() {
+        sRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot hospitals : dataSnapshot.getChildren()) {
@@ -169,39 +196,76 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        String name = txtSpecialty.getText().toString().trim();
-        String hospital = txtHospital.getText().toString().trim();
-        String txtdate = txtDate.getText().toString().trim();
+        if ((preparation.getVisibility() == View.GONE) && (txtPreparation.getVisibility() == View.GONE)) {
+            String name = txtSpecialty.getText().toString().trim();
+            String hospital = txtHospital.getText().toString().trim();
+            String txtdate = txtDate.getText().toString().trim();
 
-        if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))
-                || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital))
-                || (TextUtils.isEmpty(name) && TextUtils.isEmpty(txtdate))
-                || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))) {
-            Toast.makeText(this, "Os campos não podem ficar vazios", Toast.LENGTH_SHORT).show();
-            return;
+            if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))
+                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital))
+                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(txtdate))
+                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))) {
+                Toast.makeText(this, "Os campos não podem ficar vazios", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(name)) {
+                Toast.makeText(this, "Nome não pode ficar vazio", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(hospital)) {
+                Toast.makeText(this, "Hospital não pode ficar vazio", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(txtdate)) {
+                Toast.makeText(this, "Data não pode ficar vazia", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            getHospitalLocation();
+            AppointInfo AppointInfo = new AppointInfo(name, hospital, txtdate, HospitalLocation);
+            aRef.child(name).setValue(AppointInfo);
+            Toast.makeText(AddAppoint.this, "Consulta adicionada com sucesso!", Toast.LENGTH_SHORT).show();
+            Intent Home = new Intent(AddAppoint.this, MainActivity.class);
+            startActivity(Home);
+        } else {
+            String name = txtSpecialty.getText().toString().trim();
+            String hospital = txtHospital.getText().toString().trim();
+            String prep = txtPreparation.getText().toString().trim();
+            String txtdate = txtDate.getText().toString().trim();
+
+            if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))
+                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital))
+                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(txtdate))
+                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))) {
+                Toast.makeText(this, "Os campos não podem ficar vazios", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(name)) {
+                Toast.makeText(this, "Nome não pode ficar vazio", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(hospital)) {
+                Toast.makeText(this, "Hospital não pode ficar vazio", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(txtdate)) {
+                Toast.makeText(this, "Data não pode ficar vazia", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            getHospitalLocation();
+            ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, txtdate, HospitalLocation);
+            eRef.child(name).setValue(ExamInfo);
+            Toast.makeText(AddAppoint.this, "Exame adicionado com sucesso!", Toast.LENGTH_SHORT).show();
+            Intent Home = new Intent(AddAppoint.this, MainActivity.class);
+            startActivity(Home);
         }
-
-        if (TextUtils.isEmpty(name)) {
-            Toast.makeText(this, "Nome não pode ficar vazio", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(hospital)) {
-            Toast.makeText(this, "Hospital não pode ficar vazio", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(txtdate)) {
-            Toast.makeText(this, "Data não pode ficar vazia", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        getHospitalLocation();
-        AppointInfo AppointInfo = new AppointInfo(name, hospital, txtdate, HospitalLocation);
-        pRef.child(name).setValue(AppointInfo);
-        Toast.makeText(AddAppoint.this, "Consulta adicionada com sucesso!", Toast.LENGTH_SHORT).show();
-        Intent Home = new Intent(AddAppoint.this, MainActivity.class);
-        startActivity(Home);
     }
 
     @Override
