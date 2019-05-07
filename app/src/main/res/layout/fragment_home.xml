@@ -83,5 +83,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/appoints" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/examslist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/appointslist" />
+
     </RelativeLayout>
 </ScrollView>

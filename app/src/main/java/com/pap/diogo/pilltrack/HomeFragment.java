@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pap.diogo.pilltrack.Appoints.Appoint;
+import com.pap.diogo.pilltrack.Appoints.Exam;
 import com.pap.diogo.pilltrack.Maps.MapsActivity;
 import com.pap.diogo.pilltrack.Pills.Pill;
 
@@ -33,13 +34,14 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
 
 public class HomeFragment extends Fragment {
-    private RecyclerView Pills, Appoints;
+    private RecyclerView Pills, Appoints, Exams;
     private FirebaseRecyclerAdapter<Pill, PillsInfo> PillsAdapter;
     private FirebaseRecyclerAdapter<Appoint, AppointsInfo> AppointsAdapter;
+    private FirebaseRecyclerAdapter<Exam, ExamsInfo> ExamsAdapter;
     private FirebaseAuth mAuth;
     private String userid;
     private TextView NoAppoints, NoPills;
-    DatabaseReference pRef, aRef;
+    DatabaseReference pRef, aRef, eRef;
 
     LocalDate cDate, mDate;
 
@@ -54,16 +56,20 @@ public class HomeFragment extends Fragment {
 
         pRef = FirebaseDatabase.getInstance().getReference().child("Pills").child(userid);
         aRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
+        eRef = FirebaseDatabase.getInstance().getReference().child("Exams").child(userid);
 
         Appoints = mMainView.findViewById(R.id.appointslist);
+        Exams = mMainView.findViewById(R.id.examslist);
         Pills = mMainView.findViewById(R.id.pillslist);
 
         NoAppoints = mMainView.findViewById(R.id.NoAppoints);
         NoPills = mMainView.findViewById(R.id.NoPills);
 
         LinearLayoutManager lAppoints = new LinearLayoutManager(getContext());
+        LinearLayoutManager lExams = new LinearLayoutManager(getContext());
         LinearLayoutManager lPills = new LinearLayoutManager(getContext());
         Appoints.setLayoutManager(lAppoints);
+        Exams.setLayoutManager(lExams);
         Pills.setLayoutManager(lPills);
 
         return mMainView;
@@ -75,6 +81,7 @@ public class HomeFragment extends Fragment {
 
         ShowPills();
         ShowAppoints();
+        ShowExams();
 
     }
 
@@ -144,6 +151,74 @@ public class HomeFragment extends Fragment {
         }
 
         Appoints.setAdapter(AppointsAdapter);
+    }
+
+    private void ShowExams() {
+        FirebaseRecyclerOptions<Exam> ExamQ = new FirebaseRecyclerOptions.Builder<Exam>().setQuery(eRef, Exam.class).setLifecycleOwner(this).build();
+
+        ExamsAdapter = new FirebaseRecyclerAdapter<Exam, ExamsInfo>(ExamQ) {
+
+            @NonNull
+            @Override
+            public ExamsInfo onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                return new ExamsInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.exams, viewGroup, false));
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull final ExamsInfo holder, int position, @NonNull final Exam model) {
+                eRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        holder.setName(model.getName());
+                        holder.setDate(model.getDate());
+
+                        String dtStart = model.getDate();
+                        DateTimeFormatter format = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
+                        mDate = org.joda.time.LocalDate.parse(dtStart, format);
+                        cDate = new LocalDate();
+                        int days = Days.daysBetween(cDate, mDate).getDays();
+
+                        if (days < 0) {
+                            aRef.child(model.getName()).removeValue();
+                        } else if (days == 0) {
+                            holder.setDate("O exame é hoje.");
+                        } else {
+                            String rDays = String.valueOf(days);
+                            holder.setDate("Faltam " + rDays + " dias.");
+                        }
+
+                        holder.MapsLoc.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(getActivity(), MapsActivity.class);
+                                i.putExtra("GPSLocation", model.getHlocation());
+                                startActivity(i);
+                            }
+                        });
+
+                        holder.EditExam.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ((MainActivity) getActivity()).setNavItem(2);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        };
+
+        if (ExamsAdapter.getItemCount() == 0) {
+            Exams.setVisibility(View.VISIBLE);
+        } else {
+            Exams.setVisibility(View.GONE);
+        }
+
+        Exams.setAdapter(ExamsAdapter);
     }
 
     private void ShowPills() {
@@ -243,6 +318,30 @@ public class HomeFragment extends Fragment {
         public void setDate(String date) {
             TextView aDate = AppointsL.findViewById(R.id.aDate);
             aDate.setText(date);
+        }
+    }
+
+    public static class ExamsInfo extends RecyclerView.ViewHolder {
+        View ExamsL;
+        ImageButton EditExam;
+        Button MapsLoc;
+
+        public ExamsInfo(@NonNull View itemView) {
+            super(itemView);
+
+            ExamsL = itemView;
+            EditExam = ExamsL.findViewById(R.id.EditExam);
+            MapsLoc = ExamsL.findViewById(R.id.MapsLoc);
+        }
+
+        public void setName(String name) {
+            TextView eName = ExamsL.findViewById(R.id.eName);
+            eName.setText(name);
+        }
+
+        public void setDate(String date) {
+            TextView eDate = ExamsL.findViewById(R.id.eDate);
+            eDate.setText(date);
         }
     }
 }

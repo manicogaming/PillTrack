@@ -62,7 +62,7 @@ public class AddPill extends AppCompatActivity implements View.OnClickListener {
         String interval = txtInterval.getSelectedItem().toString().trim();
 
         if (TextUtils.isEmpty(name) && TextUtils.isEmpty(pillfunc)) {
-            Toast.makeText(this, "Os campos não podem ficar vazios", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Não podem haver campos vazios", Toast.LENGTH_SHORT).show();
             return;
         }
 

@@ -9,9 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,20 +27,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
 public class AppointsFragment extends Fragment {
     private ImageButton add_appoint;
-    private RecyclerView EAppoints;
+    private RecyclerView EAppoints, EExams;
     private FirebaseRecyclerAdapter<Appoint, EAppointsInfo> EAppointsAdapter;
+    private FirebaseRecyclerAdapter<Exam, EExamsInfo> EExamsAdapter;
     private String HospitalLocation, HName;
     private TextView NoEAppoints;
 
     private FirebaseAuth mAuth;
-    DatabaseReference pRef;
+    DatabaseReference aRef, eRef;
 
     @Nullable
     @Override
@@ -54,14 +51,19 @@ public class AppointsFragment extends Fragment {
 
         String userid = mAuth.getCurrentUser().getUid();
 
-        pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
+        aRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
+        eRef = FirebaseDatabase.getInstance().getReference().child("Exams").child(userid);
 
         EAppoints = mMainView.findViewById(R.id.eappointslist);
+        EExams = mMainView.findViewById(R.id.eexamslist);
 
         NoEAppoints = mMainView.findViewById(R.id.NoEAppoints);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        EAppoints.setLayoutManager(linearLayoutManager);
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext());
+        EAppoints.setLayoutManager(linearLayoutManager1);
+
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext());
+        EExams.setLayoutManager(linearLayoutManager2);
 
         add_appoint = mMainView.findViewById(R.id.add_appoint);
 
@@ -81,7 +83,12 @@ public class AppointsFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        FirebaseRecyclerOptions<Appoint> AppointQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(pRef, Appoint.class).setLifecycleOwner(this).build();
+        ShowAppoints();
+        ShowExams();
+    }
+
+    private void ShowAppoints() {
+        FirebaseRecyclerOptions<Appoint> AppointQ = new FirebaseRecyclerOptions.Builder<Appoint>().setQuery(aRef, Appoint.class).setLifecycleOwner(this).build();
 
         EAppointsAdapter = new FirebaseRecyclerAdapter<Appoint, EAppointsInfo>(AppointQ) {
 
@@ -93,7 +100,7 @@ public class AppointsFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull final EAppointsInfo holder, int position, @NonNull final Appoint model) {
-                pRef.addValueEventListener(new ValueEventListener() {
+                aRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         NoEAppoints.setVisibility(View.GONE);
@@ -105,7 +112,7 @@ public class AppointsFragment extends Fragment {
                         holder.EAppointDelete.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                pRef.child(model.getName()).removeValue();
+                                aRef.child(model.getName()).removeValue();
                                 ((MainActivity) getActivity()).setNavItem(2);
                             }
                         });
@@ -130,6 +137,56 @@ public class AppointsFragment extends Fragment {
         EAppoints.setAdapter(EAppointsAdapter);
     }
 
+    private void ShowExams() {
+        FirebaseRecyclerOptions<Exam> ExamQ = new FirebaseRecyclerOptions.Builder<Exam>().setQuery(eRef, Exam.class).setLifecycleOwner(this).build();
+
+        EExamsAdapter = new FirebaseRecyclerAdapter<Exam, EExamsInfo>(ExamQ) {
+
+            @NonNull
+            @Override
+            public EExamsInfo onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                return new EExamsInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.eexams, viewGroup, false));
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull final EExamsInfo holder, int position, @NonNull final Exam model) {
+                eRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        holder.setName(model.getName());
+                        holder.setDate(model.getDate());
+                        holder.setHospital(model.getHospital());
+
+                        holder.EExamDelete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                eRef.child(model.getName()).removeValue();
+                                ((MainActivity) getActivity()).setNavItem(2);
+                            }
+                        });
+
+                        EditExams(holder, model);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+
+        };
+
+        if (EExamsAdapter.getItemCount() == 0) {
+            EExams.setVisibility(View.VISIBLE);
+        } else {
+            EExams.setVisibility(View.GONE);
+        }
+
+        EExams.setAdapter(EExamsAdapter);
+    }
+
     private void EditAppoints(@NonNull final EAppointsInfo holder, @NonNull final Appoint model) {
         holder.AppointName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,15 +205,15 @@ public class AppointsFragment extends Fragment {
                             holder.AppointName.setVisibility(View.VISIBLE);
                             holder.EAppointName.setVisibility(View.GONE);
 
-                            pRef.child(model.getName()).removeValue();
+                            aRef.child(model.getName()).removeValue();
 
                             String newname = holder.EAppointName.getText().toString().trim();
                             String date = holder.AppointDate.getText().toString().trim();
                             String hospital = holder.AppointHospital.getText().toString().trim();
 
-                            getHospitalLocation(holder);
+                            getHospitalLocation(hospital);
                             AppointInfo AppointInfo = new AppointInfo(newname, hospital, date, HospitalLocation);
-                            pRef.child(newname).setValue(AppointInfo);
+                            aRef.child(newname).setValue(AppointInfo);
                         }
                     }
                 });
@@ -225,14 +282,125 @@ public class AppointsFragment extends Fragment {
 
                                     final String newhospital = str.trim();
 
-                                    getHospitalLocation(holder);
-                                    pRef.child(model.getName()).child("hospital").setValue(newhospital);
-                                    pRef.child(model.getName()).child("hlocation").setValue(HospitalLocation);
+                                    getHospitalLocation(newhospital);
+                                    aRef.child(model.getName()).child("hospital").setValue(newhospital);
+                                    aRef.child(model.getName()).child("hlocation").setValue(HospitalLocation);
                                 }
                             }
                             holder.EAppointHospital.setText(currhospital);
                             holder.AppointHospital.setVisibility(View.VISIBLE);
                             holder.EAppointHospital.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void EditExams(@NonNull final EExamsInfo holder, @NonNull final Exam model) {
+        holder.ExamName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.ExamName.setVisibility(View.GONE);
+                holder.EExamName.setVisibility(View.VISIBLE);
+                holder.EExamName.requestFocus();
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                holder.EExamName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (!hasFocus) {
+                            holder.ExamName.setVisibility(View.VISIBLE);
+                            holder.EExamName.setVisibility(View.GONE);
+
+                            eRef.child(model.getName()).removeValue();
+
+                            String newname = holder.EExamName.getText().toString().trim();
+                            String date = holder.ExamDate.getText().toString().trim();
+                            String hospital = holder.ExamHospital.getText().toString().trim();
+                            String prep = "2";
+
+                            getHospitalLocation(hospital);
+                            ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, HospitalLocation);
+                            eRef.child(newname).setValue(ExamInfo);
+                        }
+                    }
+                });
+            }
+        });
+
+        holder.ExamDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.ExamDate.setVisibility(View.GONE);
+                holder.EExamDate.setVisibility(View.VISIBLE);
+                holder.EExamDate.requestFocus();
+
+                DialogFragment newFragment = new EditDateFragment();
+                newFragment.show(getFragmentManager(), "DatePicker");
+
+                holder.ExamDate.setVisibility(View.VISIBLE);
+                holder.EExamDate.setVisibility(View.GONE);
+            }
+        });
+
+        holder.ExamHospital.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.ExamHospital.setVisibility(View.GONE);
+                holder.EExamHospital.setVisibility(View.VISIBLE);
+                holder.EExamHospital.requestFocus();
+
+                final String currhospital = holder.ExamHospital.getText().toString();
+
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference("Hospitals");
+                final ArrayAdapter<String> autoComplete = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+                database.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot hospitals : dataSnapshot.getChildren()) {
+                            HName = hospitals.child("name").getValue(String.class);
+                            autoComplete.add(HName);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                holder.EExamHospital.setThreshold(1);
+                holder.EExamHospital.setAdapter(autoComplete);
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                holder.EExamHospital.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (!hasFocus) {
+                            String str = holder.EExamHospital.getText().toString();
+
+                            ListAdapter listAdapter = holder.EExamHospital.getAdapter();
+                            for (int i = 0; i < listAdapter.getCount(); i++) {
+                                String temp = listAdapter.getItem(i).toString();
+                                if (str.compareTo(temp) == 0) {
+                                    holder.ExamHospital.setVisibility(View.VISIBLE);
+                                    holder.EExamHospital.setVisibility(View.GONE);
+
+                                    final String newhospital = str.trim();
+
+                                    getHospitalLocation(newhospital);
+                                    eRef.child(model.getName()).child("hospital").setValue(newhospital);
+                                    eRef.child(model.getName()).child("hlocation").setValue(HospitalLocation);
+                                }
+                            }
+                            holder.EExamHospital.setText(currhospital);
+                            holder.ExamHospital.setVisibility(View.VISIBLE);
+                            holder.EExamHospital.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -276,143 +444,179 @@ public class AppointsFragment extends Fragment {
         }
     }
 
-    public void getHospitalLocation(@NonNull final EAppointsInfo holder) {
-        if (holder.EAppointHospital.getText().toString().matches("Baixo Vouga")) {
+    public static class EExamsInfo extends RecyclerView.ViewHolder {
+        View EExamsL;
+        ImageButton EExamDelete;
+        TextView ExamName, ExamDate, ExamHospital;
+        EditText EExamName, EExamDate;
+        AutoCompleteTextView EExamHospital;
+
+        public EExamsInfo(@NonNull View itemView) {
+            super(itemView);
+
+            EExamsL = itemView;
+            EExamDelete = EExamsL.findViewById(R.id.EExamDelete);
+        }
+
+        public void setName(String name) {
+            ExamName = EExamsL.findViewById(R.id.ExamName);
+            EExamName = EExamsL.findViewById(R.id.EExamName);
+            ExamName.setText(name);
+            EExamName.setText(name);
+        }
+
+        public void setDate(String date) {
+            ExamDate = EExamsL.findViewById(R.id.ExamDate);
+            EExamDate = EExamsL.findViewById(R.id.EExamDate);
+            ExamDate.setText(date);
+            EExamDate.setText(date);
+        }
+
+        public void setHospital(String hospital) {
+            ExamHospital = EExamsL.findViewById(R.id.ExamHospital);
+            EExamHospital = EExamsL.findViewById(R.id.EExamHospital);
+            ExamHospital.setText(hospital);
+            EExamHospital.setText(hospital);
+        }
+    }
+
+    public void getHospitalLocation(String hospital) {
+        if (hospital.matches("Baixo Vouga")) {
             HospitalLocation = "40.633787, -8.654963";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Entre o Douro e Vouga")) {
+        if (hospital.matches("Entre o Douro e Vouga")) {
             HospitalLocation = "40.930216, -8.547473";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Francisco Zagalo")) {
+        if (hospital.matches("Francisco Zagalo")) {
             HospitalLocation = "40.857527, -8.631336";
         }
-        if (holder.EAppointHospital.getText().toString().matches("José Joaquim Fernandes")) {
+        if (hospital.matches("José Joaquim Fernandes")) {
             HospitalLocation = "38.014149, -7.869755";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Escala Brage")) {
+        if (hospital.matches("Escala Brage")) {
             HospitalLocation = "41.567980, -8.399012";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Senhora Oliveira Guimarães")) {
+        if (hospital.matches("Senhora Oliveira Guimarães")) {
             HospitalLocation = "41.441908, -8.305245";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Santa Maria Maior")) {
+        if (hospital.matches("Santa Maria Maior")) {
             HospitalLocation = "41.533183, -8.616388";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Nordeste")) {
+        if (hospital.matches("Nordeste")) {
             HospitalLocation = "41.802219, -6.768147";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Cova da Beira")) {
+        if (hospital.matches("Cova da Beira")) {
             HospitalLocation = "40.266136, -7.492287";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Castelo Branco")) {
+        if (hospital.matches("Castelo Branco")) {
             HospitalLocation = "39.822492, -7.499889";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Coimbra")) {
+        if (hospital.matches("Coimbra")) {
             HospitalLocation = "40.220665, -8.412978";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Figueira da Foz")) {
+        if (hospital.matches("Figueira da Foz")) {
             HospitalLocation = "40.130862, -8.860094";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Coimbra Francisco Gentil")) {
+        if (hospital.matches("Coimbra Francisco Gentil")) {
             HospitalLocation = "40.217128, -8.409814";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Espírito Santo - Évora")) {
+        if (hospital.matches("Espírito Santo - Évora")) {
             HospitalLocation = "38.568572, -7.903106";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Algarve")) {
+        if (hospital.matches("Algarve")) {
             HospitalLocation = "37.024569, -7.928985";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Guarda")) {
+        if (hospital.matches("Guarda")) {
             HospitalLocation = "40.530903, -7.275523";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Leiria")) {
+        if (hospital.matches("Leiria")) {
             HospitalLocation = "39.743314, -8.794250";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Oeste")) {
+        if (hospital.matches("Oeste")) {
             HospitalLocation = "39.404620, -9.129661";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Lisboa Central")) {
+        if (hospital.matches("Lisboa Central")) {
             HospitalLocation = "38.717123, -9.137085";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Lisboa Norte")) {
+        if (hospital.matches("Lisboa Norte")) {
             HospitalLocation = "38.765411, -9.159559";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Lisboa Ocidental")) {
+        if (hospital.matches("Lisboa Ocidental")) {
             HospitalLocation = "38.726995, -9.233875";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Psiquiátrico de Lisboa")) {
+        if (hospital.matches("Psiquiátrico de Lisboa")) {
             HospitalLocation = "38.757685, -9.146433";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Vila Franca de Xira")) {
+        if (hospital.matches("Vila Franca de Xira")) {
             HospitalLocation = "38.977198, -8.984925";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Beatriz Ângelo")) {
+        if (hospital.matches("Beatriz Ângelo")) {
             HospitalLocation = "38.821554, -9.176333";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Cascais")) {
+        if (hospital.matches("Cascais")) {
             HospitalLocation = "38.730010, -9.418145";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Professor Fernando Fonseca")) {
+        if (hospital.matches("Professor Fernando Fonseca")) {
             HospitalLocation = "38.743577, -9.245854";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Lisboa Francisco Gentil")) {
+        if (hospital.matches("Lisboa Francisco Gentil")) {
             HospitalLocation = "38.739869, -9.161362";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Norte Alentejano")) {
+        if (hospital.matches("Norte Alentejano")) {
             HospitalLocation = "39.300215, -7.427454";
         }
-        if (holder.EAppointHospital.getText().toString().matches("São João")) {
+        if (hospital.matches("São João")) {
             HospitalLocation = "41.181343, -8.600669";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Eduardo Santos Silva")) {
+        if (hospital.matches("Eduardo Santos Silva")) {
             HospitalLocation = "41.106352, -8.592435";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Médio Ave")) {
+        if (hospital.matches("Médio Ave")) {
             HospitalLocation = "41.412913, -8.521811";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Porto")) {
+        if (hospital.matches("Porto")) {
             HospitalLocation = "41.147228, -8.619534";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Tâmega e Sousa")) {
+        if (hospital.matches("Tâmega e Sousa")) {
             HospitalLocation = "41.197027, -8.309523";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Vila do Conde")) {
+        if (hospital.matches("Vila do Conde")) {
             HospitalLocation = "41.382959, -8.758802";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Magalhães Lemos")) {
+        if (hospital.matches("Magalhães Lemos")) {
             HospitalLocation = "41.177631, -8.663650";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Porto Francisco Gentil")) {
+        if (hospital.matches("Porto Francisco Gentil")) {
             HospitalLocation = "41.182737, -8.604551";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Pedro Hispano")) {
+        if (hospital.matches("Pedro Hispano")) {
             HospitalLocation = "41.181819, -8.663393";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Médio Tejo")) {
+        if (hospital.matches("Médio Tejo")) {
             HospitalLocation = "39.467919, -8.537029";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Santarém")) {
+        if (hospital.matches("Santarém")) {
             HospitalLocation = "39.241077, -8.696647";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Barreiro Montijo")) {
+        if (hospital.matches("Barreiro Montijo")) {
             HospitalLocation = "38.654673, -9.058227";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Setúbal")) {
+        if (hospital.matches("Setúbal")) {
             HospitalLocation = "38.529196, -8.881083";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Garcia de Orta")) {
+        if (hospital.matches("Garcia de Orta")) {
             HospitalLocation = "38.674072, -9.176839";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Litoral Alentejano")) {
+        if (hospital.matches("Litoral Alentejano")) {
             HospitalLocation = "38.040003, -8.732500";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Alto Minho")) {
+        if (hospital.matches("Alto Minho")) {
             HospitalLocation = "41.697339, -8.832486";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Trás-os-montes e Alto Douro")) {
+        if (hospital.matches("Trás-os-montes e Alto Douro")) {
             HospitalLocation = "41.310163, -7.760095";
         }
-        if (holder.EAppointHospital.getText().toString().matches("Tondela-Viseu")) {
+        if (hospital.matches("Tondela-Viseu")) {
             HospitalLocation = "40.650466, -7.905616";
         }
     }
