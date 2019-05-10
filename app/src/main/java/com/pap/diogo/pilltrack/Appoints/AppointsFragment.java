@@ -36,11 +36,13 @@ public class AppointsFragment extends Fragment {
     private RecyclerView EAppoints, EExams;
     private FirebaseRecyclerAdapter<Appoint, EAppointsInfo> EAppointsAdapter;
     private FirebaseRecyclerAdapter<Exam, EExamsInfo> EExamsAdapter;
-    private String HospitalLocation, HName;
+    private String HospitalLocation, HName, SName;
     private TextView NoEAppoints;
 
     private FirebaseAuth mAuth;
     DatabaseReference aRef, eRef;
+
+    private boolean isAppoint = true;
 
     @Nullable
     @Override
@@ -195,6 +197,28 @@ public class AppointsFragment extends Fragment {
                 holder.EAppointName.setVisibility(View.VISIBLE);
                 holder.EAppointName.requestFocus();
 
+                final String currname = holder.AppointName.getText().toString();
+
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference("Specialty");
+                final ArrayAdapter<String> autoComplete = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+                database.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot specialty : dataSnapshot.getChildren()) {
+                            SName = specialty.child("name").getValue(String.class);
+                            autoComplete.add(SName);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                holder.EAppointName.setThreshold(1);
+                holder.EAppointName.setAdapter(autoComplete);
+
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
@@ -202,18 +226,30 @@ public class AppointsFragment extends Fragment {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         if (!hasFocus) {
+                            String str = holder.EAppointName.getText().toString();
+
+                            ListAdapter listAdapter = holder.EAppointName.getAdapter();
+                            for (int i = 0; i < listAdapter.getCount(); i++) {
+                                String temp = listAdapter.getItem(i).toString();
+                                if (str.compareTo(temp) == 0) {
+                                    holder.AppointName.setVisibility(View.VISIBLE);
+                                    holder.EAppointName.setVisibility(View.GONE);
+
+                                    final String newname = str.trim();
+
+                                    aRef.child(model.getName()).removeValue();
+
+                                    String date = holder.AppointDate.getText().toString().trim();
+                                    String hospital = holder.AppointHospital.getText().toString().trim();
+
+                                    getHospitalLocation(hospital);
+                                    AppointInfo AppointInfo = new AppointInfo(newname, hospital, date, HospitalLocation);
+                                    aRef.child(newname).setValue(AppointInfo);
+                                }
+                            }
+                            holder.EAppointName.setText(currname);
                             holder.AppointName.setVisibility(View.VISIBLE);
                             holder.EAppointName.setVisibility(View.GONE);
-
-                            aRef.child(model.getName()).removeValue();
-
-                            String newname = holder.EAppointName.getText().toString().trim();
-                            String date = holder.AppointDate.getText().toString().trim();
-                            String hospital = holder.AppointHospital.getText().toString().trim();
-
-                            getHospitalLocation(hospital);
-                            AppointInfo AppointInfo = new AppointInfo(newname, hospital, date, HospitalLocation);
-                            aRef.child(newname).setValue(AppointInfo);
                         }
                     }
                 });
@@ -227,8 +263,8 @@ public class AppointsFragment extends Fragment {
                 holder.EAppointDate.setVisibility(View.VISIBLE);
                 holder.EAppointDate.requestFocus();
 
-                DialogFragment newFragment = new EditDateFragment();
-                newFragment.show(getFragmentManager(), "DatePicker");
+                isAppoint = true;
+                newInstance(isAppoint);
 
                 holder.AppointDate.setVisibility(View.VISIBLE);
                 holder.EAppointDate.setVisibility(View.GONE);
@@ -305,6 +341,28 @@ public class AppointsFragment extends Fragment {
                 holder.EExamName.setVisibility(View.VISIBLE);
                 holder.EExamName.requestFocus();
 
+                final String currname = holder.ExamName.getText().toString();
+
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference("Specialty");
+                final ArrayAdapter<String> autoComplete = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+                database.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot specialty : dataSnapshot.getChildren()) {
+                            SName = specialty.child("name").getValue(String.class);
+                            autoComplete.add(SName);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                holder.EExamName.setThreshold(1);
+                holder.EExamName.setAdapter(autoComplete);
+
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
@@ -312,19 +370,31 @@ public class AppointsFragment extends Fragment {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         if (!hasFocus) {
+                            String str = holder.EExamName.getText().toString();
+
+                            ListAdapter listAdapter = holder.EExamName.getAdapter();
+                            for (int i = 0; i < listAdapter.getCount(); i++) {
+                                String temp = listAdapter.getItem(i).toString();
+                                if (str.compareTo(temp) == 0) {
+                                    holder.ExamName.setVisibility(View.VISIBLE);
+                                    holder.EExamName.setVisibility(View.GONE);
+
+                                    final String newname = str.trim();
+
+                                    eRef.child(model.getName()).removeValue();
+
+                                    String date = holder.ExamDate.getText().toString().trim();
+                                    String hospital = holder.ExamHospital.getText().toString().trim();
+                                    String prep = "2";
+
+                                    getHospitalLocation(hospital);
+                                    ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, HospitalLocation);
+                                    eRef.child(newname).setValue(ExamInfo);
+                                }
+                            }
+                            holder.EExamName.setText(currname);
                             holder.ExamName.setVisibility(View.VISIBLE);
                             holder.EExamName.setVisibility(View.GONE);
-
-                            eRef.child(model.getName()).removeValue();
-
-                            String newname = holder.EExamName.getText().toString().trim();
-                            String date = holder.ExamDate.getText().toString().trim();
-                            String hospital = holder.ExamHospital.getText().toString().trim();
-                            String prep = "2";
-
-                            getHospitalLocation(hospital);
-                            ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, HospitalLocation);
-                            eRef.child(newname).setValue(ExamInfo);
                         }
                     }
                 });
@@ -338,8 +408,8 @@ public class AppointsFragment extends Fragment {
                 holder.EExamDate.setVisibility(View.VISIBLE);
                 holder.EExamDate.requestFocus();
 
-                DialogFragment newFragment = new EditDateFragment();
-                newFragment.show(getFragmentManager(), "DatePicker");
+                isAppoint = false;
+                newInstance(isAppoint);
 
                 holder.ExamDate.setVisibility(View.VISIBLE);
                 holder.EExamDate.setVisibility(View.GONE);
@@ -408,12 +478,23 @@ public class AppointsFragment extends Fragment {
         });
     }
 
+    public DialogFragment newInstance(boolean isExam) {
+        DialogFragment f = new EditDateFragment();
+        f.show(getFragmentManager(), "DatePicker");
+
+        Bundle args = new Bundle();
+        args.putBoolean("isAppoint", isAppoint);
+        f.setArguments(args);
+
+        return f;
+    }
+
     public static class EAppointsInfo extends RecyclerView.ViewHolder {
         View EAppointsL;
         ImageButton EAppointDelete;
         TextView AppointName, AppointDate, AppointHospital;
-        EditText EAppointName, EAppointDate;
-        AutoCompleteTextView EAppointHospital;
+        EditText EAppointDate;
+        AutoCompleteTextView EAppointName, EAppointHospital;
 
         public EAppointsInfo(@NonNull View itemView) {
             super(itemView);
@@ -448,8 +529,8 @@ public class AppointsFragment extends Fragment {
         View EExamsL;
         ImageButton EExamDelete;
         TextView ExamName, ExamDate, ExamHospital;
-        EditText EExamName, EExamDate;
-        AutoCompleteTextView EExamHospital;
+        EditText EExamDate;
+        AutoCompleteTextView EExamHospital, EExamName;
 
         public EExamsInfo(@NonNull View itemView) {
             super(itemView);

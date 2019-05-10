@@ -16,8 +16,9 @@ import com.pap.diogo.pilltrack.R;
 import java.util.Calendar;
 
 public class EditDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-    DatabaseReference pRef;
+    DatabaseReference aRef, eRef;
     private FirebaseAuth mAuth;
+    private boolean isAppoint;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class EditDateFragment extends DialogFragment implements DatePickerDialog
         int dd = calendar.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePicker = new DatePickerDialog(getActivity(), this, yy, mm, dd);
         datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        isAppoint = getArguments().getBoolean("isAppoint");
         return datePicker;
     }
 
@@ -35,19 +37,36 @@ public class EditDateFragment extends DialogFragment implements DatePickerDialog
     }
 
     public void populateSetDate(int year, int month, int day) {
-        EditText AppointDate = getActivity().findViewById(R.id.EAppointDate);
-        TextView AppointName = getActivity().findViewById(R.id.AppointName);
+        if (isAppoint) {
+            EditText AppointDate = getActivity().findViewById(R.id.EAppointDate);
+            TextView AppointName = getActivity().findViewById(R.id.AppointName);
 
-        mAuth = FirebaseAuth.getInstance();
-        String userid = mAuth.getCurrentUser().getUid();
-        pRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
+            mAuth = FirebaseAuth.getInstance();
+            String userid = mAuth.getCurrentUser().getUid();
+            aRef = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
 
-        AppointDate.setText(day + "/" + month + "/" + year);
+            AppointDate.setText(day + "/" + month + "/" + year);
 
-        String name = AppointName.getText().toString().trim();
-        String newdate = AppointDate.getText().toString().trim();
+            String name = AppointName.getText().toString().trim();
+            String newdate = AppointDate.getText().toString().trim();
 
-        pRef.child(name).child("date").setValue(newdate);
+            aRef.child(name).child("date").setValue(newdate);
+        } else {
+
+            EditText ExamDate = getActivity().findViewById(R.id.EExamDate);
+            TextView ExamName = getActivity().findViewById(R.id.ExamName);
+
+            mAuth = FirebaseAuth.getInstance();
+            String userid = mAuth.getCurrentUser().getUid();
+            eRef = FirebaseDatabase.getInstance().getReference().child("Exams").child(userid);
+
+            ExamDate.setText(day + "/" + month + "/" + year);
+
+            String name = ExamName.getText().toString().trim();
+            String newdate = ExamDate.getText().toString().trim();
+
+            eRef.child(name).child("date").setValue(newdate);
+        }
     }
 
 }
