@@ -158,6 +158,7 @@ public class AppointsFragment extends Fragment {
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
                         holder.setHospital(model.getHospital());
+                        holder.setPrep(model.getPrep());
 
                         holder.EExamDelete.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -343,7 +344,7 @@ public class AppointsFragment extends Fragment {
 
                 final String currname = holder.ExamName.getText().toString();
 
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference("Specialty");
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference("ExamType");
                 final ArrayAdapter<String> autoComplete = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
                 database.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -385,7 +386,7 @@ public class AppointsFragment extends Fragment {
 
                                     String date = holder.ExamDate.getText().toString().trim();
                                     String hospital = holder.ExamHospital.getText().toString().trim();
-                                    String prep = "2";
+                                    String prep = holder.ExamPrep.getText().toString().trim();
 
                                     getHospitalLocation(hospital);
                                     ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, HospitalLocation);
@@ -476,6 +477,31 @@ public class AppointsFragment extends Fragment {
                 });
             }
         });
+
+        holder.ExamPrep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.ExamPrep.setVisibility(View.GONE);
+                holder.EExamPrep.setVisibility(View.VISIBLE);
+                holder.EExamPrep.requestFocus();
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                holder.EExamPrep.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (!hasFocus) {
+                            String prepdays = holder.EExamPrep.getText().toString().trim();
+
+                            eRef.child(model.getName()).child("prep").setValue(prepdays);
+                        }
+                        holder.ExamPrep.setVisibility(View.VISIBLE);
+                        holder.EExamPrep.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
     }
 
     public DialogFragment newInstance(boolean isExam) {
@@ -528,8 +554,8 @@ public class AppointsFragment extends Fragment {
     public static class EExamsInfo extends RecyclerView.ViewHolder {
         View EExamsL;
         ImageButton EExamDelete;
-        TextView ExamName, ExamDate, ExamHospital;
-        EditText EExamDate;
+        TextView ExamName, ExamDate, ExamHospital, ExamPrep;
+        EditText EExamDate, EExamPrep;
         AutoCompleteTextView EExamHospital, EExamName;
 
         public EExamsInfo(@NonNull View itemView) {
@@ -558,6 +584,13 @@ public class AppointsFragment extends Fragment {
             EExamHospital = EExamsL.findViewById(R.id.EExamHospital);
             ExamHospital.setText(hospital);
             EExamHospital.setText(hospital);
+        }
+
+        public void setPrep(String prep) {
+            ExamPrep = EExamsL.findViewById(R.id.ExamPrep);
+            EExamPrep = EExamsL.findViewById(R.id.EExamPrep);
+            ExamPrep.setText(prep + " Dias");
+            EExamPrep.setText(prep);
         }
     }
 

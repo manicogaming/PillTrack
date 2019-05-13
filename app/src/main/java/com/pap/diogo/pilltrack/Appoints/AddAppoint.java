@@ -45,7 +45,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
     private String userid, HospitalLocation, HName, eName;
     private ImageButton opt_appoint, opt_exam;
     private TextInputLayout preparation;
-    private boolean isPreparation = false;
+    private boolean isExam = false;
 
     /*TODO
     Adicionar a opção de ter exames ou consultas.
@@ -73,7 +73,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
             public void onClick(View v) {
                 preparation.setVisibility(View.GONE);
                 txtPreparation.setVisibility(View.GONE);
-                isPreparation = false;
+                isExam = false;
             }
         });
 
@@ -82,7 +82,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
             public void onClick(View v) {
                 preparation.setVisibility(View.VISIBLE);
                 txtPreparation.setVisibility(View.VISIBLE);
-                isPreparation = true;
+                isExam = true;
             }
         });
 
@@ -115,8 +115,8 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         sRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot hospitals : dataSnapshot.getChildren()) {
-                    eName = hospitals.child("name").getValue(String.class);
+                for (DataSnapshot specialties : dataSnapshot.getChildren()) {
+                    eName = specialties.child("name").getValue(String.class);
                     arraySpinner.add(eName);
                 }
             }
@@ -199,7 +199,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        if (isPreparation) {
+        if (isExam) {
             String name = txtSpecialty.getText().toString().trim();
             String hospital = txtHospital.getText().toString().trim();
             String prep = txtPreparation.getText().toString().trim();
