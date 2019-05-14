@@ -495,9 +495,10 @@ public class AppointsFragment extends Fragment {
                             String prepdays = holder.EExamPrep.getText().toString().trim();
 
                             eRef.child(model.getName()).child("prep").setValue(prepdays);
+
+                            holder.ExamPrep.setVisibility(View.VISIBLE);
+                            holder.EExamPrep.setVisibility(View.GONE);
                         }
-                        holder.ExamPrep.setVisibility(View.VISIBLE);
-                        holder.EExamPrep.setVisibility(View.GONE);
                     }
                 });
             }
