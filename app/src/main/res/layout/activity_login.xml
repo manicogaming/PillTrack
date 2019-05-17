@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".Accounts.Register">
+    tools:context=".Accounts.Register"
+    android:id="@+id/rootview">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -47,13 +48,27 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="5dp"
+            android:text="Esqueceu-se da Palavra-Passe?"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layout2"
+            android:layout_below="@+id/forgotPassword"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
             android:background="@drawable/dark_button"
             android:padding="15dp"
             android:text="Login"

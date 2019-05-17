@@ -22,7 +22,7 @@
                 android:id="@+id/txtNamePill"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorDarkRed"
+                android:background="@color/colorDarkBlue"
                 android:hint="Nome do Medicamento"
                 android:inputType="text"
                 android:padding="10dp"
@@ -43,7 +43,7 @@
                 android:id="@+id/txtPillFunc"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorDarkRed"
+                android:background="@color/colorDarkBlue"
                 android:hint="Função"
                 android:padding="10dp"
                 android:textColor="@color/colorWhite"
@@ -63,7 +63,7 @@
                 android:id="@+id/txtInterval"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorDarkRed" />
+                android:background="@color/colorDarkBlue" />
         </RelativeLayout>
 
 

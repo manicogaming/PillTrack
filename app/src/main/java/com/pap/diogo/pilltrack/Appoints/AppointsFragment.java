@@ -264,8 +264,7 @@ public class AppointsFragment extends Fragment {
                 holder.EAppointDate.setVisibility(View.VISIBLE);
                 holder.EAppointDate.requestFocus();
 
-                isAppoint = true;
-                newInstance(isAppoint);
+                newInstance();
 
                 holder.AppointDate.setVisibility(View.VISIBLE);
                 holder.EAppointDate.setVisibility(View.GONE);
@@ -410,7 +409,7 @@ public class AppointsFragment extends Fragment {
                 holder.EExamDate.requestFocus();
 
                 isAppoint = false;
-                newInstance(isAppoint);
+                newInstance();
 
                 holder.ExamDate.setVisibility(View.VISIBLE);
                 holder.EExamDate.setVisibility(View.GONE);
@@ -505,7 +504,7 @@ public class AppointsFragment extends Fragment {
         });
     }
 
-    public DialogFragment newInstance(boolean isExam) {
+    public DialogFragment newInstance() {
         DialogFragment f = new EditDateFragment();
         f.show(getFragmentManager(), "DatePicker");
 
