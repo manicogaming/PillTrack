@@ -25,7 +25,8 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/eexamslist">
+            android:layout_below="@+id/eexamslist"
+            android:layout_marginBottom="15dp">
 
             <TextView
                 android:id="@+id/NoEAppoints"
@@ -36,19 +37,15 @@
                 android:text="Não tem consultas adicionadas!"
                 android:visibility="gone" />
 
-            <ImageButton
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_appoint"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/NoEAppoints"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="15dp"
                 android:background="@drawable/add_button"
-                android:padding="5dp"
                 android:src="@drawable/ic_add" />
-
         </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

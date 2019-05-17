@@ -75,7 +75,9 @@ public class AccountFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 FirebaseAuth.getInstance().signOut();
-                                getContext().startActivity(new Intent(getContext(), Launcher.class));
+                                Intent Launcher = new Intent(getContext(), Launcher.class);
+                                Launcher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(Launcher);
                             }
                         });
                     }

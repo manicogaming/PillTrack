@@ -56,6 +56,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         getSystemService(LAYOUT_INFLATER_SERVICE);
                 View popupView = inflater.inflate(R.layout.popup_forgotpassword, null);
 
+                final EditText fgEmail = popupView.findViewById(R.id.fgEmail);
+                Button btnSend = popupView.findViewById(R.id.btnSend);
+
                 int width = LinearLayout.LayoutParams.WRAP_CONTENT;
                 int height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 boolean focusable = true;
@@ -64,6 +67,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     popupWindow.setElevation(20);
                 }
+
+                btnSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FirebaseAuth.getInstance().sendPasswordResetEmail(fgEmail.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(Login.this, "Email enviado!", Toast.LENGTH_SHORT).show();
+                                            popupWindow.dismiss();
+                                        }
+                                    }
+                                });
+                    }
+                });
 
                 popupWindow.showAtLocation(rootview, Gravity.CENTER, 0, 0);
 
@@ -74,15 +93,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         return true;
                     }
                 });
-                /*FirebaseAuth.getInstance().sendPasswordResetEmail(txtEmail.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(Login.this, "Email enviado!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });*/
             }
         });
     }
