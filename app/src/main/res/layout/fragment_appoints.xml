@@ -23,10 +23,9 @@
             android:layout_marginBottom="15dp" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/eexamslist"
-            android:layout_marginBottom="15dp">
+            android:layout_below="@+id/eexamslist">
 
             <TextView
                 android:id="@+id/NoEAppoints"
@@ -35,15 +34,23 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="15dp"
                 android:text="Não tem consultas adicionadas!"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:textAlignment="center"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true">
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_appoint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/NoEAppoints"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="15dp"
+                android:layout_margin="16dp"
                 android:background="@drawable/add_button"
                 android:src="@drawable/ic_add" />
         </RelativeLayout>

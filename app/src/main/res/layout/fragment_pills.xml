@@ -29,18 +29,20 @@
                 android:layout_marginBottom="15dp"
                 android:text="Não tem medicamentos adicionados!"
                 android:visibility="gone" />
+        </RelativeLayout>
 
-            <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true">
+
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_pill"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/NoEPills"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_margin="16dp"
                 android:background="@drawable/add_button"
-                android:padding="5dp"
                 android:src="@drawable/ic_add" />
         </RelativeLayout>
     </RelativeLayout>

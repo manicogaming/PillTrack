@@ -47,10 +47,6 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
     private TextInputLayout preparation;
     private boolean isExam = false;
 
-    /*TODO
-    Adicionar a opção de ter exames ou consultas.
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +62,25 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
 
         preparation = findViewById(R.id.preparation);
 
+        DatabaseReference sRef = FirebaseDatabase.getInstance().getReference("Specialty");
+        final ArrayAdapter<String> arraySpinner = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
+        sRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot specialties : dataSnapshot.getChildren()) {
+                    eName = specialties.child("name").getValue(String.class);
+                    arraySpinner.add(eName);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        txtSpecialty.setThreshold(1);
+        txtSpecialty.setAdapter(arraySpinner);
+
         opt_appoint = findViewById(R.id.opt_appoint);
         opt_exam = findViewById(R.id.opt_exam);
         opt_appoint.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +89,25 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                 preparation.setVisibility(View.GONE);
                 txtPreparation.setVisibility(View.GONE);
                 isExam = false;
+
+                DatabaseReference sRef = FirebaseDatabase.getInstance().getReference("Specialty");
+                final ArrayAdapter<String> arraySpinner = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
+                sRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot specialties : dataSnapshot.getChildren()) {
+                            eName = specialties.child("name").getValue(String.class);
+                            arraySpinner.add(eName);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                txtSpecialty.setThreshold(1);
+                txtSpecialty.setAdapter(arraySpinner);
             }
         });
 
@@ -83,6 +117,25 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                 preparation.setVisibility(View.VISIBLE);
                 txtPreparation.setVisibility(View.VISIBLE);
                 isExam = true;
+
+                DatabaseReference sRef = FirebaseDatabase.getInstance().getReference("ExamType");
+                final ArrayAdapter<String> arraySpinner = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
+                sRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot specialties : dataSnapshot.getChildren()) {
+                            eName = specialties.child("name").getValue(String.class);
+                            arraySpinner.add(eName);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                txtSpecialty.setThreshold(1);
+                txtSpecialty.setAdapter(arraySpinner);
             }
         });
 
@@ -109,25 +162,6 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         });
         txtHospital.setThreshold(1);
         txtHospital.setAdapter(autoComplete);
-
-        DatabaseReference sRef = FirebaseDatabase.getInstance().getReference("Specialty");
-        final ArrayAdapter<String> arraySpinner = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
-        sRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot specialties : dataSnapshot.getChildren()) {
-                    eName = specialties.child("name").getValue(String.class);
-                    arraySpinner.add(eName);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        txtSpecialty.setThreshold(1);
-        txtSpecialty.setAdapter(arraySpinner);
 
         final Calendar myCalendar = Calendar.getInstance();
 

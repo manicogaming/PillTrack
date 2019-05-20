@@ -148,6 +148,10 @@ public class HomeFragment extends Fragment {
 
         if (AppointsAdapter.getItemCount() == 0) {
             NoAppoints.setVisibility(View.VISIBLE);
+            Appoints.setVisibility(View.VISIBLE);
+        } else {
+            NoAppoints.setVisibility(View.GONE);
+            Appoints.setVisibility(View.GONE);
         }
 
         Appoints.setAdapter(AppointsAdapter);
@@ -213,9 +217,11 @@ public class HomeFragment extends Fragment {
         };
 
         if (ExamsAdapter.getItemCount() == 0) {
+            NoAppoints.setVisibility(View.VISIBLE);
             Exams.setVisibility(View.VISIBLE);
         } else {
             Exams.setVisibility(View.GONE);
+            NoAppoints.setVisibility(View.GONE);
         }
 
         Exams.setAdapter(ExamsAdapter);

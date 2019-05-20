@@ -132,10 +132,6 @@ public class AppointsFragment extends Fragment {
 
         };
 
-        if (EAppointsAdapter.getItemCount() == 0) {
-            NoEAppoints.setVisibility(View.VISIBLE);
-        }
-
         EAppoints.setAdapter(EAppointsAdapter);
     }
 
@@ -181,10 +177,12 @@ public class AppointsFragment extends Fragment {
 
         };
 
-        if (EExamsAdapter.getItemCount() == 0) {
+        if ((EExamsAdapter.getItemCount() == 0) && (EAppointsAdapter.getItemCount() == 0)) {
             EExams.setVisibility(View.VISIBLE);
+            NoEAppoints.setVisibility(View.VISIBLE);
         } else {
             EExams.setVisibility(View.GONE);
+            NoEAppoints.setVisibility(View.GONE);
         }
 
         EExams.setAdapter(EExamsAdapter);
