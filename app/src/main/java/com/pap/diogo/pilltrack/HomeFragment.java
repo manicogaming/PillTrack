@@ -148,10 +148,6 @@ public class HomeFragment extends Fragment {
 
         if (AppointsAdapter.getItemCount() == 0) {
             NoAppoints.setVisibility(View.VISIBLE);
-            Appoints.setVisibility(View.VISIBLE);
-        } else {
-            NoAppoints.setVisibility(View.GONE);
-            Appoints.setVisibility(View.GONE);
         }
 
         Appoints.setAdapter(AppointsAdapter);
@@ -173,6 +169,8 @@ public class HomeFragment extends Fragment {
                 eRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        NoAppoints.setVisibility(View.GONE);
+
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
 
@@ -190,6 +188,8 @@ public class HomeFragment extends Fragment {
                             String rDays = String.valueOf(days);
                             holder.setDate("Faltam " + rDays + " dias.");
                         }
+
+                        holder.setPrep(model.getPrep());
 
                         holder.MapsLoc.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -218,10 +218,6 @@ public class HomeFragment extends Fragment {
 
         if (ExamsAdapter.getItemCount() == 0) {
             NoAppoints.setVisibility(View.VISIBLE);
-            Exams.setVisibility(View.VISIBLE);
-        } else {
-            Exams.setVisibility(View.GONE);
-            NoAppoints.setVisibility(View.GONE);
         }
 
         Exams.setAdapter(ExamsAdapter);
@@ -348,6 +344,10 @@ public class HomeFragment extends Fragment {
         public void setDate(String date) {
             TextView eDate = ExamsL.findViewById(R.id.eDate);
             eDate.setText(date);
+        }
+        public void setPrep(String prep){
+            TextView ePrep = ExamsL.findViewById(R.id.ePrep);
+            ePrep.setText(prep + " Dias de Preparação.");
         }
     }
 }

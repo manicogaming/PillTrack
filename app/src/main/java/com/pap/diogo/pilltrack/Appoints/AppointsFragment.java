@@ -3,12 +3,14 @@ package com.pap.diogo.pilltrack.Appoints;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,9 +130,11 @@ public class AppointsFragment extends Fragment {
                     }
                 });
             }
-
-
         };
+
+        if (EAppointsAdapter.getItemCount() == 0) {
+            NoEAppoints.setVisibility(View.VISIBLE);
+        }
 
         EAppoints.setAdapter(EAppointsAdapter);
     }
@@ -151,6 +155,8 @@ public class AppointsFragment extends Fragment {
                 eRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        NoEAppoints.setVisibility(View.GONE);
+
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
                         holder.setHospital(model.getHospital());
@@ -173,16 +179,10 @@ public class AppointsFragment extends Fragment {
                     }
                 });
             }
-
-
         };
 
-        if ((EExamsAdapter.getItemCount() == 0) && (EAppointsAdapter.getItemCount() == 0)) {
-            EExams.setVisibility(View.VISIBLE);
+        if (EExamsAdapter.getItemCount() == 0) {
             NoEAppoints.setVisibility(View.VISIBLE);
-        } else {
-            EExams.setVisibility(View.GONE);
-            NoEAppoints.setVisibility(View.GONE);
         }
 
         EExams.setAdapter(EExamsAdapter);

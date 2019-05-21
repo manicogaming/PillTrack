@@ -34,8 +34,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="15dp"
                 android:text="Não tem consultas adicionadas!"
-                android:visibility="gone"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:visibility="gone" />
 
 
         </RelativeLayout>
@@ -43,8 +43,8 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true">
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_appoint"

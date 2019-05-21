@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,12 +21,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
-import org.w3c.dom.Text;
-
 public class Register extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnRegister;
-    private EditText txtName, txtEmail, txtPassword, txtAge;
+    private EditText txtName, txtEmail, txtPassword, txtAge, txtWeight, txtHeight;
+    private Spinner txtSex;
     private FirebaseAuth Register;
 
     @Override
@@ -34,10 +35,23 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         Register = FirebaseAuth.getInstance();
         btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(this);
-        txtName = findViewById(R.id.txtname);
-        txtEmail = findViewById(R.id.txtemail);
-        txtPassword = findViewById(R.id.txtpassword);
-        txtAge = findViewById(R.id.txtage);
+        txtName = findViewById(R.id.txtName);
+        txtEmail = findViewById(R.id.txtEmail);
+        txtPassword = findViewById(R.id.txtPassword);
+        txtAge = findViewById(R.id.txtAge);
+        txtWeight = findViewById(R.id.txtWeight);
+        txtHeight = findViewById(R.id.txtHeight);
+
+        String[] arraySpinner = new String[]{
+                "Masculino", "Feminino"
+        };
+
+        txtSex = findViewById(R.id.txtSex);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, arraySpinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+        txtSex.setAdapter(adapter);
     }
 
     @Override
@@ -50,6 +64,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         final String Password = txtPassword.getText().toString().trim();
         final String Name = txtName.getText().toString().trim();
         final String Age = txtAge.getText().toString().trim();
+        final String Sex = txtSex.getSelectedItem().toString().trim();
+        final String Weight = txtWeight.getText().toString().trim();
+        final String Height = txtHeight.getText().toString().trim();
 
         if ((TextUtils.isEmpty(Email) && TextUtils.isEmpty(Password) && TextUtils.isEmpty(Name) && TextUtils.isEmpty(Age))
                 || (TextUtils.isEmpty(Password) && TextUtils.isEmpty(Name) && TextUtils.isEmpty(Age))
@@ -91,7 +108,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            RegisterInfo userInformation = new RegisterInfo(Name, Age);
+                            RegisterInfo userInformation = new RegisterInfo(Name, Age, Sex, Weight, Height);
 
                             FirebaseDatabase.getInstance().getReference("Users").child(Register.getCurrentUser().getUid()).setValue(userInformation).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

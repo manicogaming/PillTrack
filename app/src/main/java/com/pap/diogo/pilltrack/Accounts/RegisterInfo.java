@@ -2,26 +2,16 @@ package com.pap.diogo.pilltrack.Accounts;
 
 public class RegisterInfo {
     public String name;
-    public String idade;
+    public String age;
+    public String sex;
+    public String weight;
+    public String height;
 
-    public RegisterInfo(String name, String idade) {
+    public RegisterInfo(String name, String age, String sex, String weight, String height) {
         this.name = name;
-        this.idade = idade;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getIdade() {
-        return idade;
-    }
-
-    public void setIdade(String idade) {
-        this.idade = idade;
+        this.age = age;
+        this.sex = sex;
+        this.weight = weight;
+        this.height = height;
     }
 }

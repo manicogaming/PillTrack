@@ -17,7 +17,7 @@
             android:layout_marginBottom="15dp" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/epillslist">
 
@@ -28,14 +28,15 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="15dp"
                 android:text="Não tem medicamentos adicionados!"
+                android:textAlignment="center"
                 android:visibility="gone" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true">
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_pill"

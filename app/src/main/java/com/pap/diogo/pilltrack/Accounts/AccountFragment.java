@@ -67,7 +67,7 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         final String name = dataSnapshot.child("name").getValue().toString();
-                        final String age = dataSnapshot.child("idade").getValue().toString();
+                        final String age = dataSnapshot.child("age").getValue().toString();
                         holder.setName(name);
                         holder.setAge(age);
 

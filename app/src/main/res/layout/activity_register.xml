@@ -16,10 +16,11 @@
             android:id="@+id/layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             app:hintTextAppearance="@style/TextLabel">
 
             <EditText
-                android:id="@+id/txtname"
+                android:id="@+id/txtName"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="Nome"
@@ -33,10 +34,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout"
+            android:layout_centerHorizontal="true"
             app:hintTextAppearance="@style/TextLabel">
 
             <EditText
-                android:id="@+id/txtemail"
+                android:id="@+id/txtEmail"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="E-mail"
@@ -50,11 +52,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout2"
+            android:layout_centerHorizontal="true"
             app:hintTextAppearance="@style/TextLabel"
             app:passwordToggleEnabled="true">
 
             <EditText
-                android:id="@+id/txtpassword"
+                android:id="@+id/txtPassword"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="Password"
@@ -69,13 +72,61 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout3"
+            android:layout_centerHorizontal="true"
             app:hintTextAppearance="@style/TextLabel">
 
             <EditText
-                android:id="@+id/txtage"
+                android:id="@+id/txtAge"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="Idade"
+                android:inputType="number"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/txtSex"
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout4"
+            android:layout_marginTop="15dp"
+            android:dropDownWidth="300dp"
+            android:hint="Sexo"
+            android:textColor="@color/colorWhite"
+            android:textSize="22sp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtSex"
+            android:layout_centerHorizontal="true"
+            app:hintTextAppearance="@style/TextLabel">
+
+            <EditText
+                android:id="@+id/txtWeight"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Peso em kg"
+                android:inputType="number"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout6"
+            android:layout_centerHorizontal="true"
+            app:hintTextAppearance="@style/TextLabel">
+
+            <EditText
+                android:id="@+id/txtHeight"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Altura em cm"
                 android:inputType="number"
                 android:textColor="@color/colorWhite"
                 android:textSize="22sp" />
@@ -85,7 +136,7 @@
             android:id="@+id/btnRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layout4"
+            android:layout_below="@+id/layout7"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
             android:background="@drawable/dark_button"
