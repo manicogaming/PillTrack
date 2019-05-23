@@ -35,7 +35,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Accounts.Register"
             android:screenOrientation="portrait" />
@@ -71,6 +71,7 @@
         <activity
             android:name=".Maps.MapsActivity"
             android:label="Maps"></activity>
+        <activity android:name=".Accounts.Register_Second" />
     </application>
 
 </manifest>
