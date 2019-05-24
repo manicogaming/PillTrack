@@ -82,10 +82,41 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/e_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e_date">
+
+                <TextView
+                    android:id="@+id/ExamHour"
+                    android:layout_width="275dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Hora"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/EExamHour"
+                    android:layout_width="275dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="0dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Hora"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/e_hospital"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/e_date">
+                android:layout_below="@id/e_hour">
 
                 <TextView
                     android:id="@+id/ExamHospital"

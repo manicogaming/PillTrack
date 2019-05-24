@@ -1,5 +1,6 @@
 package com.pap.diogo.pilltrack.Appoints;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -32,6 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
+
+import java.util.Calendar;
 
 public class AppointsFragment extends Fragment {
     private ImageButton add_appoint;
@@ -111,6 +115,7 @@ public class AppointsFragment extends Fragment {
 
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
+                        holder.setHour(model.getHour());
                         holder.setHospital(model.getHospital());
 
                         holder.EAppointDelete.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +164,7 @@ public class AppointsFragment extends Fragment {
 
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
+                        holder.setHour(model.getHour());
                         holder.setHospital(model.getHospital());
                         holder.setPrep(model.getPrep());
 
@@ -242,7 +248,7 @@ public class AppointsFragment extends Fragment {
                                     String hospital = holder.AppointHospital.getText().toString().trim();
 
                                     getHospitalLocation(hospital);
-                                    AppointInfo AppointInfo = new AppointInfo(newname, hospital, date, HospitalLocation);
+                                    AppointInfo AppointInfo = new AppointInfo(newname, hospital, date, "wait", HospitalLocation);
                                     aRef.child(newname).setValue(AppointInfo);
                                 }
                             }
@@ -266,6 +272,32 @@ public class AppointsFragment extends Fragment {
 
                 holder.AppointDate.setVisibility(View.VISIBLE);
                 holder.EAppointDate.setVisibility(View.GONE);
+            }
+        });
+
+        holder.AppointHour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.AppointHour.setVisibility(View.GONE);
+                holder.EAppointHour.setVisibility(View.VISIBLE);
+                holder.EAppointHour.requestFocus();
+
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        holder.EAppointHour.setText(checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
+                        aRef.child(model.getName()).child("hour").setValue(holder.EAppointHour.getText().toString().trim());
+                    }
+                }, hour, minute, true);
+                mTimePicker.setTitle("Selecione uma Hora");
+                mTimePicker.show();
+
+                holder.AppointHour.setVisibility(View.VISIBLE);
+                holder.EAppointHour.setVisibility(View.GONE);
             }
         });
 
@@ -386,7 +418,7 @@ public class AppointsFragment extends Fragment {
                                     String prep = holder.ExamPrep.getText().toString().trim();
 
                                     getHospitalLocation(hospital);
-                                    ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, HospitalLocation);
+                                    ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, "wait", HospitalLocation);
                                     eRef.child(newname).setValue(ExamInfo);
                                 }
                             }
@@ -516,8 +548,8 @@ public class AppointsFragment extends Fragment {
     public static class EAppointsInfo extends RecyclerView.ViewHolder {
         View EAppointsL;
         ImageButton EAppointDelete;
-        TextView AppointName, AppointDate, AppointHospital;
-        EditText EAppointDate;
+        TextView AppointName, AppointDate, AppointHospital, AppointHour;
+        EditText EAppointDate, EAppointHour;
         AutoCompleteTextView EAppointName, EAppointHospital;
 
         public EAppointsInfo(@NonNull View itemView) {
@@ -541,6 +573,13 @@ public class AppointsFragment extends Fragment {
             EAppointDate.setText(date);
         }
 
+        public void setHour(String hour) {
+            AppointHour = EAppointsL.findViewById(R.id.AppointHour);
+            EAppointHour = EAppointsL.findViewById(R.id.EAppointHour);
+            AppointHour.setText(hour);
+            EAppointHour.setText(hour);
+        }
+
         public void setHospital(String hospital) {
             AppointHospital = EAppointsL.findViewById(R.id.AppointHospital);
             EAppointHospital = EAppointsL.findViewById(R.id.EAppointHospital);
@@ -552,8 +591,8 @@ public class AppointsFragment extends Fragment {
     public static class EExamsInfo extends RecyclerView.ViewHolder {
         View EExamsL;
         ImageButton EExamDelete;
-        TextView ExamName, ExamDate, ExamHospital, ExamPrep;
-        EditText EExamDate, EExamPrep;
+        TextView ExamName, ExamDate, ExamHour, ExamHospital, ExamPrep;
+        EditText EExamDate, EExamHour, EExamPrep;
         AutoCompleteTextView EExamHospital, EExamName;
 
         public EExamsInfo(@NonNull View itemView) {
@@ -577,6 +616,13 @@ public class AppointsFragment extends Fragment {
             EExamDate.setText(date);
         }
 
+        public void setHour(String hour) {
+            ExamHour = EExamsL.findViewById(R.id.ExamHour);
+            EExamHour = EExamsL.findViewById(R.id.EExamHour);
+            ExamHour.setText(hour);
+            EExamHour.setText(hour);
+        }
+
         public void setHospital(String hospital) {
             ExamHospital = EExamsL.findViewById(R.id.ExamHospital);
             EExamHospital = EExamsL.findViewById(R.id.EExamHospital);
@@ -590,6 +636,10 @@ public class AppointsFragment extends Fragment {
             ExamPrep.setText(prep + " Dias");
             EExamPrep.setText(prep);
         }
+    }
+
+    public String checkDigit(int number) {
+        return number <= 9 ? "0" + number : String.valueOf(number);
     }
 
     public void getHospitalLocation(String hospital) {

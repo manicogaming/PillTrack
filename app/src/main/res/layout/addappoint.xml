@@ -94,12 +94,33 @@
                 android:textSize="22sp" />
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date"
+            android:layout_centerHorizontal="true"
+            app:hintTextAppearance="@style/TextLabel">
+
+
+            <EditText
+                android:id="@+id/txtHour"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorDarkBlue"
+                android:focusable="false"
+                android:hint="Hora"
+                android:inputType="time"
+                android:padding="10dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp" />
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/btnAddAppoint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/date"
+            android:layout_below="@+id/hour"
             android:layout_centerInParent="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/dark_button"

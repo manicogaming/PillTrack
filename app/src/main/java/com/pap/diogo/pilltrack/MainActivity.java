@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         JodaTimeAndroid.init(this);
         setContentView(R.layout.activity_main);
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             Intent VerifyLogin = new Intent(MainActivity.this, Launcher.class);

@@ -1,6 +1,7 @@
 package com.pap.diogo.pilltrack.Appoints;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +39,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class AddAppoint extends AppCompatActivity implements View.OnClickListener {
-    private EditText txtDate, txtPreparation;
+    private EditText txtDate, txtPreparation, txtHour;
     private AutoCompleteTextView txtHospital, txtSpecialty;
     private Button btnAddAppoint;
     private FirebaseUser user;
@@ -55,6 +57,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         txtSpecialty = findViewById(R.id.txtSpecialty);
         txtHospital = findViewById(R.id.txtHospital);
         txtDate = findViewById(R.id.txtDate);
+        txtHour = findViewById(R.id.txtHour);
         txtPreparation = findViewById(R.id.txtPreparation);
 
         btnAddAppoint = findViewById(R.id.btnAddAppoint);
@@ -194,6 +197,24 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
             }
         });
 
+        txtHour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(AddAppoint.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        txtHour.setText(checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
+                    }
+                }, hour, minute, true);
+                mTimePicker.setTitle("Selecione uma Hora");
+                mTimePicker.show();
+            }
+        });
+
         txtHospital.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -237,15 +258,16 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
             String name = txtSpecialty.getText().toString().trim();
             String hospital = txtHospital.getText().toString().trim();
             String prep = txtPreparation.getText().toString().trim();
-            String txtdate = txtDate.getText().toString().trim();
+            String date = txtDate.getText().toString().trim();
+            String hour = txtHour.getText().toString().trim();
 
-            if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))
+            if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date))
                     || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital))
-                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(txtdate))
-                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))
+                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(date))
+                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date))
                     || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(prep))
-                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(prep) && TextUtils.isEmpty(txtdate))
-                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(prep) && TextUtils.isEmpty(txtdate))) {
+                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(prep) && TextUtils.isEmpty(date))
+                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(prep) && TextUtils.isEmpty(date))) {
                 Toast.makeText(this, "Não podem haver campos vazios", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -265,13 +287,13 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                 return;
             }
 
-            if (TextUtils.isEmpty(txtdate)) {
+            if (TextUtils.isEmpty(date)) {
                 Toast.makeText(this, "Data não pode ficar vazia", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             getHospitalLocation();
-            ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, txtdate, HospitalLocation);
+            ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
             eRef.child(name).setValue(ExamInfo);
             Toast.makeText(AddAppoint.this, "Exame adicionado com sucesso!", Toast.LENGTH_SHORT).show();
             Intent Home = new Intent(AddAppoint.this, MainActivity.class);
@@ -279,12 +301,13 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         } else {
             String name = txtSpecialty.getText().toString().trim();
             String hospital = txtHospital.getText().toString().trim();
-            String txtdate = txtDate.getText().toString().trim();
+            String date = txtDate.getText().toString().trim();
+            String hour = txtHour.getText().toString().trim();
 
-            if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))
+            if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date))
                     || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital))
-                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(txtdate))
-                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(txtdate))) {
+                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(date))
+                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date))) {
                 Toast.makeText(this, "Não podem haver campos vazios", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -299,13 +322,13 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                 return;
             }
 
-            if (TextUtils.isEmpty(txtdate)) {
+            if (TextUtils.isEmpty(date)) {
                 Toast.makeText(this, "Data não pode ficar vazia", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             getHospitalLocation();
-            AppointInfo AppointInfo = new AppointInfo(name, hospital, txtdate, HospitalLocation);
+            AppointInfo AppointInfo = new AppointInfo(name, hospital, date, hour, HospitalLocation);
             aRef.child(name).setValue(AppointInfo);
             Toast.makeText(AddAppoint.this, "Consulta adicionada com sucesso!", Toast.LENGTH_SHORT).show();
             Intent Home = new Intent(AddAppoint.this, MainActivity.class);
@@ -328,6 +351,10 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
             }
         }
         return super.dispatchTouchEvent(event);
+    }
+
+    public String checkDigit(int number) {
+        return number <= 9 ? "0" + number : String.valueOf(number);
     }
 
     public void getHospitalLocation() {

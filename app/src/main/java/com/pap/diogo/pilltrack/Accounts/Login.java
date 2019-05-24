@@ -3,6 +3,7 @@ package com.pap.diogo.pilltrack.Accounts;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,11 +32,11 @@ import com.pap.diogo.pilltrack.R;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
-    private Button btnLogin;
-    private TextView forgotPassword;
+    private Button btnLogin, btnSend;
+    private TextView forgotPassword, goBack;
     private EditText txtEmail, txtPassword;
     private FirebaseAuth Login;
-    private RelativeLayout rootview;
+    private TextInputLayout layoutPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,55 +45,47 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         Login = FirebaseAuth.getInstance();
         btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
+        btnSend = findViewById(R.id.btnSend);
         txtEmail = findViewById(R.id.txtEmail);
         txtPassword = findViewById(R.id.txtPassword);
         forgotPassword = findViewById(R.id.forgotPassword);
-        rootview = findViewById(R.id.rootview);
+        goBack = findViewById(R.id.goBack);
+        layoutPassword = findViewById(R.id.layout2);
 
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = (LayoutInflater)
-                        getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.popup_forgotpassword, null);
-
-                final EditText fgEmail = popupView.findViewById(R.id.fgEmail);
-                Button btnSend = popupView.findViewById(R.id.btnSend);
-
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                boolean focusable = true;
-                final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    popupWindow.setElevation(20);
-                }
+                btnLogin.setVisibility(View.GONE);
+                btnSend.setVisibility(View.VISIBLE);
+                layoutPassword.setVisibility(View.GONE);
+                forgotPassword.setVisibility(View.GONE);
+                goBack.setVisibility(View.VISIBLE);
 
                 btnSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FirebaseAuth.getInstance().sendPasswordResetEmail(fgEmail.getText().toString())
+                        FirebaseAuth.getInstance().sendPasswordResetEmail(txtEmail.getText().toString())
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(Login.this, "Email enviado!", Toast.LENGTH_SHORT).show();
-                                            popupWindow.dismiss();
                                         }
                                     }
                                 });
                     }
                 });
+            }
+        });
 
-                popupWindow.showAtLocation(rootview, Gravity.CENTER, 0, 0);
-
-                popupView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        popupWindow.dismiss();
-                        return true;
-                    }
-                });
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnLogin.setVisibility(View.VISIBLE);
+                btnSend.setVisibility(View.GONE);
+                layoutPassword.setVisibility(View.VISIBLE);
+                forgotPassword.setVisibility(View.VISIBLE);
+                goBack.setVisibility(View.GONE);
             }
         });
     }

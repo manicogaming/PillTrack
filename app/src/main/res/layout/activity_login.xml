@@ -61,6 +61,20 @@
             android:textColor="@color/colorWhite"
             android:textSize="22sp" />
 
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/dark_button"
+            android:padding="15dp"
+            android:text="Enviar"
+            android:textColor="@color/colorWhite"
+            android:textSize="22sp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/forgotPassword"
             android:layout_width="wrap_content"
@@ -74,6 +88,21 @@
             android:text="Esqueceu-se da Palavra-Passe?"
             android:textColor="@color/colorWhite"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/goBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnSend"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="5dp"
+            android:text="Voltar"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

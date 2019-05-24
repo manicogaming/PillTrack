@@ -10,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -32,6 +34,7 @@ import org.w3c.dom.Text;
 public class AccountFragment extends Fragment {
     private RecyclerView AccountUsers;
     private FirebaseRecyclerAdapter<Account, AccountInfo> AccountAdapter;
+    private ArrayAdapter<String> adapter;
 
     @Nullable
     @Override
@@ -42,6 +45,13 @@ public class AccountFragment extends Fragment {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         AccountUsers.setLayoutManager(linearLayoutManager);
+
+        String[] arraySpinner = new String[]{
+                "Masculino", "Feminino"
+        };
+
+        adapter = new ArrayAdapter(getContext(), R.layout.spinner_item_account, arraySpinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
 
         return mMainView;
     }
@@ -76,6 +86,8 @@ public class AccountFragment extends Fragment {
                         holder.setWeight(model.getWeight());
                         holder.setHeight(model.getHeight());
 
+                        holder.EAccountSex.setAdapter(adapter);
+
                         holder.Logout.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -102,7 +114,46 @@ public class AccountFragment extends Fragment {
                                 holder.EAccountHeight.setVisibility(View.VISIBLE);
 
                                 holder.btnEditInfos.setVisibility(View.GONE);
+
+                                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnChangePass.getLayoutParams();
+                                params.addRule(RelativeLayout.BELOW, R.id.SaveAccountInfos);
+                                holder.btnChangePass.setLayoutParams(params);
+
                                 holder.btnSaveChanges.setVisibility(View.VISIBLE);
+                            }
+                        });
+
+                        holder.btnSaveChanges.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                holder.AccountName.setVisibility(View.VISIBLE);
+                                holder.AccountAge.setVisibility(View.VISIBLE);
+                                holder.AccountSex.setVisibility(View.VISIBLE);
+                                holder.AccountWeight.setVisibility(View.VISIBLE);
+                                holder.AccountHeight.setVisibility(View.VISIBLE);
+
+                                holder.EAccountName.setVisibility(View.GONE);
+                                holder.EAccountAge.setVisibility(View.GONE);
+                                holder.EAccountSex.setVisibility(View.GONE);
+                                holder.EAccountWeight.setVisibility(View.GONE);
+                                holder.EAccountHeight.setVisibility(View.GONE);
+
+                                holder.btnEditInfos.setVisibility(View.VISIBLE);
+
+                                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnChangePass.getLayoutParams();
+                                params.addRule(RelativeLayout.BELOW, R.id.EditAccountInfos);
+                                holder.btnChangePass.setLayoutParams(params);
+
+                                holder.btnSaveChanges.setVisibility(View.GONE);
+
+                                String Name = holder.EAccountName.getText().toString().trim();
+                                String Age = holder.EAccountAge.getText().toString().trim();
+                                String Sex = holder.EAccountSex.getSelectedItem().toString().trim();
+                                String Weight = holder.EAccountWeight.getText().toString().trim();
+                                String Height = holder.EAccountHeight.getText().toString().trim();
+
+                                RegisterInfo userInformation = new RegisterInfo(Name, Age, Sex, Weight, Height);
+                                ref.child(userid).setValue(userInformation);
                             }
                         });
                     }
