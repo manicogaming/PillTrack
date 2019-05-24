@@ -7,19 +7,16 @@
     <RelativeLayout
         android:id="@+id/AccountUser"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/edit_bg"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:padding="15dp">
 
         <RelativeLayout
             android:id="@+id/AccountImage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -33,69 +30,222 @@
             android:id="@+id/AccountInfos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_toEndOf="@id/AccountImage">
+            android:layout_below="@id/AccountImage">
 
             <TextView
                 android:id="@+id/AccountName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:text="Nome"
                 android:textColor="@color/colorWhite"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/EAccountName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:inputType="text"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:hint="Nome"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/AccountAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/AccountName"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:text="Idade"
                 android:textColor="@color/colorWhite"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/AccountChangePass"
+            <EditText
+                android:id="@+id/EAccountAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/EAccountName"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:hint="Idade"
+                android:inputType="number"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/AccountSex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/AccountAge"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/dark_button"
-                android:padding="10dp"
-                android:text="Mudar Palavra-Passe"
-                android:textAllCaps="false"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Sexo"
                 android:textColor="@color/colorWhite"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/EAccountSex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/EAccountAge"
+                android:layout_marginTop="15dp"
+                android:dropDownWidth="300dp"
+                android:hint="Sexo"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/AccountWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/AccountSex"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Peso"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/EAccountWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/EAccountSex"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:hint="Peso em kg"
+                android:inputType="number"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/AccountHeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/AccountWeight"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Altura"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/EAccountHeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/EAccountWeight"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:hint="Altura em cm"
+                android:inputType="number"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <Button
+                    android:id="@+id/SaveAccountInfos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/dark_button"
+                    android:padding="12dp"
+                    android:text="Guardar Alterações"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/EditAccountInfos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/dark_button"
+                    android:padding="12dp"
+                    android:text="Editar Informações"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/AccountChangePass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/EditAccountInfos"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/dark_button"
+                    android:padding="12dp"
+                    android:text="Mudar Palavra-Passe"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/Logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/AccountChangePass"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/dark_button"
+                    android:padding="12dp"
+                    android:text="Terminar Sessão"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
         </RelativeLayout>
-
     </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/AccountUser">
-
-        <Button
-            android:id="@+id/Logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/icon_button"
-            android:padding="10dp"
-            android:text="Terminar Sessão"
-            android:textAllCaps="false"
-            android:textColor="@color/colorWhite"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
-
-
 </RelativeLayout>

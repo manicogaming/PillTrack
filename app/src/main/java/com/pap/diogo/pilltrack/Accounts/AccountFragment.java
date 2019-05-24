@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -24,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pap.diogo.pilltrack.Launcher;
 import com.pap.diogo.pilltrack.R;
+
+import org.w3c.dom.Text;
 
 public class AccountFragment extends Fragment {
     private RecyclerView AccountUsers;
@@ -66,10 +70,11 @@ public class AccountFragment extends Fragment {
                 ref.child(userid).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        final String name = dataSnapshot.child("name").getValue().toString();
-                        final String age = dataSnapshot.child("age").getValue().toString();
-                        holder.setName(name);
-                        holder.setAge(age);
+                        holder.setName(model.getName());
+                        holder.setAge(model.getAge());
+                        holder.setSex(model.getSex());
+                        holder.setWeight(model.getWeight());
+                        holder.setHeight(model.getHeight());
 
                         holder.Logout.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -78,6 +83,26 @@ public class AccountFragment extends Fragment {
                                 Intent Launcher = new Intent(getContext(), Launcher.class);
                                 Launcher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(Launcher);
+                            }
+                        });
+
+                        holder.btnEditInfos.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                holder.AccountName.setVisibility(View.GONE);
+                                holder.AccountAge.setVisibility(View.GONE);
+                                holder.AccountSex.setVisibility(View.GONE);
+                                holder.AccountWeight.setVisibility(View.GONE);
+                                holder.AccountHeight.setVisibility(View.GONE);
+
+                                holder.EAccountName.setVisibility(View.VISIBLE);
+                                holder.EAccountAge.setVisibility(View.VISIBLE);
+                                holder.EAccountSex.setVisibility(View.VISIBLE);
+                                holder.EAccountWeight.setVisibility(View.VISIBLE);
+                                holder.EAccountHeight.setVisibility(View.VISIBLE);
+
+                                holder.btnEditInfos.setVisibility(View.GONE);
+                                holder.btnSaveChanges.setVisibility(View.VISIBLE);
                             }
                         });
                     }
@@ -96,13 +121,19 @@ public class AccountFragment extends Fragment {
 
     public static class AccountInfo extends RecyclerView.ViewHolder {
         View AccountL;
-        Button btnChangePass, Logout;
+        Button btnChangePass, btnEditInfos, btnSaveChanges, Logout;
+        TextView AccountName, AccountAge, AccountSex, AccountWeight, AccountHeight;
+        EditText EAccountName, EAccountAge, EAccountWeight, EAccountHeight;
+        Spinner EAccountSex;
 
         public AccountInfo(@NonNull View itemView) {
             super(itemView);
 
             AccountL = itemView;
             btnChangePass = AccountL.findViewById(R.id.AccountChangePass);
+            btnEditInfos = AccountL.findViewById(R.id.EditAccountInfos);
+            btnSaveChanges = AccountL.findViewById(R.id.SaveAccountInfos);
+
             Logout = AccountL.findViewById(R.id.Logout);
 
             btnChangePass.setOnClickListener(new View.OnClickListener() {
@@ -114,13 +145,37 @@ public class AccountFragment extends Fragment {
         }
 
         public void setName(String name) {
-            TextView AccountName = AccountL.findViewById(R.id.AccountName);
+            AccountName = AccountL.findViewById(R.id.AccountName);
+            EAccountName = AccountL.findViewById(R.id.EAccountName);
             AccountName.setText(name);
+            EAccountName.setText(name);
         }
 
         public void setAge(String age) {
-            TextView AccountAge = AccountL.findViewById(R.id.AccountAge);
+            AccountAge = AccountL.findViewById(R.id.AccountAge);
+            EAccountAge = AccountL.findViewById(R.id.EAccountAge);
             AccountAge.setText(age + " anos");
+            EAccountAge.setText(age);
+        }
+
+        public void setSex(String sex) {
+            AccountSex = AccountL.findViewById(R.id.AccountSex);
+            EAccountSex = AccountL.findViewById(R.id.EAccountSex);
+            AccountSex.setText(sex);
+        }
+
+        public void setWeight(String weight) {
+            AccountWeight = AccountL.findViewById(R.id.AccountWeight);
+            EAccountWeight = AccountL.findViewById(R.id.EAccountWeight);
+            AccountWeight.setText(weight + " kg");
+            EAccountWeight.setText(weight);
+        }
+
+        public void setHeight(String height) {
+            AccountHeight = AccountL.findViewById(R.id.AccountHeight);
+            EAccountHeight = AccountL.findViewById(R.id.EAccountHeight);
+            AccountHeight.setText(height + " cm");
+            EAccountHeight.setText(height);
         }
     }
 }
