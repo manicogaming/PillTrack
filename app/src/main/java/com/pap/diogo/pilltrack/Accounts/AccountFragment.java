@@ -1,12 +1,15 @@
 package com.pap.diogo.pilltrack.Accounts;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,24 +30,49 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pap.diogo.pilltrack.Launcher;
+import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
 import org.w3c.dom.Text;
 
 public class AccountFragment extends Fragment {
     private RecyclerView AccountUsers;
-    private FirebaseRecyclerAdapter<Account, AccountInfo> AccountAdapter;
+    //private FirebaseRecyclerAdapter<Account, AccountInfo> AccountAdapter;
     private ArrayAdapter<String> adapter;
+    private TextView AccountName, AccountAge, AccountSex, AccountWeight, AccountHeight;
+    private EditText EAccountName, EAccountAge, EAccountWeight, EAccountHeight;
+    private Spinner EAccountSex;
+    private Button btnSaveAccountInfos, btnEditAccountInfos, btnAccountChangePass, btnLogout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mMainView = inflater.inflate(R.layout.fragment_account, container, false);
+        View mMainView = inflater.inflate(R.layout.account, container, false);
 
-        AccountUsers = mMainView.findViewById(R.id.accountlist);
+        AccountName = mMainView.findViewById(R.id.AccountName);
+        EAccountName = mMainView.findViewById(R.id.EAccountName);
+
+        AccountAge = mMainView.findViewById(R.id.AccountAge);
+        EAccountAge = mMainView.findViewById(R.id.EAccountAge);
+
+        AccountSex = mMainView.findViewById(R.id.AccountSex);
+        EAccountSex = mMainView.findViewById(R.id.EAccountSex);
+
+        AccountWeight = mMainView.findViewById(R.id.AccountWeight);
+        EAccountWeight = mMainView.findViewById(R.id.EAccountWeight);
+
+        AccountHeight = mMainView.findViewById(R.id.AccountHeight);
+        EAccountHeight = mMainView.findViewById(R.id.EAccountHeight);
+
+        btnSaveAccountInfos = mMainView.findViewById(R.id.SaveAccountInfos);
+        btnEditAccountInfos = mMainView.findViewById(R.id.EditAccountInfos);
+        btnAccountChangePass = mMainView.findViewById(R.id.AccountChangePass);
+        btnLogout = mMainView.findViewById(R.id.Logout);
+
+        /*AccountUsers = mMainView.findViewById(R.id.accountlist);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        AccountUsers.setLayoutManager(linearLayoutManager);
+        AccountUsers.setLayoutManager(linearLayoutManager);*/
 
         String[] arraySpinner = new String[]{
                 "Masculino", "Feminino"
@@ -60,8 +88,112 @@ public class AccountFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final String userid = user.getUid();
+        EAccountSex.setAdapter(adapter);
+
+        final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userid);
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                String name = dataSnapshot.child("name").getValue(String.class);
+                String age = dataSnapshot.child("age").getValue(String.class);
+                String sex = dataSnapshot.child("sex").getValue(String.class);
+                String weight = dataSnapshot.child("weight").getValue(String.class);
+                String height = dataSnapshot.child("height").getValue(String.class);
+
+                AccountName.setText(name);
+                EAccountName.setText(name);
+
+                AccountAge.setText(age + " anos");
+                EAccountAge.setText(age);
+
+                AccountSex.setText(sex);
+
+                AccountWeight.setText(weight + " kg");
+                EAccountWeight.setText(weight);
+
+                AccountHeight.setText(height + " cm");
+                EAccountHeight.setText(height);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        ref.addListenerForSingleValueEvent(eventListener);
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent Launcher = new Intent(getContext(), Launcher.class);
+                Launcher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(Launcher);
+            }
+        });
+
+        btnEditAccountInfos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AccountName.setVisibility(View.GONE);
+                AccountAge.setVisibility(View.GONE);
+                AccountSex.setVisibility(View.GONE);
+                AccountWeight.setVisibility(View.GONE);
+                AccountHeight.setVisibility(View.GONE);
+
+                EAccountName.setVisibility(View.VISIBLE);
+                EAccountAge.setVisibility(View.VISIBLE);
+                EAccountSex.setVisibility(View.VISIBLE);
+                EAccountWeight.setVisibility(View.VISIBLE);
+                EAccountHeight.setVisibility(View.VISIBLE);
+
+                btnEditAccountInfos.setVisibility(View.GONE);
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btnAccountChangePass.getLayoutParams();
+                params.addRule(RelativeLayout.BELOW, R.id.SaveAccountInfos);
+                btnAccountChangePass.setLayoutParams(params);
+
+                btnSaveAccountInfos.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnSaveAccountInfos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AccountName.setVisibility(View.VISIBLE);
+                AccountAge.setVisibility(View.VISIBLE);
+                AccountSex.setVisibility(View.VISIBLE);
+                AccountWeight.setVisibility(View.VISIBLE);
+                AccountHeight.setVisibility(View.VISIBLE);
+
+                EAccountName.setVisibility(View.GONE);
+                EAccountAge.setVisibility(View.GONE);
+                EAccountSex.setVisibility(View.GONE);
+                EAccountWeight.setVisibility(View.GONE);
+                EAccountHeight.setVisibility(View.GONE);
+
+                btnEditAccountInfos.setVisibility(View.VISIBLE);
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btnAccountChangePass.getLayoutParams();
+                params.addRule(RelativeLayout.BELOW, R.id.EditAccountInfos);
+                btnAccountChangePass.setLayoutParams(params);
+
+                btnSaveAccountInfos.setVisibility(View.GONE);
+
+                String Name = EAccountName.getText().toString().trim();
+                String Age = EAccountAge.getText().toString().trim();
+                String Sex = EAccountSex.getSelectedItem().toString().trim();
+                String Weight = EAccountWeight.getText().toString().trim();
+                String Height = EAccountHeight.getText().toString().trim();
+
+                RegisterInfo userInformation = new RegisterInfo(Name, Age, Sex, Weight, Height);
+                ref.setValue(userInformation);
+            }
+        });
+
+        /*FirebaseAuth user = FirebaseAuth.getInstance();
+        final String userid = user.getCurrentUser().getUid();
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
 
@@ -77,7 +209,7 @@ public class AccountFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull final AccountInfo holder, int position, @NonNull final Account model) {
-                ref.child(userid).addValueEventListener(new ValueEventListener() {
+                ref.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         holder.setName(model.getName());
@@ -227,7 +359,7 @@ public class AccountFragment extends Fragment {
             EAccountHeight = AccountL.findViewById(R.id.EAccountHeight);
             AccountHeight.setText(height + " cm");
             EAccountHeight.setText(height);
-        }
+        }*/
     }
 }
 
