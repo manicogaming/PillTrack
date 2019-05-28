@@ -97,6 +97,7 @@ public class PillsFragment extends Fragment {
                         holder.setName(model.getName());
                         holder.setPillFunc(model.getPillfunc());
                         holder.setInterval(model.getInterval());
+                        holder.setPillHour(model.getPillhour());
 
                         holder.EPillDelete.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -149,8 +150,9 @@ public class PillsFragment extends Fragment {
                             String newname = holder.EPillName.getText().toString().trim();
                             String pillfunc = holder.PillFunc.getText().toString().trim();
                             String interval = holder.PillInterval.getText().toString().trim();
+                            String pillhour = holder.PillHour.getText().toString().trim();
 
-                            PillInfo PillInfo = new PillInfo(newname, pillfunc, interval);
+                            PillInfo PillInfo = new PillInfo(newname, pillfunc, interval, pillhour);
                             pRef.child(newname).setValue(PillInfo);
                         }
                     }
@@ -237,7 +239,7 @@ public class PillsFragment extends Fragment {
     public static class EPillsInfo extends RecyclerView.ViewHolder {
         View EPillsL;
         ImageButton EPillDelete;
-        TextView PillName, PillFunc, PillInterval;
+        TextView PillName, PillFunc, PillInterval, PillHour;
         EditText EPillName, EPillFunc;
         Spinner EPillInterval;
 
@@ -271,6 +273,11 @@ public class PillsFragment extends Fragment {
             PillInterval = EPillsL.findViewById(R.id.PillInterval);
             EPillInterval = EPillsL.findViewById(R.id.EPillInterval);
             PillInterval.setText(interval);
+        }
+
+        public void setPillHour(String hour){
+            PillHour = EPillsL.findViewById(R.id.PillHour);
+            PillHour.setText(hour);
         }
     }
 }

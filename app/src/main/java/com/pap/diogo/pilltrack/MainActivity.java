@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 navigation.setSelectedItemId(R.id.navigation_appointment);
                 break;
+            case 3:
+                navigation.setSelectedItemId(R.id.navigation_account);
+                break;
         }
     }
 

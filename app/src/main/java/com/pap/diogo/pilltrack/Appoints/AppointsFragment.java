@@ -266,7 +266,6 @@ public class AppointsFragment extends Fragment {
             public void onClick(View v) {
                 holder.AppointDate.setVisibility(View.GONE);
                 holder.EAppointDate.setVisibility(View.VISIBLE);
-                holder.EAppointDate.requestFocus();
 
                 newInstance();
 
@@ -280,7 +279,6 @@ public class AppointsFragment extends Fragment {
             public void onClick(View v) {
                 holder.AppointHour.setVisibility(View.GONE);
                 holder.EAppointHour.setVisibility(View.VISIBLE);
-                holder.EAppointHour.requestFocus();
 
                 Calendar mcurrentTime = Calendar.getInstance();
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -436,13 +434,37 @@ public class AppointsFragment extends Fragment {
             public void onClick(View v) {
                 holder.ExamDate.setVisibility(View.GONE);
                 holder.EExamDate.setVisibility(View.VISIBLE);
-                holder.EExamDate.requestFocus();
 
                 isAppoint = false;
                 newInstance();
 
                 holder.ExamDate.setVisibility(View.VISIBLE);
                 holder.EExamDate.setVisibility(View.GONE);
+            }
+        });
+
+        holder.ExamHour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.ExamHour.setVisibility(View.GONE);
+                holder.EExamHour.setVisibility(View.VISIBLE);
+
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        holder.EExamHour.setText(checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
+                        eRef.child(model.getName()).child("hour").setValue(holder.EExamHour.getText().toString().trim());
+                    }
+                }, hour, minute, true);
+                mTimePicker.setTitle("Selecione uma Hora");
+                mTimePicker.show();
+
+                holder.ExamHour.setVisibility(View.VISIBLE);
+                holder.EExamHour.setVisibility(View.GONE);
             }
         });
 

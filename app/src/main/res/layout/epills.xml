@@ -83,10 +83,28 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/p_interval"
+                android:id="@+id/p_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/p_func">
+
+                <TextView
+                    android:id="@+id/PillHour"
+                    android:layout_width="275dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Hora"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/p_interval"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/p_hour">
 
                 <TextView
                     android:id="@+id/PillInterval"

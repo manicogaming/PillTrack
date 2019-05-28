@@ -261,34 +261,39 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
             String date = txtDate.getText().toString().trim();
             String hour = txtHour.getText().toString().trim();
 
-            if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date))
-                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital))
-                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(date))
-                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date))
-                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(prep))
-                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(prep) && TextUtils.isEmpty(date))
-                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(prep) && TextUtils.isEmpty(date))) {
-                Toast.makeText(this, "Não podem haver campos vazios", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date) && TextUtils.isEmpty(hour)) {
+                txtSpecialty.setError("Especialidade não pode ficar fazia");
+                txtHospital.setError("Hospital não pode ficar vazio");
+                txtDate.setError("Data não pode ficar vazia");
+                txtHour.setError("Hora não pode ficar vazia");
+                txtPreparation.setError("Dias de Preparação não pode ficar vazio");
                 return;
             }
 
             if (TextUtils.isEmpty(name)) {
-                Toast.makeText(this, "Nome não pode ficar vazio", Toast.LENGTH_SHORT).show();
+                txtSpecialty.setError("Especialidade não pode ficar fazia");
                 return;
             }
 
             if (TextUtils.isEmpty(hospital)) {
-                Toast.makeText(this, "Hospital não pode ficar vazio", Toast.LENGTH_SHORT).show();
+                txtHospital.setError("Hospital não pode ficar vazio");
                 return;
             }
 
             if (TextUtils.isEmpty(prep)) {
-                Toast.makeText(this, "Dias de Preparação não pode ficar vazio", Toast.LENGTH_SHORT).show();
+                txtPreparation.setError("Dias de Preparação não pode ficar vazio");
                 return;
             }
 
             if (TextUtils.isEmpty(date)) {
-                Toast.makeText(this, "Data não pode ficar vazia", Toast.LENGTH_SHORT).show();
+                txtDate.setError("Data não pode ficar vazia");
+                return;
+            }
+
+
+
+            if (TextUtils.isEmpty(hour)) {
+                txtHour.setError("Hora não pode ficar vazia");
                 return;
             }
 
@@ -304,26 +309,31 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
             String date = txtDate.getText().toString().trim();
             String hour = txtHour.getText().toString().trim();
 
-            if ((TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date))
-                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital))
-                    || (TextUtils.isEmpty(name) && TextUtils.isEmpty(date))
-                    || (TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date))) {
-                Toast.makeText(this, "Não podem haver campos vazios", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date) && TextUtils.isEmpty(hour)) {
+                txtSpecialty.setError("Especialidade não pode ficar fazia");
+                txtHospital.setError("Hospital não pode ficar vazio");
+                txtDate.setError("Data não pode ficar vazia");
+                txtHour.setError("Hora não pode ficar vazia");
                 return;
             }
 
             if (TextUtils.isEmpty(name)) {
-                Toast.makeText(this, "Nome não pode ficar vazio", Toast.LENGTH_SHORT).show();
+                txtSpecialty.setError("Especialidade não pode ficar fazia");
                 return;
             }
 
             if (TextUtils.isEmpty(hospital)) {
-                Toast.makeText(this, "Hospital não pode ficar vazio", Toast.LENGTH_SHORT).show();
+                txtHospital.setError("Hospital não pode ficar vazio");
                 return;
             }
 
             if (TextUtils.isEmpty(date)) {
-                Toast.makeText(this, "Data não pode ficar vazia", Toast.LENGTH_SHORT).show();
+                txtDate.setError("Data não pode ficar vazia");
+                return;
+            }
+
+            if (TextUtils.isEmpty(hour)) {
+                txtHour.setError("Hora não pode ficar vazia");
                 return;
             }
 

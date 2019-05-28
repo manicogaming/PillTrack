@@ -4,11 +4,13 @@ public class PillInfo {
     public String name;
     public String pillfunc;
     public String interval;
+    public String pillhour;
 
-    public PillInfo(String name, String pillfunc, String interval) {
+    public PillInfo(String name, String pillfunc, String interval, String pillhour) {
         this.name = name;
         this.pillfunc = pillfunc;
         this.interval = interval;
+        this.pillhour = pillhour;
     }
 
     public String getName() {
@@ -33,5 +35,13 @@ public class PillInfo {
 
     public void setInterval(String interval) {
         this.interval = interval;
+    }
+
+    public String getPillhour() {
+        return pillhour;
+    }
+
+    public void setPillhour(String pillhour) {
+        this.pillhour = pillhour;
     }
 }

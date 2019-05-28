@@ -40,9 +40,9 @@
                 android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
-                android:text="Nome"
+                android:text=""
                 android:textColor="@color/colorWhite"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -56,7 +56,7 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
                 android:textColor="@color/colorWhite"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -69,9 +69,9 @@
                 android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
-                android:text="Idade"
+                android:text=""
                 android:textColor="@color/colorWhite"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -86,7 +86,7 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
                 android:textColor="@color/colorWhite"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -99,9 +99,9 @@
                 android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
-                android:text="Sexo"
+                android:text=""
                 android:textColor="@color/colorWhite"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <Spinner
@@ -125,9 +125,9 @@
                 android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
-                android:text="Peso"
+                android:text=""
                 android:textColor="@color/colorWhite"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -142,7 +142,7 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
                 android:textColor="@color/colorWhite"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -155,9 +155,9 @@
                 android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
-                android:text="Altura"
+                android:text=""
                 android:textColor="@color/colorWhite"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -172,7 +172,7 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
                 android:textColor="@color/colorWhite"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -189,7 +189,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/dark_button"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:text="Guardar Alterações"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
@@ -205,7 +205,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/dark_button"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:text="Editar Informações"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
@@ -221,7 +221,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/dark_button"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:text="Mudar Palavra-Passe"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
@@ -238,7 +238,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/dark_button"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:text="Terminar Sessão"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
