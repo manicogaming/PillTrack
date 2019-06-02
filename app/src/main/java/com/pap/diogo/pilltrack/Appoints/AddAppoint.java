@@ -191,9 +191,30 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         txtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddAppoint.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-                datePickerDialog.show();
+                final int mYear, mMonth, mDay;
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(AddAppoint.this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        if (selectedyear == mYear && (selectedmonth + 1) == mMonth + 1) {
+                            if (selectedday < mDay) {
+                                Toast.makeText(AddAppoint.this, "Data inválida", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                        txtDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+
+                    }
+                }, mYear, mMonth, mDay);
+
+                mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                if (!mDatePicker.isShowing()) {
+                    mDatePicker.show();
+                }
             }
         });
 
@@ -289,7 +310,6 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                 txtDate.setError("Data não pode ficar vazia");
                 return;
             }
-
 
 
             if (TextUtils.isEmpty(hour)) {

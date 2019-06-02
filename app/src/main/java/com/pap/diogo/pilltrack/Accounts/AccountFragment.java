@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.view.Change;
 import com.pap.diogo.pilltrack.Launcher;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
@@ -123,6 +124,14 @@ public class AccountFragment extends Fragment {
                 Intent Launcher = new Intent(getContext(), Launcher.class);
                 Launcher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(Launcher);
+            }
+        });
+
+        btnAccountChangePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ChangePW = new Intent(getContext(), ChangePW.class);
+                startActivity(ChangePW);
             }
         });
 
