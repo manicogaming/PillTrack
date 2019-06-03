@@ -51,16 +51,34 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/PillNames">
 
-            <TextView
-                android:id="@+id/pNext"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_margin="15dp"
-                android:text="PróximaMedicação"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="20sp" />
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:id="@+id/pDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="PróximaMedicação"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/pNext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/pDuration"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="Duração"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"/>
+            </RelativeLayout>
 
             <ImageButton
                 android:layout_width="65dp"

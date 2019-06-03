@@ -143,7 +143,6 @@ public class AddPill extends AppCompatActivity implements View.OnClickListener {
                     e.printStackTrace();
                 }
                 mDatePicker.getDatePicker().setMinDate(d.getTime());
-                //mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 if (!mDatePicker.isShowing()) {
                     mDatePicker.show();
                 }

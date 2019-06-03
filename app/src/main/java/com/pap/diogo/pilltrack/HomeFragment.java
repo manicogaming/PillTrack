@@ -246,6 +246,22 @@ public class HomeFragment extends Fragment {
                         holder.setPillFunc(model.getPillfunc());
                         holder.setInterval(model.getInterval());
 
+                        String dtStart = model.getPillstartdate();
+                        String dtEnd = model.getPillenddate();
+                        DateTimeFormatter format = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
+                        mDate = org.joda.time.LocalDate.parse(dtStart, format);
+                        cDate = org.joda.time.LocalDate.parse(dtEnd, format);
+                        int days = Days.daysBetween(mDate, cDate).getDays();
+
+                        if (days < 0) {
+                            pRef.child(model.getName()).removeValue();
+                        } else if (days == 0) {
+                            holder.setDuration("O tratamento acaba hoje.");
+                        } else {
+                            String rDays = String.valueOf(days);
+                            holder.setDuration("Faltam " + rDays + " dias.");
+                        }
+
                         holder.EditPill.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -297,6 +313,11 @@ public class HomeFragment extends Fragment {
             TextView PillInterval = PillsL.findViewById(R.id.pNext);
             PillInterval.setText(interval);
         }
+
+        public void setDuration(String duration) {
+            TextView PillDuration = PillsL.findViewById(R.id.pDuration);
+            PillDuration.setText(duration);
+        }
     }
 
     public static class AppointsInfo extends RecyclerView.ViewHolder {
@@ -345,7 +366,8 @@ public class HomeFragment extends Fragment {
             TextView eDate = ExamsL.findViewById(R.id.eDate);
             eDate.setText(date);
         }
-        public void setPrep(String prep){
+
+        public void setPrep(String prep) {
             TextView ePrep = ExamsL.findViewById(R.id.ePrep);
             ePrep.setText(prep + " Dias de Preparação.");
         }

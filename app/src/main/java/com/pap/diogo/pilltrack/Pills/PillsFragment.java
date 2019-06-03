@@ -1,10 +1,12 @@
 package com.pap.diogo.pilltrack.Pills;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +16,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -27,14 +31,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pap.diogo.pilltrack.Appoints.EditDateFragment;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class PillsFragment extends Fragment {
     private ImageButton add_pill;
     private RecyclerView EPills;
     private FirebaseRecyclerAdapter<Pill, EPillsInfo> EPillsAdapter;
     private TextView NoEPills;
+    private Date d;
     private boolean isSpinnerInitial = true;
 
     private FirebaseAuth mAuth;
@@ -108,6 +119,14 @@ public class PillsFragment extends Fragment {
                             }
                         });
 
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        d = null;
+                        try {
+                            d = sdf.parse(holder.PillStartDate.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
                         EditPills(holder, model);
                     }
 
@@ -149,10 +168,8 @@ public class PillsFragment extends Fragment {
                             pRef.child(model.getName()).removeValue();
 
                             String newname = holder.EPillName.getText().toString().trim();
-                            String pillfunc = holder.PillFunc.getText().toString().trim();
-                            String interval = holder.PillInterval.getText().toString().trim();
 
-                            PillInfo PillInfo = new PillInfo(newname, pillfunc, interval, model.getPillhour(), "test", "text");
+                            PillInfo PillInfo = new PillInfo(newname, model.getPillfunc(), model.getInterval(), model.getPillhour(), model.getPillstartdate(), model.getPillenddate());
                             pRef.child(newname).setValue(PillInfo);
                         }
                     }
@@ -228,6 +245,77 @@ public class PillsFragment extends Fragment {
             public void onClick(View v) {
                 holder.PillStartDate.setVisibility(View.GONE);
                 holder.EPillStartDate.setVisibility(View.VISIBLE);
+
+                final int mYear, mMonth, mDay;
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        if (selectedyear == mYear && (selectedmonth + 1) == mMonth + 1) {
+                            if (selectedday < mDay) {
+                                Toast.makeText(getContext(), "Data inválida", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                        holder.EPillStartDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+
+                        String name = holder.PillName.getText().toString().trim();
+                        String newdate = holder.EPillStartDate.getText().toString().trim();
+
+                        pRef.child(name).child("pillstartdate").setValue(newdate);
+                    }
+                }, mYear, mMonth, mDay);
+
+                mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                if (!mDatePicker.isShowing()) {
+                    mDatePicker.show();
+                }
+                holder.PillStartDate.setVisibility(View.VISIBLE);
+                holder.EPillStartDate.setVisibility(View.GONE);
+            }
+        });
+
+        holder.PillEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.PillEndDate.setVisibility(View.GONE);
+                holder.EPillEndDate.setVisibility(View.VISIBLE);
+
+                final int mYear, mMonth, mDay;
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        if (selectedyear == mYear && (selectedmonth + 1) == mMonth + 1) {
+                            if (selectedday < mDay) {
+                                Toast.makeText(getContext(), "Data inválida", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                        holder.EPillEndDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+
+                        String name = holder.PillName.getText().toString().trim();
+                        String newdate = holder.EPillEndDate.getText().toString().trim();
+
+                        pRef.child(name).child("pillenddate").setValue(newdate);
+                    }
+                }, mYear, mMonth, mDay);
+
+                mDatePicker.getDatePicker().setMinDate(d.getTime());
+                if (!mDatePicker.isShowing()) {
+                    mDatePicker.show();
+                }
+
+                holder.PillEndDate.setVisibility(View.VISIBLE);
+                holder.EPillEndDate.setVisibility(View.GONE);
             }
         });
     }
