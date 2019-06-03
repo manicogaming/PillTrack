@@ -87,12 +87,56 @@
                 android:background="@color/colorDarkBlue" />
         </RelativeLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/pillstartdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/interval"
+            android:layout_centerHorizontal="true"
+            app:hintTextAppearance="@style/TextLabel">
+
+
+            <EditText
+                android:id="@+id/txtStartDate"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorDarkBlue"
+                android:focusable="false"
+                android:hint="Início do tratamento"
+                android:inputType="time"
+                android:padding="10dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/pillenddate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pillstartdate"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            app:hintTextAppearance="@style/TextLabel">
+
+
+            <EditText
+                android:id="@+id/txtEndDate"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorDarkBlue"
+                android:focusable="false"
+                android:hint="Fim do tratamento"
+                android:inputType="time"
+                android:padding="10dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp" />
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/btnAddPill"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/interval"
+            android:layout_below="@+id/pillenddate"
             android:layout_centerInParent="true"
             android:layout_marginTop="18dp"
             android:background="@drawable/dark_button"

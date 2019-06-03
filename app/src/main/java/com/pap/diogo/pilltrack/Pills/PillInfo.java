@@ -5,12 +5,16 @@ public class PillInfo {
     public String pillfunc;
     public String interval;
     public String pillhour;
+    public String pillstartdate;
+    public String pillenddate;
 
-    public PillInfo(String name, String pillfunc, String interval, String pillhour) {
+    public PillInfo(String name, String pillfunc, String interval, String pillhour, String pillstartdate, String pillenddate) {
         this.name = name;
         this.pillfunc = pillfunc;
         this.interval = interval;
         this.pillhour = pillhour;
+        this.pillstartdate = pillstartdate;
+        this.pillenddate = pillenddate;
     }
 
     public String getName() {
@@ -43,5 +47,21 @@ public class PillInfo {
 
     public void setPillhour(String pillhour) {
         this.pillhour = pillhour;
+    }
+
+    public String getPillstartdate() {
+        return pillstartdate;
+    }
+
+    public void setPillstartdate(String pillstartdate) {
+        this.pillstartdate = pillstartdate;
+    }
+
+    public String getPillenddate() {
+        return pillenddate;
+    }
+
+    public void setPillenddate(String pillenddate) {
+        this.pillenddate = pillenddate;
     }
 }

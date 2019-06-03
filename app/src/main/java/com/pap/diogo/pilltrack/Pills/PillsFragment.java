@@ -97,7 +97,8 @@ public class PillsFragment extends Fragment {
                         holder.setName(model.getName());
                         holder.setPillFunc(model.getPillfunc());
                         holder.setInterval(model.getInterval());
-                        holder.setPillHour(model.getPillhour());
+                        holder.setStartDate(model.getPillstartdate());
+                        holder.setEndDate(model.getPillenddate());
 
                         holder.EPillDelete.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -150,9 +151,8 @@ public class PillsFragment extends Fragment {
                             String newname = holder.EPillName.getText().toString().trim();
                             String pillfunc = holder.PillFunc.getText().toString().trim();
                             String interval = holder.PillInterval.getText().toString().trim();
-                            String pillhour = holder.PillHour.getText().toString().trim();
 
-                            PillInfo PillInfo = new PillInfo(newname, pillfunc, interval, pillhour);
+                            PillInfo PillInfo = new PillInfo(newname, pillfunc, interval, model.getPillhour(), "test", "text");
                             pRef.child(newname).setValue(PillInfo);
                         }
                     }
@@ -222,6 +222,14 @@ public class PillsFragment extends Fragment {
                 });
             }
         });
+
+        holder.PillStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.PillStartDate.setVisibility(View.GONE);
+                holder.EPillStartDate.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private int getIndex(Spinner s1, String dbInterval) {
@@ -239,8 +247,8 @@ public class PillsFragment extends Fragment {
     public static class EPillsInfo extends RecyclerView.ViewHolder {
         View EPillsL;
         ImageButton EPillDelete;
-        TextView PillName, PillFunc, PillInterval, PillHour;
-        EditText EPillName, EPillFunc;
+        TextView PillName, PillFunc, PillInterval, PillStartDate, PillEndDate;
+        EditText EPillName, EPillFunc, EPillStartDate, EPillEndDate;
         Spinner EPillInterval;
 
         String[] arraySpinner = new String[]{
@@ -275,9 +283,18 @@ public class PillsFragment extends Fragment {
             PillInterval.setText(interval);
         }
 
-        public void setPillHour(String hour){
-            PillHour = EPillsL.findViewById(R.id.PillHour);
-            PillHour.setText(hour);
+        public void setStartDate(String pillstartdate) {
+            PillStartDate = EPillsL.findViewById(R.id.PillStartDate);
+            EPillStartDate = EPillsL.findViewById(R.id.EPillStartDate);
+            PillStartDate.setText(pillstartdate);
+            EPillStartDate.setText(pillstartdate);
+        }
+
+        public void setEndDate(String pillenddate) {
+            PillEndDate = EPillsL.findViewById(R.id.PillEndDate);
+            EPillEndDate = EPillsL.findViewById(R.id.EPillEndDate);
+            PillEndDate.setText(pillenddate);
+            EPillEndDate.setText(pillenddate);
         }
     }
 }
