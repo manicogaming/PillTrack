@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
     private TextView NoAppoints, NoPills;
     DatabaseReference pRef, aRef, eRef;
 
-    LocalDate cDate, mDate;
+    LocalDate cDate, mDate, sDate, eDate;
 
     @Nullable
     @Override
@@ -246,19 +246,32 @@ public class HomeFragment extends Fragment {
                         holder.setPillFunc(model.getPillfunc());
                         holder.setInterval(model.getInterval());
 
-                        String dtStart = model.getPillstartdate();
-                        String dtEnd = model.getPillenddate();
-                        DateTimeFormatter format = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
-                        mDate = org.joda.time.LocalDate.parse(dtStart, format);
-                        cDate = org.joda.time.LocalDate.parse(dtEnd, format);
-                        int days = Days.daysBetween(mDate, cDate).getDays();
+                        String dtNow = model.getPillstartdate();
+                        DateTimeFormatter curr = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
+                        mDate = org.joda.time.LocalDate.parse(dtNow, curr);
+                        cDate = new LocalDate();
+                        int currdays = Days.daysBetween(cDate, mDate).getDays();
 
-                        if (days < 0) {
+                        if (currdays < 0) {
                             pRef.child(model.getName()).removeValue();
-                        } else if (days == 0) {
-                            holder.setDuration("O tratamento acaba hoje.");
+                        } else if (currdays == 0) {
+                            String dtStart = model.getPillstartdate();
+                            String dtEnd = model.getPillenddate();
+                            DateTimeFormatter format = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
+                            sDate = org.joda.time.LocalDate.parse(dtStart, format);
+                            eDate = org.joda.time.LocalDate.parse(dtEnd, format);
+                            int days = Days.daysBetween(sDate, eDate).getDays();
+
+                            if (days < 0) {
+                                pRef.child(model.getName()).removeValue();
+                            } else if (days == 0) {
+                                holder.setDuration("O tratamento acaba hoje.");
+                            } else {
+                                String rDays = String.valueOf(days);
+                                holder.setDuration("Tratamento de " + rDays + " dias.");
+                            }
                         } else {
-                            String rDays = String.valueOf(days);
+                            String rDays = String.valueOf(currdays);
                             holder.setDuration("Faltam " + rDays + " dias.");
                         }
 

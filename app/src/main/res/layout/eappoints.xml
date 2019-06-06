@@ -158,4 +158,20 @@
 
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/ConfirmChanges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/EAppoints"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/add_button"
+        android:text="Confirmar Alterações"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
 </RelativeLayout>

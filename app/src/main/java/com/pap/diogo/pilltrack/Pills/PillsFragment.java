@@ -2,6 +2,7 @@ package com.pap.diogo.pilltrack.Pills;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -154,24 +156,34 @@ public class PillsFragment extends Fragment {
                 holder.PillName.setVisibility(View.GONE);
                 holder.EPillName.setVisibility(View.VISIBLE);
                 holder.EPillName.requestFocus();
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-                holder.EPillName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
-                            holder.PillName.setVisibility(View.VISIBLE);
-                            holder.EPillName.setVisibility(View.GONE);
+                    public void onClick(View v) {
+                        holder.PillName.setVisibility(View.VISIBLE);
+                        holder.EPillName.setVisibility(View.GONE);
 
-                            pRef.child(model.getName()).removeValue();
+                        pRef.child(model.getName()).removeValue();
 
-                            String newname = holder.EPillName.getText().toString().trim();
+                        String name = holder.EPillName.getText().toString().trim();
+                        String pillfunc = holder.EPillFunc.getText().toString().trim();
+                        String pillstartdate = holder.EPillStartDate.getText().toString().trim();
+                        String pillenddate = holder.EPillEndDate.getText().toString().trim();
+                        String interval;
 
-                            PillInfo PillInfo = new PillInfo(newname, model.getPillfunc(), model.getInterval(), model.getPillhour(), model.getPillstartdate(), model.getPillenddate());
-                            pRef.child(newname).setValue(PillInfo);
+                        if (holder.EPillInterval.getSelectedItem() == null) {
+                            interval = holder.PillInterval.getText().toString().trim();
+                        } else {
+                            interval = holder.EPillInterval.getSelectedItem().toString().trim();
                         }
+
+                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                        pRef.child(name).setValue(PillInfo);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
                     }
                 });
             }
@@ -183,21 +195,34 @@ public class PillsFragment extends Fragment {
                 holder.PillFunc.setVisibility(View.GONE);
                 holder.EPillFunc.setVisibility(View.VISIBLE);
                 holder.EPillFunc.requestFocus();
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-                holder.EPillFunc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
-                            holder.PillFunc.setVisibility(View.VISIBLE);
-                            holder.EPillFunc.setVisibility(View.GONE);
+                    public void onClick(View v) {
+                        holder.PillFunc.setVisibility(View.VISIBLE);
+                        holder.EPillFunc.setVisibility(View.GONE);
 
-                            String newpillfunc = holder.EPillFunc.getText().toString().trim();
+                        pRef.child(model.getName()).removeValue();
 
-                            pRef.child(model.getName()).child("pillfunc").setValue(newpillfunc);
+                        String name = holder.EPillName.getText().toString().trim();
+                        String pillfunc = holder.EPillFunc.getText().toString().trim();
+                        String pillstartdate = holder.EPillStartDate.getText().toString().trim();
+                        String pillenddate = holder.EPillEndDate.getText().toString().trim();
+                        String interval;
+
+                        if (holder.EPillInterval.getSelectedItem() == null) {
+                            interval = holder.PillInterval.getText().toString().trim();
+                        } else {
+                            interval = holder.EPillInterval.getSelectedItem().toString().trim();
                         }
+
+                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                        pRef.child(name).setValue(PillInfo);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
                     }
                 });
             }
@@ -208,6 +233,7 @@ public class PillsFragment extends Fragment {
             public void onClick(View v) {
                 holder.PillInterval.setVisibility(View.GONE);
                 holder.EPillInterval.setVisibility(View.VISIBLE);
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item_edit, holder.arraySpinner);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -215,26 +241,29 @@ public class PillsFragment extends Fragment {
 
                 holder.EPillInterval.setSelection(getIndex(holder.EPillInterval, model.getInterval()));
 
-                holder.EPillInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        if (isSpinnerInitial) {
-                            isSpinnerInitial = false;
-                        } else {
-                            String newinterval = holder.EPillInterval.getSelectedItem().toString().trim();
-
-                            pRef.child(model.getName()).child("interval").setValue(newinterval);
-
-                            holder.PillInterval.setVisibility(View.VISIBLE);
-                            holder.EPillInterval.setVisibility(View.GONE);
-                            isSpinnerInitial = true;
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
+                    public void onClick(View v) {
                         holder.PillInterval.setVisibility(View.VISIBLE);
                         holder.EPillInterval.setVisibility(View.GONE);
+
+                        pRef.child(model.getName()).removeValue();
+
+                        String name = holder.EPillName.getText().toString().trim();
+                        String pillfunc = holder.EPillFunc.getText().toString().trim();
+                        String pillstartdate = holder.EPillStartDate.getText().toString().trim();
+                        String pillenddate = holder.EPillEndDate.getText().toString().trim();
+                        String interval;
+
+                        if (holder.EPillInterval.getSelectedItem() == null) {
+                            interval = holder.PillInterval.getText().toString().trim();
+                        } else {
+                            interval = holder.EPillInterval.getSelectedItem().toString().trim();
+                        }
+
+                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                        pRef.child(name).setValue(PillInfo);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
                     }
                 });
             }
@@ -245,6 +274,7 @@ public class PillsFragment extends Fragment {
             public void onClick(View v) {
                 holder.PillStartDate.setVisibility(View.GONE);
                 holder.EPillStartDate.setVisibility(View.VISIBLE);
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 final int mYear, mMonth, mDay;
                 Calendar mcurrentDate = Calendar.getInstance();
@@ -262,20 +292,77 @@ public class PillsFragment extends Fragment {
                             }
                         }
                         holder.EPillStartDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+                        holder.PillStartDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
 
-                        String name = holder.PillName.getText().toString().trim();
-                        String newdate = holder.EPillStartDate.getText().toString().trim();
+                        holder.PillStartDate.setVisibility(View.VISIBLE);
+                        holder.EPillStartDate.setVisibility(View.GONE);
 
-                        pRef.child(name).child("pillstartdate").setValue(newdate);
+                        holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                holder.PillStartDate.setVisibility(View.VISIBLE);
+                                holder.EPillStartDate.setVisibility(View.GONE);
+
+                                pRef.child(model.getName()).removeValue();
+
+                                String name = holder.EPillName.getText().toString().trim();
+                                String pillfunc = holder.EPillFunc.getText().toString().trim();
+                                String pillstartdate = holder.EPillStartDate.getText().toString().trim();
+                                String pillenddate = holder.EPillEndDate.getText().toString().trim();
+                                String interval;
+
+                                if (holder.EPillInterval.getSelectedItem() == null) {
+                                    interval = holder.PillInterval.getText().toString().trim();
+                                } else {
+                                    interval = holder.EPillInterval.getSelectedItem().toString().trim();
+                                }
+
+                                PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                                pRef.child(name).setValue(PillInfo);
+                                holder.ConfirmChanges.setVisibility(View.GONE);
+                            }
+                        });
                     }
                 }, mYear, mMonth, mDay);
+
+                mDatePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        holder.PillStartDate.setVisibility(View.VISIBLE);
+                        holder.EPillStartDate.setVisibility(View.GONE);
+
+                        holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                holder.PillStartDate.setVisibility(View.VISIBLE);
+                                holder.EPillStartDate.setVisibility(View.GONE);
+
+                                pRef.child(model.getName()).removeValue();
+
+                                String name = holder.EPillName.getText().toString().trim();
+                                String pillfunc = holder.EPillFunc.getText().toString().trim();
+                                String pillstartdate = holder.EPillStartDate.getText().toString().trim();
+                                String pillenddate = holder.EPillEndDate.getText().toString().trim();
+                                String interval;
+
+                                if (holder.EPillInterval.getSelectedItem() == null) {
+                                    interval = holder.PillInterval.getText().toString().trim();
+                                } else {
+                                    interval = holder.EPillInterval.getSelectedItem().toString().trim();
+                                }
+
+                                PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                                pRef.child(name).setValue(PillInfo);
+                                holder.ConfirmChanges.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                });
 
                 mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 if (!mDatePicker.isShowing()) {
                     mDatePicker.show();
                 }
-                holder.PillStartDate.setVisibility(View.VISIBLE);
-                holder.EPillStartDate.setVisibility(View.GONE);
             }
         });
 
@@ -284,6 +371,7 @@ public class PillsFragment extends Fragment {
             public void onClick(View v) {
                 holder.PillEndDate.setVisibility(View.GONE);
                 holder.EPillEndDate.setVisibility(View.VISIBLE);
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 final int mYear, mMonth, mDay;
                 Calendar mcurrentDate = Calendar.getInstance();
@@ -301,21 +389,77 @@ public class PillsFragment extends Fragment {
                             }
                         }
                         holder.EPillEndDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+                        holder.PillEndDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
 
-                        String name = holder.PillName.getText().toString().trim();
-                        String newdate = holder.EPillEndDate.getText().toString().trim();
+                        holder.PillEndDate.setVisibility(View.VISIBLE);
+                        holder.EPillEndDate.setVisibility(View.GONE);
 
-                        pRef.child(name).child("pillenddate").setValue(newdate);
+                        holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                holder.PillEndDate.setVisibility(View.VISIBLE);
+                                holder.EPillEndDate.setVisibility(View.GONE);
+
+                                pRef.child(model.getName()).removeValue();
+
+                                String name = holder.EPillName.getText().toString().trim();
+                                String pillfunc = holder.EPillFunc.getText().toString().trim();
+                                String pillstartdate = holder.EPillStartDate.getText().toString().trim();
+                                String pillenddate = holder.EPillEndDate.getText().toString().trim();
+                                String interval;
+
+                                if (holder.EPillInterval.getSelectedItem() == null) {
+                                    interval = holder.PillInterval.getText().toString().trim();
+                                } else {
+                                    interval = holder.EPillInterval.getSelectedItem().toString().trim();
+                                }
+
+                                PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                                pRef.child(name).setValue(PillInfo);
+                                holder.ConfirmChanges.setVisibility(View.GONE);
+                            }
+                        });
                     }
                 }, mYear, mMonth, mDay);
+
+                mDatePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        holder.PillEndDate.setVisibility(View.VISIBLE);
+                        holder.EPillEndDate.setVisibility(View.GONE);
+
+                        holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                holder.PillEndDate.setVisibility(View.VISIBLE);
+                                holder.EPillEndDate.setVisibility(View.GONE);
+
+                                pRef.child(model.getName()).removeValue();
+
+                                String name = holder.EPillName.getText().toString().trim();
+                                String pillfunc = holder.EPillFunc.getText().toString().trim();
+                                String pillstartdate = holder.EPillStartDate.getText().toString().trim();
+                                String pillenddate = holder.EPillEndDate.getText().toString().trim();
+                                String interval;
+
+                                if (holder.EPillInterval.getSelectedItem() == null) {
+                                    interval = holder.PillInterval.getText().toString().trim();
+                                } else {
+                                    interval = holder.EPillInterval.getSelectedItem().toString().trim();
+                                }
+
+                                PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                                pRef.child(name).setValue(PillInfo);
+                                holder.ConfirmChanges.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                });
 
                 mDatePicker.getDatePicker().setMinDate(d.getTime());
                 if (!mDatePicker.isShowing()) {
                     mDatePicker.show();
                 }
-
-                holder.PillEndDate.setVisibility(View.VISIBLE);
-                holder.EPillEndDate.setVisibility(View.GONE);
             }
         });
     }
@@ -338,6 +482,7 @@ public class PillsFragment extends Fragment {
         TextView PillName, PillFunc, PillInterval, PillStartDate, PillEndDate;
         EditText EPillName, EPillFunc, EPillStartDate, EPillEndDate;
         Spinner EPillInterval;
+        Button ConfirmChanges;
 
         String[] arraySpinner = new String[]{
                 "4 em 4 horas", "8 em 8 horas", "12 em 12 horas", "De manhã e à noite", "De manhã", "À noite"
@@ -349,6 +494,7 @@ public class PillsFragment extends Fragment {
             EPillsL = itemView;
             EPillDelete = EPillsL.findViewById(R.id.EPillDelete);
             EPillInterval = EPillsL.findViewById(R.id.EPillInterval);
+            ConfirmChanges = EPillsL.findViewById(R.id.ConfirmChanges);
         }
 
         public void setName(String name) {

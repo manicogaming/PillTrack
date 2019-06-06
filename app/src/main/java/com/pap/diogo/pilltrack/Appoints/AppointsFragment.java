@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -201,6 +202,7 @@ public class AppointsFragment extends Fragment {
                 holder.AppointName.setVisibility(View.GONE);
                 holder.EAppointName.setVisibility(View.VISIBLE);
                 holder.EAppointName.requestFocus();
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 final String currname = holder.AppointName.getText().toString();
 
@@ -414,9 +416,10 @@ public class AppointsFragment extends Fragment {
                                     String date = holder.ExamDate.getText().toString().trim();
                                     String hospital = holder.ExamHospital.getText().toString().trim();
                                     String prep = holder.ExamPrep.getText().toString().trim();
+                                    String hour = holder.ExamHour.getText().toString().trim();
 
                                     getHospitalLocation(hospital);
-                                    ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, "wait", HospitalLocation);
+                                    ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, hour, HospitalLocation);
                                     eRef.child(newname).setValue(ExamInfo);
                                 }
                             }
@@ -573,12 +576,14 @@ public class AppointsFragment extends Fragment {
         TextView AppointName, AppointDate, AppointHospital, AppointHour;
         EditText EAppointDate, EAppointHour;
         AutoCompleteTextView EAppointName, EAppointHospital;
+        Button ConfirmChanges;
 
         public EAppointsInfo(@NonNull View itemView) {
             super(itemView);
 
             EAppointsL = itemView;
             EAppointDelete = EAppointsL.findViewById(R.id.EAppointDelete);
+            ConfirmChanges = EAppointsL.findViewById(R.id.ConfirmChanges);
         }
 
         public void setName(String name) {
