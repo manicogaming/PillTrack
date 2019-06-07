@@ -1,7 +1,9 @@
 package com.pap.diogo.pilltrack.Appoints;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,11 +21,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -229,35 +233,37 @@ public class AppointsFragment extends Fragment {
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-                holder.EAppointName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
-                            String str = holder.EAppointName.getText().toString();
+                    public void onClick(View v) {
+                        String str = holder.EAppointName.getText().toString();
 
-                            ListAdapter listAdapter = holder.EAppointName.getAdapter();
-                            for (int i = 0; i < listAdapter.getCount(); i++) {
-                                String temp = listAdapter.getItem(i).toString();
-                                if (str.compareTo(temp) == 0) {
-                                    holder.AppointName.setVisibility(View.VISIBLE);
-                                    holder.EAppointName.setVisibility(View.GONE);
+                        ListAdapter listAdapter = holder.EAppointName.getAdapter();
+                        for (int i = 0; i < listAdapter.getCount(); i++) {
+                            String temp = listAdapter.getItem(i).toString();
+                            if (str.compareTo(temp) == 0) {
+                                holder.AppointName.setVisibility(View.VISIBLE);
+                                holder.EAppointName.setVisibility(View.GONE);
+                                holder.AppointHospital.setVisibility(View.VISIBLE);
+                                holder.EAppointHospital.setVisibility(View.GONE);
 
-                                    final String newname = str.trim();
+                                final String newname = str.trim();
 
-                                    aRef.child(model.getName()).removeValue();
+                                aRef.child(model.getName()).removeValue();
 
-                                    String date = holder.AppointDate.getText().toString().trim();
-                                    String hospital = holder.AppointHospital.getText().toString().trim();
+                                String date = holder.AppointDate.getText().toString().trim();
+                                String hospital = holder.EAppointHospital.getText().toString().trim();
+                                String hour = holder.AppointHour.getText().toString().trim();
 
-                                    getHospitalLocation(hospital);
-                                    AppointInfo AppointInfo = new AppointInfo(newname, hospital, date, "wait", HospitalLocation);
-                                    aRef.child(newname).setValue(AppointInfo);
-                                }
+                                getHospitalLocation(hospital);
+                                AppointInfo AppointInfo = new AppointInfo(newname, hospital, date, hour, HospitalLocation);
+                                aRef.child(newname).setValue(AppointInfo);
                             }
-                            holder.EAppointName.setText(currname);
-                            holder.AppointName.setVisibility(View.VISIBLE);
-                            holder.EAppointName.setVisibility(View.GONE);
                         }
+                        holder.EAppointName.setText(currname);
+                        holder.AppointName.setVisibility(View.VISIBLE);
+                        holder.EAppointName.setVisibility(View.GONE);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
                     }
                 });
             }
@@ -266,21 +272,72 @@ public class AppointsFragment extends Fragment {
         holder.AppointDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.AppointDate.setVisibility(View.GONE);
-                holder.EAppointDate.setVisibility(View.VISIBLE);
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
-                newInstance();
+                final int mYear, mMonth, mDay;
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
 
-                holder.AppointDate.setVisibility(View.VISIBLE);
-                holder.EAppointDate.setVisibility(View.GONE);
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        if (selectedyear == mYear && (selectedmonth + 1) == mMonth + 1) {
+                            if (selectedday < mDay) {
+                                Toast.makeText(getContext(), "Data inválida", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                        holder.AppointDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+
+                        holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                holder.AppointName.setVisibility(View.VISIBLE);
+                                holder.EAppointName.setVisibility(View.GONE);
+                                holder.AppointHospital.setVisibility(View.VISIBLE);
+                                holder.EAppointHospital.setVisibility(View.GONE);
+
+                                aRef.child(model.getName()).removeValue();
+
+                                String name = holder.EAppointName.getText().toString().trim();
+                                String date = holder.AppointDate.getText().toString().trim();
+                                String hospital = holder.EAppointHospital.getText().toString().trim();
+                                String hour = holder.AppointHour.getText().toString().trim();
+
+                                getHospitalLocation(hospital);
+
+                                AppointInfo AppointInfo = new AppointInfo(name, hospital, date, hour, HospitalLocation);
+                                aRef.child(name).setValue(AppointInfo);
+                                holder.ConfirmChanges.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }, mYear, mMonth, mDay);
+
+                mDatePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        if ((holder.EAppointName.getVisibility() == View.VISIBLE) || (holder.EAppointHospital.getVisibility() == View.VISIBLE) || (!model.getHour().matches(holder.AppointHour.getText().toString()))) {
+                            holder.ConfirmChanges.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.ConfirmChanges.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+                mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                if (!mDatePicker.isShowing()) {
+                    mDatePicker.show();
+                }
             }
         });
 
         holder.AppointHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.AppointHour.setVisibility(View.GONE);
-                holder.EAppointHour.setVisibility(View.VISIBLE);
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 Calendar mcurrentTime = Calendar.getInstance();
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -288,16 +345,44 @@ public class AppointsFragment extends Fragment {
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        holder.EAppointHour.setText(checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
-                        aRef.child(model.getName()).child("hour").setValue(holder.EAppointHour.getText().toString().trim());
+                    public void onTimeSet(TimePicker timePicker, final int selectedHour, final int selectedMinute) {
+                        holder.AppointHour.setText(checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
+
+                        holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                aRef.child(model.getName()).removeValue();
+
+                                String name = holder.EAppointName.getText().toString().trim();
+                                String date = holder.AppointDate.getText().toString().trim();
+                                String hospital = holder.EAppointHospital.getText().toString().trim();
+                                String hour = holder.AppointHour.getText().toString().trim();
+
+                                getHospitalLocation(hospital);
+
+                                AppointInfo AppointInfo = new AppointInfo(name, hospital, date, hour, HospitalLocation);
+                                aRef.child(name).setValue(AppointInfo);
+
+                                holder.ConfirmChanges.setVisibility(View.GONE);
+                            }
+                        });
+
                     }
                 }, hour, minute, true);
+
+                mTimePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        if ((holder.EAppointName.getVisibility() == View.VISIBLE) || (holder.EAppointHospital.getVisibility() == View.VISIBLE) || (!model.getDate().matches(holder.AppointDate.getText().toString()))) {
+                            holder.ConfirmChanges.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.ConfirmChanges.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
                 mTimePicker.setTitle("Selecione uma Hora");
                 mTimePicker.show();
-
-                holder.AppointHour.setVisibility(View.VISIBLE);
-                holder.EAppointHour.setVisibility(View.GONE);
             }
         });
 
@@ -307,6 +392,7 @@ public class AppointsFragment extends Fragment {
                 holder.AppointHospital.setVisibility(View.GONE);
                 holder.EAppointHospital.setVisibility(View.VISIBLE);
                 holder.EAppointHospital.requestFocus();
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 final String currhospital = holder.AppointHospital.getText().toString();
 
@@ -333,30 +419,37 @@ public class AppointsFragment extends Fragment {
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-                holder.EAppointHospital.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
-                            String str = holder.EAppointHospital.getText().toString();
+                    public void onClick(View v) {
+                        String str = holder.EAppointHospital.getText().toString();
 
-                            ListAdapter listAdapter = holder.EAppointHospital.getAdapter();
-                            for (int i = 0; i < listAdapter.getCount(); i++) {
-                                String temp = listAdapter.getItem(i).toString();
-                                if (str.compareTo(temp) == 0) {
-                                    holder.AppointHospital.setVisibility(View.VISIBLE);
-                                    holder.EAppointHospital.setVisibility(View.GONE);
+                        ListAdapter listAdapter = holder.EAppointHospital.getAdapter();
+                        for (int i = 0; i < listAdapter.getCount(); i++) {
+                            String temp = listAdapter.getItem(i).toString();
+                            if (str.compareTo(temp) == 0) {
+                                holder.AppointName.setVisibility(View.VISIBLE);
+                                holder.EAppointName.setVisibility(View.GONE);
+                                holder.AppointHospital.setVisibility(View.VISIBLE);
+                                holder.EAppointHospital.setVisibility(View.GONE);
 
-                                    final String newhospital = str.trim();
+                                final String newhospital = str.trim();
 
-                                    getHospitalLocation(newhospital);
-                                    aRef.child(model.getName()).child("hospital").setValue(newhospital);
-                                    aRef.child(model.getName()).child("hlocation").setValue(HospitalLocation);
-                                }
+                                aRef.child(model.getName()).removeValue();
+
+                                String name = holder.EAppointName.getText().toString().trim();
+                                String date = holder.AppointDate.getText().toString().trim();
+                                String hour = holder.AppointHour.getText().toString().trim();
+
+                                getHospitalLocation(newhospital);
+                                AppointInfo AppointInfo = new AppointInfo(name, newhospital, date, hour, HospitalLocation);
+                                aRef.child(name).setValue(AppointInfo);
                             }
-                            holder.EAppointHospital.setText(currhospital);
-                            holder.AppointHospital.setVisibility(View.VISIBLE);
-                            holder.EAppointHospital.setVisibility(View.GONE);
                         }
+                        holder.EAppointHospital.setText(currhospital);
+                        holder.AppointHospital.setVisibility(View.VISIBLE);
+                        holder.EAppointHospital.setVisibility(View.GONE);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
                     }
                 });
             }
@@ -370,6 +463,7 @@ public class AppointsFragment extends Fragment {
                 holder.ExamName.setVisibility(View.GONE);
                 holder.EExamName.setVisibility(View.VISIBLE);
                 holder.EExamName.requestFocus();
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 final String currname = holder.ExamName.getText().toString();
 
@@ -396,37 +490,40 @@ public class AppointsFragment extends Fragment {
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-                holder.EExamName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
-                            String str = holder.EExamName.getText().toString();
+                    public void onClick(View v) {
+                        String str = holder.EExamName.getText().toString();
 
-                            ListAdapter listAdapter = holder.EExamName.getAdapter();
-                            for (int i = 0; i < listAdapter.getCount(); i++) {
-                                String temp = listAdapter.getItem(i).toString();
-                                if (str.compareTo(temp) == 0) {
-                                    holder.ExamName.setVisibility(View.VISIBLE);
-                                    holder.EExamName.setVisibility(View.GONE);
+                        ListAdapter listAdapter = holder.EExamName.getAdapter();
+                        for (int i = 0; i < listAdapter.getCount(); i++) {
+                            String temp = listAdapter.getItem(i).toString();
+                            if (str.compareTo(temp) == 0) {
+                                holder.ExamName.setVisibility(View.VISIBLE);
+                                holder.EExamName.setVisibility(View.GONE);
+                                holder.ExamHospital.setVisibility(View.VISIBLE);
+                                holder.EExamHospital.setVisibility(View.GONE);
+                                holder.ExamPrep.setVisibility(View.VISIBLE);
+                                holder.EExamPrep.setVisibility(View.GONE);
 
-                                    final String newname = str.trim();
+                                final String newname = str.trim();
 
-                                    eRef.child(model.getName()).removeValue();
+                                eRef.child(model.getName()).removeValue();
 
-                                    String date = holder.ExamDate.getText().toString().trim();
-                                    String hospital = holder.ExamHospital.getText().toString().trim();
-                                    String prep = holder.ExamPrep.getText().toString().trim();
-                                    String hour = holder.ExamHour.getText().toString().trim();
+                                String date = holder.ExamDate.getText().toString().trim();
+                                String hospital = holder.EExamHospital.getText().toString().trim();
+                                String prep = holder.EExamPrep.getText().toString().trim();
+                                String hour = holder.ExamHour.getText().toString().trim();
 
-                                    getHospitalLocation(hospital);
-                                    ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, hour, HospitalLocation);
-                                    eRef.child(newname).setValue(ExamInfo);
-                                }
+                                getHospitalLocation(hospital);
+                                ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, hour, HospitalLocation);
+                                eRef.child(newname).setValue(ExamInfo);
                             }
-                            holder.EExamName.setText(currname);
-                            holder.ExamName.setVisibility(View.VISIBLE);
-                            holder.EExamName.setVisibility(View.GONE);
                         }
+                        holder.EExamName.setText(currname);
+                        holder.ExamName.setVisibility(View.VISIBLE);
+                        holder.EExamName.setVisibility(View.GONE);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
                     }
                 });
             }
@@ -435,22 +532,75 @@ public class AppointsFragment extends Fragment {
         holder.ExamDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.ExamDate.setVisibility(View.GONE);
-                holder.EExamDate.setVisibility(View.VISIBLE);
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
-                isAppoint = false;
-                newInstance();
+                final int mYear, mMonth, mDay;
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
 
-                holder.ExamDate.setVisibility(View.VISIBLE);
-                holder.EExamDate.setVisibility(View.GONE);
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        if (selectedyear == mYear && (selectedmonth + 1) == mMonth + 1) {
+                            if (selectedday < mDay) {
+                                Toast.makeText(getContext(), "Data inválida", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                        holder.ExamDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+                        holder.ExamDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+
+                        holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                holder.ExamName.setVisibility(View.VISIBLE);
+                                holder.EExamName.setVisibility(View.GONE);
+                                holder.ExamHospital.setVisibility(View.VISIBLE);
+                                holder.EExamHospital.setVisibility(View.GONE);
+                                holder.ExamPrep.setVisibility(View.VISIBLE);
+                                holder.EExamPrep.setVisibility(View.GONE);
+
+                                eRef.child(model.getName()).removeValue();
+
+                                String name = holder.EExamName.getText().toString().trim();
+                                String date = holder.ExamDate.getText().toString().trim();
+                                String hospital = holder.EExamHospital.getText().toString().trim();
+                                String prep = holder.EExamPrep.getText().toString().trim();
+                                String hour = holder.ExamHour.getText().toString().trim();
+
+                                getHospitalLocation(hospital);
+                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
+                                eRef.child(name).setValue(ExamInfo);
+                                holder.ConfirmChanges.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }, mYear, mMonth, mDay);
+
+                mDatePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        if ((holder.EExamName.getVisibility() == View.VISIBLE) || (holder.EExamPrep.getVisibility() == View.VISIBLE) || (holder.EExamHospital.getVisibility() == View.VISIBLE)) {
+                            holder.ConfirmChanges.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.ConfirmChanges.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+                mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                if (!mDatePicker.isShowing()) {
+                    mDatePicker.show();
+                }
             }
         });
 
         holder.ExamHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.ExamHour.setVisibility(View.GONE);
-                holder.EExamHour.setVisibility(View.VISIBLE);
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 Calendar mcurrentTime = Calendar.getInstance();
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -458,16 +608,52 @@ public class AppointsFragment extends Fragment {
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        holder.EExamHour.setText(checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
-                        eRef.child(model.getName()).child("hour").setValue(holder.EExamHour.getText().toString().trim());
+                    public void onTimeSet(TimePicker timePicker, final int selectedHour, final int selectedMinute) {
+                        holder.ExamHour.setText(checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
+
+                        holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                eRef.child(model.getName()).removeValue();
+
+                                String name = holder.EExamName.getText().toString().trim();
+                                String date = holder.ExamDate.getText().toString().trim();
+                                String hospital = holder.EExamHospital.getText().toString().trim();
+                                String prep = holder.EExamPrep.getText().toString().trim();
+                                String hour = holder.ExamHour.getText().toString().trim();
+
+                                getHospitalLocation(hospital);
+                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
+                                eRef.child(name).setValue(ExamInfo);
+
+                                holder.ConfirmChanges.setVisibility(View.GONE);
+
+                                holder.ExamName.setVisibility(View.VISIBLE);
+                                holder.EExamName.setVisibility(View.GONE);
+                                holder.ExamHospital.setVisibility(View.VISIBLE);
+                                holder.EExamHospital.setVisibility(View.GONE);
+                                holder.ExamPrep.setVisibility(View.VISIBLE);
+                                holder.EExamPrep.setVisibility(View.GONE);
+                            }
+                        });
+
                     }
                 }, hour, minute, true);
+
+                mTimePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        if ((holder.EExamName.getVisibility() == View.VISIBLE) || (holder.EExamPrep.getVisibility() == View.VISIBLE) || (holder.EExamHospital.getVisibility() == View.VISIBLE)) {
+                            holder.ConfirmChanges.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.ConfirmChanges.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
                 mTimePicker.setTitle("Selecione uma Hora");
                 mTimePicker.show();
 
-                holder.ExamHour.setVisibility(View.VISIBLE);
-                holder.EExamHour.setVisibility(View.GONE);
             }
         });
 
@@ -477,6 +663,7 @@ public class AppointsFragment extends Fragment {
                 holder.ExamHospital.setVisibility(View.GONE);
                 holder.EExamHospital.setVisibility(View.VISIBLE);
                 holder.EExamHospital.requestFocus();
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 final String currhospital = holder.ExamHospital.getText().toString();
 
@@ -503,30 +690,39 @@ public class AppointsFragment extends Fragment {
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-                holder.EExamHospital.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
-                            String str = holder.EExamHospital.getText().toString();
+                    public void onClick(View v) {
+                        String str = holder.EExamHospital.getText().toString();
 
-                            ListAdapter listAdapter = holder.EExamHospital.getAdapter();
-                            for (int i = 0; i < listAdapter.getCount(); i++) {
-                                String temp = listAdapter.getItem(i).toString();
-                                if (str.compareTo(temp) == 0) {
-                                    holder.ExamHospital.setVisibility(View.VISIBLE);
-                                    holder.EExamHospital.setVisibility(View.GONE);
+                        ListAdapter listAdapter = holder.EExamHospital.getAdapter();
+                        for (int i = 0; i < listAdapter.getCount(); i++) {
+                            String temp = listAdapter.getItem(i).toString();
+                            if (str.compareTo(temp) == 0) {
+                                holder.ExamName.setVisibility(View.VISIBLE);
+                                holder.EExamName.setVisibility(View.GONE);
+                                holder.ExamHospital.setVisibility(View.VISIBLE);
+                                holder.EExamHospital.setVisibility(View.GONE);
+                                holder.ExamPrep.setVisibility(View.VISIBLE);
+                                holder.EExamPrep.setVisibility(View.GONE);
 
-                                    final String newhospital = str.trim();
+                                eRef.child(model.getName()).removeValue();
 
-                                    getHospitalLocation(newhospital);
-                                    eRef.child(model.getName()).child("hospital").setValue(newhospital);
-                                    eRef.child(model.getName()).child("hlocation").setValue(HospitalLocation);
-                                }
+                                String name = holder.EExamName.getText().toString().trim();
+                                String date = holder.ExamDate.getText().toString().trim();
+                                String hospital = holder.EExamHospital.getText().toString().trim();
+                                String prep = holder.EExamPrep.getText().toString().trim();
+                                String hour = holder.ExamHour.getText().toString().trim();
+
+                                getHospitalLocation(hospital);
+                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
+                                eRef.child(name).setValue(ExamInfo);
                             }
-                            holder.EExamHospital.setText(currhospital);
-                            holder.ExamHospital.setVisibility(View.VISIBLE);
-                            holder.EExamHospital.setVisibility(View.GONE);
                         }
+                        holder.EExamHospital.setText(currhospital);
+                        holder.ExamHospital.setVisibility(View.VISIBLE);
+                        holder.EExamHospital.setVisibility(View.GONE);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
                     }
                 });
             }
@@ -535,46 +731,44 @@ public class AppointsFragment extends Fragment {
         holder.ExamPrep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.ExamPrep.setVisibility(View.GONE);
-                holder.EExamPrep.setVisibility(View.VISIBLE);
                 holder.EExamPrep.requestFocus();
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-                holder.EExamPrep.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
-                            String prepdays = holder.EExamPrep.getText().toString().trim();
+                    public void onClick(View v) {
+                        eRef.child(model.getName()).removeValue();
 
-                            eRef.child(model.getName()).child("prep").setValue(prepdays);
+                        String name = holder.EExamName.getText().toString().trim();
+                        String date = holder.ExamDate.getText().toString().trim();
+                        String hospital = holder.EExamHospital.getText().toString().trim();
+                        String prep = holder.EExamPrep.getText().toString().trim();
+                        String hour = holder.ExamHour.getText().toString().trim();
 
-                            holder.ExamPrep.setVisibility(View.VISIBLE);
-                            holder.EExamPrep.setVisibility(View.GONE);
-                        }
+                        getHospitalLocation(hospital);
+                        ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
+                        eRef.child(name).setValue(ExamInfo);
+
+                        holder.ExamName.setVisibility(View.VISIBLE);
+                        holder.EExamName.setVisibility(View.GONE);
+                        holder.ExamHospital.setVisibility(View.VISIBLE);
+                        holder.EExamHospital.setVisibility(View.GONE);
+                        holder.ExamPrep.setVisibility(View.VISIBLE);
+                        holder.EExamPrep.setVisibility(View.GONE);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
                     }
                 });
             }
         });
     }
 
-    public DialogFragment newInstance() {
-        DialogFragment f = new EditDateFragment();
-        f.show(getFragmentManager(), "DatePicker");
-
-        Bundle args = new Bundle();
-        args.putBoolean("isAppoint", isAppoint);
-        f.setArguments(args);
-
-        return f;
-    }
-
     public static class EAppointsInfo extends RecyclerView.ViewHolder {
         View EAppointsL;
         ImageButton EAppointDelete;
         TextView AppointName, AppointDate, AppointHospital, AppointHour;
-        EditText EAppointDate, EAppointHour;
         AutoCompleteTextView EAppointName, EAppointHospital;
         Button ConfirmChanges;
 
@@ -595,16 +789,12 @@ public class AppointsFragment extends Fragment {
 
         public void setDate(String date) {
             AppointDate = EAppointsL.findViewById(R.id.AppointDate);
-            EAppointDate = EAppointsL.findViewById(R.id.EAppointDate);
             AppointDate.setText(date);
-            EAppointDate.setText(date);
         }
 
         public void setHour(String hour) {
             AppointHour = EAppointsL.findViewById(R.id.AppointHour);
-            EAppointHour = EAppointsL.findViewById(R.id.EAppointHour);
             AppointHour.setText(hour);
-            EAppointHour.setText(hour);
         }
 
         public void setHospital(String hospital) {
@@ -619,14 +809,16 @@ public class AppointsFragment extends Fragment {
         View EExamsL;
         ImageButton EExamDelete;
         TextView ExamName, ExamDate, ExamHour, ExamHospital, ExamPrep;
-        EditText EExamDate, EExamHour, EExamPrep;
+        EditText EExamPrep;
         AutoCompleteTextView EExamHospital, EExamName;
+        Button ConfirmChanges;
 
         public EExamsInfo(@NonNull View itemView) {
             super(itemView);
 
             EExamsL = itemView;
             EExamDelete = EExamsL.findViewById(R.id.EExamDelete);
+            ConfirmChanges = EExamsL.findViewById(R.id.ConfirmChanges);
         }
 
         public void setName(String name) {
@@ -638,16 +830,12 @@ public class AppointsFragment extends Fragment {
 
         public void setDate(String date) {
             ExamDate = EExamsL.findViewById(R.id.ExamDate);
-            EExamDate = EExamsL.findViewById(R.id.EExamDate);
             ExamDate.setText(date);
-            EExamDate.setText(date);
         }
 
         public void setHour(String hour) {
             ExamHour = EExamsL.findViewById(R.id.ExamHour);
-            EExamHour = EExamsL.findViewById(R.id.EExamHour);
             ExamHour.setText(hour);
-            EExamHour.setText(hour);
         }
 
         public void setHospital(String hospital) {

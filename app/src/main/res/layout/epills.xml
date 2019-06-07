@@ -122,19 +122,6 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/EPillStartDate"
-                    android:layout_width="275dp"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="0dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="Data início"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -153,19 +140,6 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/EPillEndDate"
-                    android:layout_width="275dp"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="0dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="Data fim"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
             </RelativeLayout>
 
         </RelativeLayout>

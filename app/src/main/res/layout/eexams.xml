@@ -66,19 +66,6 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/EExamDate"
-                    android:layout_width="275dp"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="0dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="Data"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -97,19 +84,6 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/EExamHour"
-                    android:layout_width="275dp"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="0dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="Hora"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -189,5 +163,21 @@
             android:src="@drawable/ic_delete" />
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/ConfirmChanges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/EExams"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/add_button"
+        android:text="Confirmar Alterações"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
 </RelativeLayout>
