@@ -34,7 +34,7 @@ import java.util.Date;
 
 public class AddPill extends AppCompatActivity implements View.OnClickListener {
     private EditText txtNamePill, txtPillFunc, txtPillHour, txtStartDate, txtEndDate;
-    private Spinner txtInterval;
+    private Spinner txtInterval, txtPillType;
     private Button btnAddPill;
     private FirebaseUser user;
     private DatabaseReference mDatabase, pRef;
@@ -61,6 +61,15 @@ public class AddPill extends AppCompatActivity implements View.OnClickListener {
                 R.layout.spinner_item, arraySpinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         txtInterval.setAdapter(adapter);
+
+        String[] arraySpinner1 = new String[]{
+                "Comprimido", "Cápsula", "Drágea", "Pó", "Granulado", "Solução", "Gotas", "Xarope", "Suspensão", "Elixir"
+        };
+        txtPillType = findViewById(R.id.txtPillType);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, arraySpinner1);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        txtPillType.setAdapter(adapter1);
 
         txtPillHour.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +169,7 @@ public class AddPill extends AppCompatActivity implements View.OnClickListener {
         String name = txtNamePill.getText().toString().trim();
         String pillfunc = txtPillFunc.getText().toString().trim();
         String interval = txtInterval.getSelectedItem().toString().trim();
+        String pilltype = txtPillType.getSelectedItem().toString().trim();
         String pillhour = txtPillHour.getText().toString().trim();
         String pillstartdate = txtStartDate.getText().toString().trim();
         String pillenddate = txtEndDate.getText().toString().trim();
@@ -198,7 +208,7 @@ public class AddPill extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
-        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, pillhour, pillstartdate, pillenddate);
+        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, pilltype, pillhour, pillstartdate, pillenddate);
         pRef.child(name).setValue(PillInfo);
         Toast.makeText(AddPill.this, "Medicamento adicionado com sucesso!", Toast.LENGTH_SHORT).show();
         Intent Home = new Intent(AddPill.this, MainActivity.class);

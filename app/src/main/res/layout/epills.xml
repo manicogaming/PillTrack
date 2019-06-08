@@ -107,10 +107,34 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/p_startdate"
+                android:id="@+id/p_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/p_interval">
+
+                <TextView
+                    android:id="@+id/PillType"
+                    android:layout_width="275dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Tipo de medicamento"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/EPillType"
+                    android:layout_width="275dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/p_startdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/p_type">
 
                 <TextView
                     android:id="@+id/PillStartDate"

@@ -1,16 +1,17 @@
 package com.pap.diogo.pilltrack.Pills;
 
 public class Pill {
-    private String name, pillfunc, interval, pillhour, pillstartdate, pillenddate;
+    private String name, pillfunc, interval, pilltype, pillhour, pillstartdate, pillenddate;
 
     public Pill() {
 
     }
 
-    public Pill(String name, String pillfunc, String interval, String pillhour, String pillstartdate, String pillenddate) {
+    public Pill(String name, String pillfunc, String interval, String pilltype, String pillhour, String pillstartdate, String pillenddate) {
         this.name = name;
         this.pillfunc = pillfunc;
         this.interval = interval;
+        this.pilltype = pilltype;
         this.pillhour = pillhour;
         this.pillstartdate = pillstartdate;
         this.pillenddate = pillenddate;
@@ -38,6 +39,14 @@ public class Pill {
 
     public void setInterval(String interval) {
         this.interval = interval;
+    }
+
+    public String getPilltype() {
+        return pilltype;
+    }
+
+    public void setPilltype(String pilltype) {
+        this.pilltype = pilltype;
     }
 
     public String getPillhour() {

@@ -107,6 +107,7 @@ public class PillsFragment extends Fragment {
                         holder.setName(model.getName());
                         holder.setPillFunc(model.getPillfunc());
                         holder.setInterval(model.getInterval());
+                        holder.setPillType(model.getPilltype());
                         holder.setStartDate(model.getPillstartdate());
                         holder.setEndDate(model.getPillenddate());
 
@@ -167,6 +168,8 @@ public class PillsFragment extends Fragment {
                         holder.EPillFunc.setVisibility(View.GONE);
                         holder.PillInterval.setVisibility(View.VISIBLE);
                         holder.EPillInterval.setVisibility(View.GONE);
+                        holder.PillType.setVisibility(View.VISIBLE);
+                        holder.EPillType.setVisibility(View.GONE);
 
                         pRef.child(model.getName()).removeValue();
 
@@ -175,6 +178,7 @@ public class PillsFragment extends Fragment {
                         String pillstartdate = holder.PillStartDate.getText().toString().trim();
                         String pillenddate = holder.PillEndDate.getText().toString().trim();
                         String interval;
+                        String pilltype;
 
                         if (holder.EPillInterval.getSelectedItem() == null) {
                             interval = holder.PillInterval.getText().toString().trim();
@@ -182,7 +186,13 @@ public class PillsFragment extends Fragment {
                             interval = holder.EPillInterval.getSelectedItem().toString().trim();
                         }
 
-                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                        if (holder.EPillType.getSelectedItem() == null) {
+                            pilltype = holder.PillType.getText().toString().trim();
+                        } else {
+                            pilltype = holder.EPillType.getSelectedItem().toString().trim();
+                        }
+
+                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, pilltype, model.getPillhour(), pillstartdate, pillenddate);
                         pRef.child(name).setValue(PillInfo);
                         holder.ConfirmChanges.setVisibility(View.GONE);
                     }
@@ -210,6 +220,8 @@ public class PillsFragment extends Fragment {
                         holder.EPillFunc.setVisibility(View.GONE);
                         holder.PillInterval.setVisibility(View.VISIBLE);
                         holder.EPillInterval.setVisibility(View.GONE);
+                        holder.PillType.setVisibility(View.VISIBLE);
+                        holder.EPillType.setVisibility(View.GONE);
 
                         pRef.child(model.getName()).removeValue();
 
@@ -218,6 +230,7 @@ public class PillsFragment extends Fragment {
                         String pillstartdate = holder.PillStartDate.getText().toString().trim();
                         String pillenddate = holder.PillEndDate.getText().toString().trim();
                         String interval;
+                        String pilltype;
 
                         if (holder.EPillInterval.getSelectedItem() == null) {
                             interval = holder.PillInterval.getText().toString().trim();
@@ -225,7 +238,13 @@ public class PillsFragment extends Fragment {
                             interval = holder.EPillInterval.getSelectedItem().toString().trim();
                         }
 
-                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                        if (holder.EPillType.getSelectedItem() == null) {
+                            pilltype = holder.PillType.getText().toString().trim();
+                        } else {
+                            pilltype = holder.EPillType.getSelectedItem().toString().trim();
+                        }
+
+                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, pilltype, model.getPillhour(), pillstartdate, pillenddate);
                         pRef.child(name).setValue(PillInfo);
                         holder.ConfirmChanges.setVisibility(View.GONE);
                     }
@@ -255,6 +274,8 @@ public class PillsFragment extends Fragment {
                         holder.EPillFunc.setVisibility(View.GONE);
                         holder.PillInterval.setVisibility(View.VISIBLE);
                         holder.EPillInterval.setVisibility(View.GONE);
+                        holder.PillType.setVisibility(View.VISIBLE);
+                        holder.EPillType.setVisibility(View.GONE);
 
                         pRef.child(model.getName()).removeValue();
 
@@ -263,6 +284,7 @@ public class PillsFragment extends Fragment {
                         String pillstartdate = holder.PillStartDate.getText().toString().trim();
                         String pillenddate = holder.PillEndDate.getText().toString().trim();
                         String interval;
+                        String pilltype;
 
                         if (holder.EPillInterval.getSelectedItem() == null) {
                             interval = holder.PillInterval.getText().toString().trim();
@@ -270,7 +292,67 @@ public class PillsFragment extends Fragment {
                             interval = holder.EPillInterval.getSelectedItem().toString().trim();
                         }
 
-                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                        if (holder.EPillType.getSelectedItem() == null) {
+                            pilltype = holder.PillType.getText().toString().trim();
+                        } else {
+                            pilltype = holder.EPillType.getSelectedItem().toString().trim();
+                        }
+
+                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, pilltype, model.getPillhour(), pillstartdate, pillenddate);
+                        pRef.child(name).setValue(PillInfo);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+
+        holder.PillType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.PillType.setVisibility(View.GONE);
+                holder.EPillType.setVisibility(View.VISIBLE);
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item_edit, holder.arraySpinner1);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                holder.EPillType.setAdapter(adapter);
+
+                holder.EPillType.setSelection(getIndex(holder.EPillType, model.getPilltype()));
+
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        holder.PillName.setVisibility(View.VISIBLE);
+                        holder.EPillName.setVisibility(View.GONE);
+                        holder.PillFunc.setVisibility(View.VISIBLE);
+                        holder.EPillFunc.setVisibility(View.GONE);
+                        holder.PillInterval.setVisibility(View.VISIBLE);
+                        holder.EPillInterval.setVisibility(View.GONE);
+                        holder.PillType.setVisibility(View.VISIBLE);
+                        holder.EPillType.setVisibility(View.GONE);
+
+                        pRef.child(model.getName()).removeValue();
+
+                        String name = holder.EPillName.getText().toString().trim();
+                        String pillfunc = holder.EPillFunc.getText().toString().trim();
+                        String pillstartdate = holder.PillStartDate.getText().toString().trim();
+                        String pillenddate = holder.PillEndDate.getText().toString().trim();
+                        String interval;
+                        String pilltype;
+
+                        if (holder.EPillInterval.getSelectedItem() == null) {
+                            interval = holder.PillInterval.getText().toString().trim();
+                        } else {
+                            interval = holder.EPillInterval.getSelectedItem().toString().trim();
+                        }
+
+                        if (holder.EPillType.getSelectedItem() == null) {
+                            pilltype = holder.PillType.getText().toString().trim();
+                        } else {
+                            pilltype = holder.EPillType.getSelectedItem().toString().trim();
+                        }
+
+                        PillInfo PillInfo = new PillInfo(name, pillfunc, interval, pilltype, model.getPillhour(), pillstartdate, pillenddate);
                         pRef.child(name).setValue(PillInfo);
                         holder.ConfirmChanges.setVisibility(View.GONE);
                     }
@@ -317,6 +399,8 @@ public class PillsFragment extends Fragment {
                                 holder.EPillFunc.setVisibility(View.GONE);
                                 holder.PillInterval.setVisibility(View.VISIBLE);
                                 holder.EPillInterval.setVisibility(View.GONE);
+                                holder.PillType.setVisibility(View.VISIBLE);
+                                holder.EPillType.setVisibility(View.GONE);
 
                                 pRef.child(model.getName()).removeValue();
 
@@ -325,6 +409,7 @@ public class PillsFragment extends Fragment {
                                 String pillstartdate = holder.PillStartDate.getText().toString().trim();
                                 String pillenddate = holder.PillEndDate.getText().toString().trim();
                                 String interval;
+                                String pilltype;
 
                                 if (holder.EPillInterval.getSelectedItem() == null) {
                                     interval = holder.PillInterval.getText().toString().trim();
@@ -332,7 +417,13 @@ public class PillsFragment extends Fragment {
                                     interval = holder.EPillInterval.getSelectedItem().toString().trim();
                                 }
 
-                                PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                                if (holder.EPillType.getSelectedItem() == null) {
+                                    pilltype = holder.PillType.getText().toString().trim();
+                                } else {
+                                    pilltype = holder.EPillType.getSelectedItem().toString().trim();
+                                }
+
+                                PillInfo PillInfo = new PillInfo(name, pillfunc, interval, pilltype, model.getPillhour(), pillstartdate, pillenddate);
                                 pRef.child(name).setValue(PillInfo);
 
                                 holder.ConfirmChanges.setVisibility(View.GONE);
@@ -390,6 +481,8 @@ public class PillsFragment extends Fragment {
                                 holder.EPillFunc.setVisibility(View.GONE);
                                 holder.PillInterval.setVisibility(View.VISIBLE);
                                 holder.EPillInterval.setVisibility(View.GONE);
+                                holder.PillType.setVisibility(View.VISIBLE);
+                                holder.EPillType.setVisibility(View.GONE);
 
                                 pRef.child(model.getName()).removeValue();
 
@@ -398,6 +491,7 @@ public class PillsFragment extends Fragment {
                                 String pillstartdate = holder.PillStartDate.getText().toString().trim();
                                 String pillenddate = holder.PillEndDate.getText().toString().trim();
                                 String interval;
+                                String pilltype;
 
                                 if (holder.EPillInterval.getSelectedItem() == null) {
                                     interval = holder.PillInterval.getText().toString().trim();
@@ -405,7 +499,13 @@ public class PillsFragment extends Fragment {
                                     interval = holder.EPillInterval.getSelectedItem().toString().trim();
                                 }
 
-                                PillInfo PillInfo = new PillInfo(name, pillfunc, interval, model.getPillhour(), pillstartdate, pillenddate);
+                                if (holder.EPillType.getSelectedItem() == null) {
+                                    pilltype = holder.PillType.getText().toString().trim();
+                                } else {
+                                    pilltype = holder.EPillType.getSelectedItem().toString().trim();
+                                }
+
+                                PillInfo PillInfo = new PillInfo(name, pillfunc, interval, pilltype, model.getPillhour(), pillstartdate, pillenddate);
                                 pRef.child(name).setValue(PillInfo);
                                 holder.ConfirmChanges.setVisibility(View.GONE);
                             }
@@ -447,13 +547,17 @@ public class PillsFragment extends Fragment {
     public static class EPillsInfo extends RecyclerView.ViewHolder {
         View EPillsL;
         ImageButton EPillDelete;
-        TextView PillName, PillFunc, PillInterval, PillStartDate, PillEndDate;
+        TextView PillName, PillFunc, PillInterval, PillType, PillStartDate, PillEndDate;
         EditText EPillName, EPillFunc;
-        Spinner EPillInterval;
+        Spinner EPillInterval, EPillType;
         Button ConfirmChanges;
 
         String[] arraySpinner = new String[]{
                 "4 em 4 horas", "8 em 8 horas", "12 em 12 horas", "De manhã e à noite", "De manhã", "À noite"
+        };
+
+        String[] arraySpinner1 = new String[]{
+                "Comprimido", "Cápsula", "Drágea", "Pó", "Granulado", "Solução", "Gotas", "Xarope", "Suspensão", "Elixir"
         };
 
         public EPillsInfo(@NonNull View itemView) {
@@ -483,6 +587,12 @@ public class PillsFragment extends Fragment {
             PillInterval = EPillsL.findViewById(R.id.PillInterval);
             EPillInterval = EPillsL.findViewById(R.id.EPillInterval);
             PillInterval.setText(interval);
+        }
+
+        public void setPillType(String pilltype) {
+            PillType = EPillsL.findViewById(R.id.PillType);
+            EPillType = EPillsL.findViewById(R.id.EPillType);
+            PillType.setText(pilltype);
         }
 
         public void setStartDate(String pillstartdate) {
