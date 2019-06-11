@@ -57,7 +57,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/dark_button"
             android:padding="15dp"
-            android:text="Login"
+            android:text="Entrar"
             android:textColor="@color/colorWhite"
             android:textSize="22sp" />
 

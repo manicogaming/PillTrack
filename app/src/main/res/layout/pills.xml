@@ -81,15 +81,6 @@
             </RelativeLayout>
 
             <ImageButton
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="85dp"
-                android:background="@drawable/icon_button"
-                android:src="@drawable/ic_notifications" />
-
-            <ImageButton
                 android:id="@+id/EditPill"
                 android:layout_width="65dp"
                 android:layout_height="65dp"

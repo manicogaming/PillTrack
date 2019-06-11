@@ -20,10 +20,11 @@
             app:hintTextAppearance="@style/TextLabel">
 
             <EditText
-                android:id="@+id/txtAge"
+                android:id="@+id/txtDoB"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:hint="Idade"
+                android:focusable="false"
+                android:hint="Data de Nascimento"
                 android:inputType="number"
                 android:textColor="@color/colorWhite"
                 android:textSize="22sp" />

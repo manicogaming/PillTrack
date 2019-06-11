@@ -7,14 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -116,6 +114,7 @@ public class HomeFragment extends Fragment {
                             aRef.child(model.getName()).removeValue();
                         } else if (days == 0) {
                             holder.setDate("A consulta é hoje.");
+
                         } else {
                             String rDays = String.valueOf(days);
                             holder.setDate("Faltam " + rDays + " dias.");
@@ -300,7 +299,6 @@ public class HomeFragment extends Fragment {
         Pills.setAdapter(PillsAdapter);
     }
 
-
     public static class PillsInfo extends RecyclerView.ViewHolder {
         View PillsL;
         ImageButton EditPill;
@@ -335,7 +333,7 @@ public class HomeFragment extends Fragment {
 
     public static class AppointsInfo extends RecyclerView.ViewHolder {
         View AppointsL;
-        ImageButton EditAppoint;
+        ImageButton EditAppoint, EnableNotifications, DisableNotifications;
         Button MapsLoc;
 
         public AppointsInfo(@NonNull View itemView) {

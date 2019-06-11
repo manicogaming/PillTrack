@@ -1,5 +1,6 @@
 package com.pap.diogo.pilltrack.Accounts;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,10 +28,12 @@ import com.pap.diogo.pilltrack.Launcher;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
+import java.util.Calendar;
+
 public class AccountFragment extends Fragment {
     private ArrayAdapter<String> adapter;
-    private TextView AccountName, AccountAge, AccountSex, AccountWeight, AccountHeight;
-    private EditText EAccountName, EAccountAge, EAccountWeight, EAccountHeight;
+    private TextView AccountName, AccountDoB, AccountSex, AccountWeight, AccountHeight;
+    private EditText EAccountName, EAccountDoB, EAccountWeight, EAccountHeight;
     private Spinner EAccountSex;
     private Button btnSaveAccountInfos, btnEditAccountInfos, btnAccountChangePass, btnLogout;
 
@@ -40,8 +45,8 @@ public class AccountFragment extends Fragment {
         AccountName = mMainView.findViewById(R.id.AccountName);
         EAccountName = mMainView.findViewById(R.id.EAccountName);
 
-        AccountAge = mMainView.findViewById(R.id.AccountAge);
-        EAccountAge = mMainView.findViewById(R.id.EAccountAge);
+        AccountDoB = mMainView.findViewById(R.id.AccountDoB);
+        EAccountDoB = mMainView.findViewById(R.id.EAccountDoB);
 
         AccountSex = mMainView.findViewById(R.id.AccountSex);
         EAccountSex = mMainView.findViewById(R.id.EAccountSex);
@@ -80,7 +85,7 @@ public class AccountFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 String name = dataSnapshot.child("name").getValue(String.class);
-                String age = dataSnapshot.child("age").getValue(String.class);
+                String dob = dataSnapshot.child("dob").getValue(String.class);
                 String sex = dataSnapshot.child("sex").getValue(String.class);
                 String weight = dataSnapshot.child("weight").getValue(String.class);
                 String height = dataSnapshot.child("height").getValue(String.class);
@@ -88,8 +93,8 @@ public class AccountFragment extends Fragment {
                 AccountName.setText(name);
                 EAccountName.setText(name);
 
-                AccountAge.setText(age + " anos");
-                EAccountAge.setText(age);
+                AccountDoB.setText(dob);
+                EAccountDoB.setText(dob);
 
                 AccountSex.setText(sex);
 
@@ -105,6 +110,35 @@ public class AccountFragment extends Fragment {
             }
         };
         ref.addListenerForSingleValueEvent(eventListener);
+
+        EAccountDoB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int mYear, mMonth, mDay;
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        if (selectedyear == mYear && (selectedmonth + 1) == mMonth + 1) {
+                            if (selectedday < mDay) {
+                                Toast.makeText(getContext(), "Data inválida", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                        EAccountDoB.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+
+                    }
+                }, mYear, mMonth, mDay);
+
+                if (!mDatePicker.isShowing()) {
+                    mDatePicker.show();
+                }
+            }
+        });
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,13 +162,13 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AccountName.setVisibility(View.GONE);
-                AccountAge.setVisibility(View.GONE);
+                AccountDoB.setVisibility(View.GONE);
                 AccountSex.setVisibility(View.GONE);
                 AccountWeight.setVisibility(View.GONE);
                 AccountHeight.setVisibility(View.GONE);
 
                 EAccountName.setVisibility(View.VISIBLE);
-                EAccountAge.setVisibility(View.VISIBLE);
+                EAccountDoB.setVisibility(View.VISIBLE);
                 EAccountSex.setVisibility(View.VISIBLE);
                 EAccountWeight.setVisibility(View.VISIBLE);
                 EAccountHeight.setVisibility(View.VISIBLE);
@@ -153,13 +187,13 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AccountName.setVisibility(View.VISIBLE);
-                AccountAge.setVisibility(View.VISIBLE);
+                AccountDoB.setVisibility(View.VISIBLE);
                 AccountSex.setVisibility(View.VISIBLE);
                 AccountWeight.setVisibility(View.VISIBLE);
                 AccountHeight.setVisibility(View.VISIBLE);
 
                 EAccountName.setVisibility(View.GONE);
-                EAccountAge.setVisibility(View.GONE);
+                EAccountDoB.setVisibility(View.GONE);
                 EAccountSex.setVisibility(View.GONE);
                 EAccountWeight.setVisibility(View.GONE);
                 EAccountHeight.setVisibility(View.GONE);
@@ -173,12 +207,12 @@ public class AccountFragment extends Fragment {
                 btnSaveAccountInfos.setVisibility(View.GONE);
 
                 String Name = EAccountName.getText().toString().trim();
-                String Age = EAccountAge.getText().toString().trim();
+                String DoB = EAccountDoB.getText().toString().trim();
                 String Sex = EAccountSex.getSelectedItem().toString().trim();
                 String Weight = EAccountWeight.getText().toString().trim();
                 String Height = EAccountHeight.getText().toString().trim();
 
-                RegisterInfo userInformation = new RegisterInfo(Name, Age, Sex, Weight, Height);
+                RegisterInfo userInformation = new RegisterInfo(Name, DoB, Sex, Weight, Height);
                 ref.setValue(userInformation);
 
                 ((MainActivity) getActivity()).setNavItem(3);

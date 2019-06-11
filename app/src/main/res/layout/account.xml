@@ -61,7 +61,7 @@
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/AccountAge"
+                android:id="@+id/AccountDoB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/AccountName"
@@ -75,12 +75,13 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/EAccountAge"
+                android:id="@+id/EAccountDoB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/EAccountName"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="15dp"
+                android:focusable="false"
                 android:hint="Idade"
                 android:inputType="number"
                 android:paddingTop="5dp"
@@ -94,7 +95,7 @@
                 android:id="@+id/AccountSex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/AccountAge"
+                android:layout_below="@+id/AccountDoB"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
@@ -108,10 +109,10 @@
                 android:id="@+id/EAccountSex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/EAccountAge"
+                android:layout_below="@+id/EAccountDoB"
                 android:layout_marginStart="15dp"
-                android:hint="Sexo"
                 android:dropDownWidth="350dp"
+                android:hint="Sexo"
                 android:textColor="@color/colorWhite"
                 android:textSize="22sp"
                 android:visibility="gone" />

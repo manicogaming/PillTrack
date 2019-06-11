@@ -1,5 +1,6 @@
 package com.pap.diogo.pilltrack.Accounts;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -23,13 +25,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.pap.diogo.pilltrack.MainActivity;
 import com.pap.diogo.pilltrack.R;
 
+import java.util.Calendar;
+
 public class Register_Second extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnRegister;
-    private EditText txtAge, txtWeight, txtHeight;
+    private EditText txtDoB, txtWeight, txtHeight;
     private Spinner txtSex;
     private FirebaseAuth Register;
-    private String Email, Password, Name, Age, Weight, Height, Sex;
+    private String Email, Password, Name, DoB, Weight, Height, Sex;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +42,7 @@ public class Register_Second extends AppCompatActivity implements View.OnClickLi
 
         Register = FirebaseAuth.getInstance();
 
-        txtAge = findViewById(R.id.txtAge);
+        txtDoB = findViewById(R.id.txtDoB);
         txtWeight = findViewById(R.id.txtWeight);
         txtHeight = findViewById(R.id.txtHeight);
 
@@ -56,6 +60,35 @@ public class Register_Second extends AppCompatActivity implements View.OnClickLi
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
         txtSex.setAdapter(adapter);
 
+        txtDoB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int mYear, mMonth, mDay;
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(Register_Second.this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        if (selectedyear == mYear && (selectedmonth + 1) == mMonth + 1) {
+                            if (selectedday < mDay) {
+                                Toast.makeText(Register_Second.this, "Data inválida", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                        txtDoB.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+
+                    }
+                }, mYear, mMonth, mDay);
+
+                if (!mDatePicker.isShowing()) {
+                    mDatePicker.show();
+                }
+            }
+        });
+
         Bundle extras = getIntent().getExtras();
 
         Email = extras.getString("Email");
@@ -65,21 +98,21 @@ public class Register_Second extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        Age = txtAge.getText().toString().trim();
+        DoB = txtDoB.getText().toString().trim();
         Sex = txtSex.getSelectedItem().toString().trim();
         Weight = txtWeight.getText().toString().trim();
         Height = txtHeight.getText().toString().trim();
 
-        if ((TextUtils.isEmpty(Age) && TextUtils.isEmpty(Weight) && TextUtils.isEmpty(Height))
-                || (TextUtils.isEmpty(Age) && TextUtils.isEmpty(Weight))
-                || (TextUtils.isEmpty(Age) && TextUtils.isEmpty(Height))
+        if ((TextUtils.isEmpty(DoB) && TextUtils.isEmpty(Weight) && TextUtils.isEmpty(Height))
+                || (TextUtils.isEmpty(DoB) && TextUtils.isEmpty(Weight))
+                || (TextUtils.isEmpty(DoB) && TextUtils.isEmpty(Height))
                 || (TextUtils.isEmpty(Weight) && TextUtils.isEmpty(Height))) {
             Toast.makeText(this, "Os campos não podem ficar vazios", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(Age)) {
-            Toast.makeText(this, "Idade não pode ficar vazia", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(DoB)) {
+            Toast.makeText(this, "Data de nascimento não pode ficar vazia", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -98,7 +131,7 @@ public class Register_Second extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            RegisterInfo userInformation = new RegisterInfo(Name, Age, Sex, Weight, Height);
+                            RegisterInfo userInformation = new RegisterInfo(Name, DoB, Sex, Weight, Height);
 
                             FirebaseDatabase.getInstance().getReference("Users").child(Register.getCurrentUser().getUid()).setValue(userInformation).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
