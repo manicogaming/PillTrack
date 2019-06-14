@@ -1,18 +1,19 @@
 package com.pap.diogo.pilltrack.Appoints;
 
 public class Exam {
-    private String name, hospital, prep, date, hour, hlocation;
+    private String name, hospital, prep, date, hour, prepmethod, hlocation;
 
     public Exam() {
 
     }
 
-    public Exam(String name, String hospital, String prep, String date, String hour, String hlocation) {
+    public Exam(String name, String hospital, String prep, String date, String hour, String prepmethod, String hlocation) {
         this.name = name;
         this.hospital = hospital;
         this.prep = prep;
         this.date = date;
         this.hour = hour;
+        this.prepmethod = prepmethod;
         this.hlocation = hlocation;
     }
 
@@ -54,6 +55,14 @@ public class Exam {
 
     public void setHour(String hour) {
         this.hour = hour;
+    }
+
+    public String getPrepmethod() {
+        return prepmethod;
+    }
+
+    public void setPrepmethod(String prepmethod) {
+        this.prepmethod = prepmethod;
     }
 
     public String getHlocation() {

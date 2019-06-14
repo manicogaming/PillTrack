@@ -172,6 +172,7 @@ public class HomeFragment extends Fragment {
 
                         holder.setName(model.getName());
                         holder.setDate(model.getDate());
+                        holder.setPrepMethod(model.getPrepmethod());
 
                         String dtStart = model.getDate();
                         DateTimeFormatter format = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -381,6 +382,11 @@ public class HomeFragment extends Fragment {
         public void setPrep(String prep) {
             TextView ePrep = ExamsL.findViewById(R.id.ePrep);
             ePrep.setText(prep + " Dias de Preparação.");
+        }
+
+        public void setPrepMethod(String prepmethod) {
+            TextView ePrepMethod = ExamsL.findViewById(R.id.ePrepMethod);
+            ePrepMethod.setText(prepmethod);
         }
     }
 }

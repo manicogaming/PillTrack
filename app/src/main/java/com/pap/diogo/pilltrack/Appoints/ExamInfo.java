@@ -6,14 +6,16 @@ public class ExamInfo {
     public String prep;
     public String date;
     public String hour;
+    public String prepmethod;
     public String hlocation;
 
-    public ExamInfo(String name, String hospital, String prep, String date, String hour, String hlocation) {
+    public ExamInfo(String name, String hospital, String prep, String date, String hour, String prepmethod, String hlocation) {
         this.name = name;
         this.hospital = hospital;
         this.prep = prep;
         this.date = date;
         this.hour = hour;
+        this.prepmethod = prepmethod;
         this.hlocation = hlocation;
     }
 
@@ -55,6 +57,14 @@ public class ExamInfo {
 
     public void setHour(String hour) {
         this.hour = hour;
+    }
+
+    public String getPrepmethod() {
+        return prepmethod;
+    }
+
+    public void setPrepmethod(String prepmethod) {
+        this.prepmethod = prepmethod;
     }
 
     public String getHlocation() {

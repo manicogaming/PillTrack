@@ -20,7 +20,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
-import android.widget.Spinner;
+import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -39,14 +39,15 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class AddAppoint extends AppCompatActivity implements View.OnClickListener {
-    private EditText txtDate, txtPreparation, txtHour;
+    private EditText txtDate, txtPreparation, txtHour, txtPrepMethod;
     private AutoCompleteTextView txtHospital, txtSpecialty;
     private Button btnAddAppoint;
     private FirebaseUser user;
     private DatabaseReference aRef, eRef;
     private String userid, HospitalLocation, HName, eName;
     private ImageButton opt_appoint, opt_exam;
-    private TextInputLayout preparation;
+    private TextInputLayout preparation, prepmethod;
+    private RelativeLayout layout1;
     private boolean isExam = false;
 
     @Override
@@ -59,11 +60,14 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         txtDate = findViewById(R.id.txtDate);
         txtHour = findViewById(R.id.txtHour);
         txtPreparation = findViewById(R.id.txtPreparation);
+        txtPrepMethod = findViewById(R.id.txtPrepMethod);
+        layout1 = findViewById(R.id.layout1);
 
         btnAddAppoint = findViewById(R.id.btnAddAppoint);
         btnAddAppoint.setOnClickListener(this);
 
         preparation = findViewById(R.id.preparation);
+        prepmethod = findViewById(R.id.prepmethod);
 
         DatabaseReference sRef = FirebaseDatabase.getInstance().getReference("Specialty");
         final ArrayAdapter<String> arraySpinner = new ArrayAdapter<>(AddAppoint.this, android.R.layout.simple_list_item_1);
@@ -84,12 +88,15 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
         txtSpecialty.setThreshold(1);
         txtSpecialty.setAdapter(arraySpinner);
 
+        final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout1.getLayoutParams();
+
         opt_appoint = findViewById(R.id.opt_appoint);
         opt_exam = findViewById(R.id.opt_exam);
         opt_appoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 preparation.setVisibility(View.GONE);
+                prepmethod.setVisibility(View.GONE);
                 txtPreparation.setVisibility(View.GONE);
                 isExam = false;
 
@@ -111,6 +118,9 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                 });
                 txtSpecialty.setThreshold(1);
                 txtSpecialty.setAdapter(arraySpinner);
+
+                params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                layout1.setLayoutParams(params);
             }
         });
 
@@ -118,6 +128,7 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(View v) {
                 preparation.setVisibility(View.VISIBLE);
+                prepmethod.setVisibility(View.VISIBLE);
                 txtPreparation.setVisibility(View.VISIBLE);
                 isExam = true;
 
@@ -139,6 +150,11 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                 });
                 txtSpecialty.setThreshold(1);
                 txtSpecialty.setAdapter(arraySpinner);
+
+                params.addRule(RelativeLayout.CENTER_IN_PARENT, 0);
+                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                params.setMargins(0, 75, 0, 0);
+                layout1.setLayoutParams(params);
             }
         });
 
@@ -281,13 +297,15 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
             String prep = txtPreparation.getText().toString().trim();
             String date = txtDate.getText().toString().trim();
             String hour = txtHour.getText().toString().trim();
+            String prepmethod = txtPrepMethod.getText().toString().trim();
 
-            if (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date) && TextUtils.isEmpty(hour)) {
+            if (TextUtils.isEmpty(name) && TextUtils.isEmpty(hospital) && TextUtils.isEmpty(date) && TextUtils.isEmpty(hour) && TextUtils.isEmpty(prepmethod)) {
                 txtSpecialty.setError("Especialidade não pode ficar fazia");
                 txtHospital.setError("Hospital não pode ficar vazio");
                 txtDate.setError("Data não pode ficar vazia");
                 txtHour.setError("Hora não pode ficar vazia");
                 txtPreparation.setError("Dias de Preparação não pode ficar vazio");
+                txtPrepMethod.setError("Método de Preparação não pode ficar vazio");
                 return;
             }
 
@@ -311,14 +329,17 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                 return;
             }
 
-
             if (TextUtils.isEmpty(hour)) {
                 txtHour.setError("Hora não pode ficar vazia");
                 return;
             }
 
+            if (TextUtils.isEmpty(prepmethod)) {
+                txtPrepMethod.setError("Método de Preparação não pode ficar vazio");
+            }
+
             getHospitalLocation();
-            ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
+            ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, prepmethod, HospitalLocation);
             eRef.child(name).setValue(ExamInfo);
             Toast.makeText(AddAppoint.this, "Exame adicionado com sucesso!", Toast.LENGTH_SHORT).show();
             Intent Home = new Intent(AddAppoint.this, MainActivity.class);

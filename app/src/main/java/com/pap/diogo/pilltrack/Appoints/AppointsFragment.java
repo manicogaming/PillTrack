@@ -6,14 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,6 +169,7 @@ public class AppointsFragment extends Fragment {
                         holder.setHour(model.getHour());
                         holder.setHospital(model.getHospital());
                         holder.setPrep(model.getPrep());
+                        holder.setPrepMethod(model.getPrepmethod());
 
                         holder.EExamDelete.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -499,25 +497,28 @@ public class AppointsFragment extends Fragment {
                         for (int i = 0; i < listAdapter.getCount(); i++) {
                             String temp = listAdapter.getItem(i).toString();
                             if (str.compareTo(temp) == 0) {
+                                eRef.child(model.getName()).removeValue();
+
+                                String name = holder.EExamName.getText().toString().trim();
+                                String date = holder.ExamDate.getText().toString().trim();
+                                String hospital = holder.EExamHospital.getText().toString().trim();
+                                String prep = holder.EExamPrep.getText().toString().trim();
+                                String prepmethod = holder.EExamPrepMethod.getText().toString().trim();
+                                String hour = holder.ExamHour.getText().toString().trim();
+
+                                getHospitalLocation(hospital);
+                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, prepmethod, HospitalLocation);
+                                eRef.child(name).setValue(ExamInfo);
+
                                 holder.ExamName.setVisibility(View.VISIBLE);
                                 holder.EExamName.setVisibility(View.GONE);
                                 holder.ExamHospital.setVisibility(View.VISIBLE);
                                 holder.EExamHospital.setVisibility(View.GONE);
                                 holder.ExamPrep.setVisibility(View.VISIBLE);
                                 holder.EExamPrep.setVisibility(View.GONE);
-
-                                final String newname = str.trim();
-
-                                eRef.child(model.getName()).removeValue();
-
-                                String date = holder.ExamDate.getText().toString().trim();
-                                String hospital = holder.EExamHospital.getText().toString().trim();
-                                String prep = holder.EExamPrep.getText().toString().trim();
-                                String hour = holder.ExamHour.getText().toString().trim();
-
-                                getHospitalLocation(hospital);
-                                ExamInfo ExamInfo = new ExamInfo(newname, hospital, prep, date, hour, HospitalLocation);
-                                eRef.child(newname).setValue(ExamInfo);
+                                holder.ExamPrepMethod.setVisibility(View.VISIBLE);
+                                holder.EExamPrepMethod.setVisibility(View.GONE);
+                                holder.ConfirmChanges.setVisibility(View.GONE);
                             }
                         }
                         holder.EExamName.setText(currname);
@@ -555,24 +556,27 @@ public class AppointsFragment extends Fragment {
                         holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                holder.ExamName.setVisibility(View.VISIBLE);
-                                holder.EExamName.setVisibility(View.GONE);
-                                holder.ExamHospital.setVisibility(View.VISIBLE);
-                                holder.EExamHospital.setVisibility(View.GONE);
-                                holder.ExamPrep.setVisibility(View.VISIBLE);
-                                holder.EExamPrep.setVisibility(View.GONE);
-
                                 eRef.child(model.getName()).removeValue();
 
                                 String name = holder.EExamName.getText().toString().trim();
                                 String date = holder.ExamDate.getText().toString().trim();
                                 String hospital = holder.EExamHospital.getText().toString().trim();
                                 String prep = holder.EExamPrep.getText().toString().trim();
+                                String prepmethod = holder.EExamPrepMethod.getText().toString().trim();
                                 String hour = holder.ExamHour.getText().toString().trim();
 
                                 getHospitalLocation(hospital);
-                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
+                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, prepmethod, HospitalLocation);
                                 eRef.child(name).setValue(ExamInfo);
+
+                                holder.ExamName.setVisibility(View.VISIBLE);
+                                holder.EExamName.setVisibility(View.GONE);
+                                holder.ExamHospital.setVisibility(View.VISIBLE);
+                                holder.EExamHospital.setVisibility(View.GONE);
+                                holder.ExamPrep.setVisibility(View.VISIBLE);
+                                holder.EExamPrep.setVisibility(View.GONE);
+                                holder.ExamPrepMethod.setVisibility(View.VISIBLE);
+                                holder.EExamPrepMethod.setVisibility(View.GONE);
                                 holder.ConfirmChanges.setVisibility(View.GONE);
                             }
                         });
@@ -582,7 +586,7 @@ public class AppointsFragment extends Fragment {
                 mDatePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        if ((holder.EExamName.getVisibility() == View.VISIBLE) || (holder.EExamPrep.getVisibility() == View.VISIBLE) || (holder.EExamHospital.getVisibility() == View.VISIBLE)) {
+                        if ((holder.EExamName.getVisibility() == View.VISIBLE) || (holder.EExamPrep.getVisibility() == View.VISIBLE) || (holder.EExamHospital.getVisibility() == View.VISIBLE) || (holder.EExamPrepMethod.getVisibility() == View.VISIBLE)) {
                             holder.ConfirmChanges.setVisibility(View.VISIBLE);
                         } else {
                             holder.ConfirmChanges.setVisibility(View.GONE);
@@ -620,13 +624,12 @@ public class AppointsFragment extends Fragment {
                                 String date = holder.ExamDate.getText().toString().trim();
                                 String hospital = holder.EExamHospital.getText().toString().trim();
                                 String prep = holder.EExamPrep.getText().toString().trim();
+                                String prepmethod = holder.EExamPrepMethod.getText().toString().trim();
                                 String hour = holder.ExamHour.getText().toString().trim();
 
                                 getHospitalLocation(hospital);
-                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
+                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, prepmethod, HospitalLocation);
                                 eRef.child(name).setValue(ExamInfo);
-
-                                holder.ConfirmChanges.setVisibility(View.GONE);
 
                                 holder.ExamName.setVisibility(View.VISIBLE);
                                 holder.EExamName.setVisibility(View.GONE);
@@ -634,6 +637,9 @@ public class AppointsFragment extends Fragment {
                                 holder.EExamHospital.setVisibility(View.GONE);
                                 holder.ExamPrep.setVisibility(View.VISIBLE);
                                 holder.EExamPrep.setVisibility(View.GONE);
+                                holder.ExamPrepMethod.setVisibility(View.VISIBLE);
+                                holder.EExamPrepMethod.setVisibility(View.GONE);
+                                holder.ConfirmChanges.setVisibility(View.GONE);
                             }
                         });
 
@@ -643,7 +649,7 @@ public class AppointsFragment extends Fragment {
                 mTimePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        if ((holder.EExamName.getVisibility() == View.VISIBLE) || (holder.EExamPrep.getVisibility() == View.VISIBLE) || (holder.EExamHospital.getVisibility() == View.VISIBLE)) {
+                        if ((holder.EExamName.getVisibility() == View.VISIBLE) || (holder.EExamPrep.getVisibility() == View.VISIBLE) || (holder.EExamHospital.getVisibility() == View.VISIBLE) || (holder.EExamPrepMethod.getVisibility() == View.VISIBLE)) {
                             holder.ConfirmChanges.setVisibility(View.VISIBLE);
                         } else {
                             holder.ConfirmChanges.setVisibility(View.GONE);
@@ -699,24 +705,28 @@ public class AppointsFragment extends Fragment {
                         for (int i = 0; i < listAdapter.getCount(); i++) {
                             String temp = listAdapter.getItem(i).toString();
                             if (str.compareTo(temp) == 0) {
-                                holder.ExamName.setVisibility(View.VISIBLE);
-                                holder.EExamName.setVisibility(View.GONE);
-                                holder.ExamHospital.setVisibility(View.VISIBLE);
-                                holder.EExamHospital.setVisibility(View.GONE);
-                                holder.ExamPrep.setVisibility(View.VISIBLE);
-                                holder.EExamPrep.setVisibility(View.GONE);
-
                                 eRef.child(model.getName()).removeValue();
 
                                 String name = holder.EExamName.getText().toString().trim();
                                 String date = holder.ExamDate.getText().toString().trim();
                                 String hospital = holder.EExamHospital.getText().toString().trim();
                                 String prep = holder.EExamPrep.getText().toString().trim();
+                                String prepmethod = holder.EExamPrepMethod.getText().toString().trim();
                                 String hour = holder.ExamHour.getText().toString().trim();
 
                                 getHospitalLocation(hospital);
-                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
+                                ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, prepmethod, HospitalLocation);
                                 eRef.child(name).setValue(ExamInfo);
+
+                                holder.ExamName.setVisibility(View.VISIBLE);
+                                holder.EExamName.setVisibility(View.GONE);
+                                holder.ExamHospital.setVisibility(View.VISIBLE);
+                                holder.EExamHospital.setVisibility(View.GONE);
+                                holder.ExamPrep.setVisibility(View.VISIBLE);
+                                holder.EExamPrep.setVisibility(View.GONE);
+                                holder.ExamPrepMethod.setVisibility(View.VISIBLE);
+                                holder.EExamPrepMethod.setVisibility(View.GONE);
+                                holder.ConfirmChanges.setVisibility(View.GONE);
                             }
                         }
                         holder.EExamHospital.setText(currhospital);
@@ -731,6 +741,8 @@ public class AppointsFragment extends Fragment {
         holder.ExamPrep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                holder.ExamPrep.setVisibility(View.GONE);
+                holder.EExamPrep.setVisibility(View.VISIBLE);
                 holder.EExamPrep.requestFocus();
                 holder.ConfirmChanges.setVisibility(View.VISIBLE);
 
@@ -746,10 +758,11 @@ public class AppointsFragment extends Fragment {
                         String date = holder.ExamDate.getText().toString().trim();
                         String hospital = holder.EExamHospital.getText().toString().trim();
                         String prep = holder.EExamPrep.getText().toString().trim();
+                        String prepmethod = holder.EExamPrepMethod.getText().toString().trim();
                         String hour = holder.ExamHour.getText().toString().trim();
 
                         getHospitalLocation(hospital);
-                        ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, HospitalLocation);
+                        ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, prepmethod, HospitalLocation);
                         eRef.child(name).setValue(ExamInfo);
 
                         holder.ExamName.setVisibility(View.VISIBLE);
@@ -758,6 +771,49 @@ public class AppointsFragment extends Fragment {
                         holder.EExamHospital.setVisibility(View.GONE);
                         holder.ExamPrep.setVisibility(View.VISIBLE);
                         holder.EExamPrep.setVisibility(View.GONE);
+                        holder.ExamPrepMethod.setVisibility(View.VISIBLE);
+                        holder.EExamPrepMethod.setVisibility(View.GONE);
+                        holder.ConfirmChanges.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+
+        holder.ExamPrepMethod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.ExamPrepMethod.setVisibility(View.GONE);
+                holder.EExamPrepMethod.setVisibility(View.VISIBLE);
+                holder.EExamPrepMethod.requestFocus();
+                holder.ConfirmChanges.setVisibility(View.VISIBLE);
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                holder.ConfirmChanges.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        eRef.child(model.getName()).removeValue();
+
+                        String name = holder.EExamName.getText().toString().trim();
+                        String date = holder.ExamDate.getText().toString().trim();
+                        String hospital = holder.EExamHospital.getText().toString().trim();
+                        String prep = holder.EExamPrep.getText().toString().trim();
+                        String prepmethod = holder.EExamPrepMethod.getText().toString().trim();
+                        String hour = holder.ExamHour.getText().toString().trim();
+
+                        getHospitalLocation(hospital);
+                        ExamInfo ExamInfo = new ExamInfo(name, hospital, prep, date, hour, prepmethod, HospitalLocation);
+                        eRef.child(name).setValue(ExamInfo);
+
+                        holder.ExamName.setVisibility(View.VISIBLE);
+                        holder.EExamName.setVisibility(View.GONE);
+                        holder.ExamHospital.setVisibility(View.VISIBLE);
+                        holder.EExamHospital.setVisibility(View.GONE);
+                        holder.ExamPrep.setVisibility(View.VISIBLE);
+                        holder.EExamPrep.setVisibility(View.GONE);
+                        holder.ExamPrepMethod.setVisibility(View.VISIBLE);
+                        holder.EExamPrepMethod.setVisibility(View.GONE);
                         holder.ConfirmChanges.setVisibility(View.GONE);
                     }
                 });
@@ -808,8 +864,8 @@ public class AppointsFragment extends Fragment {
     public static class EExamsInfo extends RecyclerView.ViewHolder {
         View EExamsL;
         ImageButton EExamDelete;
-        TextView ExamName, ExamDate, ExamHour, ExamHospital, ExamPrep;
-        EditText EExamPrep;
+        TextView ExamName, ExamDate, ExamHour, ExamHospital, ExamPrep, ExamPrepMethod;
+        EditText EExamPrep, EExamPrepMethod;
         AutoCompleteTextView EExamHospital, EExamName;
         Button ConfirmChanges;
 
@@ -850,6 +906,13 @@ public class AppointsFragment extends Fragment {
             EExamPrep = EExamsL.findViewById(R.id.EExamPrep);
             ExamPrep.setText(prep + " Dias");
             EExamPrep.setText(prep);
+        }
+
+        public void setPrepMethod(String prepmethod) {
+            ExamPrepMethod = EExamsL.findViewById(R.id.ExamPrepMethod);
+            EExamPrepMethod = EExamsL.findViewById(R.id.EExamPrepMethod);
+            ExamPrepMethod.setText(prepmethod);
+            EExamPrepMethod.setText(prepmethod);
         }
     }
 
