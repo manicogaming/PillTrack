@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".AppNotifications"
         android:allowBackup="true"
@@ -73,6 +75,10 @@
             android:name=".Maps.MapsActivity"
             android:label="Maps"></activity>
         <activity android:name=".Accounts.Register_Second" />
+
+        <service
+            android:name=".NotificationJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>
