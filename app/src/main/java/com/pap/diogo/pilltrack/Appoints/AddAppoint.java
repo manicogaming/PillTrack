@@ -223,11 +223,10 @@ public class AddAppoint extends AppCompatActivity implements View.OnClickListene
                             }
                         }
                         txtDate.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
-
                     }
                 }, mYear, mMonth, mDay);
 
-                mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis() + (1000 * 60 * 60 * 24));
                 if (!mDatePicker.isShowing()) {
                     mDatePicker.show();
                 }

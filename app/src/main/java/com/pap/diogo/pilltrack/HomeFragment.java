@@ -31,6 +31,11 @@ import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class HomeFragment extends Fragment {
     private RecyclerView Pills, Appoints, Exams;
     private FirebaseRecyclerAdapter<Pill, PillsInfo> PillsAdapter;
@@ -40,6 +45,7 @@ public class HomeFragment extends Fragment {
     private String userid;
     private TextView NoAppoints, NoPills;
     DatabaseReference pRef, aRef, eRef;
+    Date date;
 
     LocalDate cDate, mDate, sDate, eDate;
 
@@ -244,7 +250,6 @@ public class HomeFragment extends Fragment {
 
                         holder.setName(model.getName());
                         holder.setPillFunc(model.getPillfunc());
-                        holder.setInterval(model.getInterval());
 
                         String dtNow = model.getPillstartdate();
                         DateTimeFormatter curr = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -273,6 +278,24 @@ public class HomeFragment extends Fragment {
                         } else {
                             String rDays = String.valueOf(currdays);
                             holder.setDuration("Faltam " + rDays + " dias.");
+                        }
+
+                        String interval = model.getInterval();
+                        String hour = model.getPillhour();
+
+                        if (interval.equals("4 em 4 horas")) {
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                            try {
+                                date = dateFormat.parse(hour);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(date);
+                            calendar.add(Calendar.HOUR, 4);
+                            String currentTime = checkDigit(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + checkDigit(calendar.get(Calendar.MINUTE));
+                            holder.setInterval("Próxima medicação: " + currentTime);
                         }
 
                         holder.EditPill.setOnClickListener(new View.OnClickListener() {
@@ -388,5 +411,9 @@ public class HomeFragment extends Fragment {
             TextView ePrepMethod = ExamsL.findViewById(R.id.ePrepMethod);
             ePrepMethod.setText(prepmethod);
         }
+    }
+
+    public String checkDigit(int number) {
+        return number <= 9 ? "0" + number : String.valueOf(number);
     }
 }
