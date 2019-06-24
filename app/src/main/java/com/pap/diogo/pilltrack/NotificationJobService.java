@@ -92,7 +92,7 @@ public class NotificationJobService extends JobService {
                         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, activityIntent, 0);
 
                         Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_1_ID)
-                                .setSmallIcon(R.mipmap.ic_launcher_round)
+                                .setSmallIcon(R.drawable.ic_icon)
                                 .setContentTitle("Consultas")
                                 .setContentText("Tem uma consulta hoje ás " + hour + ".")
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -138,7 +138,7 @@ public class NotificationJobService extends JobService {
                         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, activityIntent, 0);
 
                         Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_2_ID)
-                                .setSmallIcon(R.mipmap.ic_launcher_round)
+                                .setSmallIcon(R.drawable.ic_icon)
                                 .setContentTitle("Exames")
                                 .setContentText("Tem um exame hoje ás " + hour + ".")
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
