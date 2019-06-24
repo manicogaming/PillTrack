@@ -1,6 +1,7 @@
 package com.pap.diogo.pilltrack;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pap.diogo.pilltrack.Appoints.Appoint;
 import com.pap.diogo.pilltrack.Appoints.Exam;
-import com.pap.diogo.pilltrack.Maps.MapsActivity;
 import com.pap.diogo.pilltrack.Pills.Pill;
 
 import org.joda.time.Days;
@@ -129,9 +129,9 @@ public class HomeFragment extends Fragment {
                         holder.MapsLoc.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent i = new Intent(getActivity(), MapsActivity.class);
-                                i.putExtra("GPSLocation", model.getHlocation());
-                                startActivity(i);
+                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                        Uri.parse("http://maps.google.com/maps?daddr=" + model.getHlocation()));
+                                startActivity(intent);
                             }
                         });
 
@@ -200,9 +200,9 @@ public class HomeFragment extends Fragment {
                         holder.MapsLoc.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent i = new Intent(getActivity(), MapsActivity.class);
-                                i.putExtra("GPSLocation", model.getHlocation());
-                                startActivity(i);
+                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                        Uri.parse("http://maps.google.com/maps?daddr=" + model.getHlocation()));
+                                startActivity(intent);
                             }
                         });
 

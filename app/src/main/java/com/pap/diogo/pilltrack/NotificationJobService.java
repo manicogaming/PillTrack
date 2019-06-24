@@ -5,8 +5,7 @@ import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -17,7 +16,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.pap.diogo.pilltrack.Maps.MapsActivity;
 
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
@@ -87,8 +85,8 @@ public class NotificationJobService extends JobService {
                     if (days == 0) {
                         notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-                        Intent activityIntent = new Intent(getApplicationContext(), MapsActivity.class);
-                        activityIntent.putExtra("GPSLocation", hlocation);
+                        Intent activityIntent = new Intent(android.content.Intent.ACTION_VIEW,
+                                Uri.parse("http://maps.google.com/maps?daddr=" + hlocation));
                         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, activityIntent, 0);
 
                         Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_1_ID)
@@ -133,8 +131,8 @@ public class NotificationJobService extends JobService {
                     if (days == 0) {
                         notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-                        Intent activityIntent = new Intent(getApplicationContext(), MapsActivity.class);
-                        activityIntent.putExtra("GPSLocation", hlocation);
+                        Intent activityIntent = new Intent(android.content.Intent.ACTION_VIEW,
+                                Uri.parse("http://maps.google.com/maps?daddr=" + hlocation));
                         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, activityIntent, 0);
 
                         Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_2_ID)
