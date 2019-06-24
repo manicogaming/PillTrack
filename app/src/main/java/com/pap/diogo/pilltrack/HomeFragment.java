@@ -8,12 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -280,23 +282,7 @@ public class HomeFragment extends Fragment {
                             holder.setDuration("Faltam " + rDays + " dias.");
                         }
 
-                        String interval = model.getInterval();
-                        String hour = model.getPillhour();
-
-                        if (interval.equals("4 em 4 horas")) {
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
-                            try {
-                                date = dateFormat.parse(hour);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTime(date);
-                            calendar.add(Calendar.HOUR, 4);
-                            String currentTime = checkDigit(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + checkDigit(calendar.get(Calendar.MINUTE));
-                            holder.setInterval("Próxima medicação: " + currentTime);
-                        }
+                        pillNextIntake(holder, model);
 
                         holder.EditPill.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -357,7 +343,7 @@ public class HomeFragment extends Fragment {
 
     public static class AppointsInfo extends RecyclerView.ViewHolder {
         View AppointsL;
-        ImageButton EditAppoint, EnableNotifications, DisableNotifications;
+        ImageButton EditAppoint;
         Button MapsLoc;
 
         public AppointsInfo(@NonNull View itemView) {
@@ -415,5 +401,61 @@ public class HomeFragment extends Fragment {
 
     public String checkDigit(int number) {
         return number <= 9 ? "0" + number : String.valueOf(number);
+    }
+
+    public void pillNextIntake(PillsInfo holder, Pill model) {
+        String interval = model.getInterval();
+        String hour = model.getPillhour();
+
+        if (interval.equals("4 em 4 horas")) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            try {
+                date = dateFormat.parse(hour);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.HOUR, 4);
+            String nextPill = checkDigit(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + checkDigit(calendar.get(Calendar.MINUTE));
+            holder.setInterval("Próxima medicação: " + nextPill);
+        }
+
+        if (interval.equals("8 em 8 horas")) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            try {
+                date = dateFormat.parse(hour);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.HOUR, 8);
+            String nextPill = checkDigit(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + checkDigit(calendar.get(Calendar.MINUTE));
+
+            holder.setInterval("Próxima medicação: " + nextPill);
+        }
+
+        if (interval.equals("12 em 12 horas")) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            try {
+                date = dateFormat.parse(hour);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.HOUR, 12);
+            String nextPill = checkDigit(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + checkDigit(calendar.get(Calendar.MINUTE));
+
+            holder.setInterval("Próxima medicação: " + nextPill);
+        }
+
+        if (interval.equals("De manhã e à noite") || interval.equals("De manhã") || interval.equals("À noite")) {
+            holder.setInterval(model.getInterval());
+        }
     }
 }
