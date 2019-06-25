@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +30,7 @@ import java.util.Date;
 
 import static com.pap.diogo.pilltrack.AppNotifications.CHANNEL_1_ID;
 import static com.pap.diogo.pilltrack.AppNotifications.CHANNEL_2_ID;
+import static com.pap.diogo.pilltrack.AppNotifications.CHANNEL_3_ID;
 
 public class NotificationJobService extends JobService {
     private static final String TAG = "NotificationJobService";
@@ -74,7 +76,13 @@ public class NotificationJobService extends JobService {
     }
 
     private void getAppointsNotifications() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            return;
+        }
         final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Appoints").child(userid);
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
@@ -120,6 +128,12 @@ public class NotificationJobService extends JobService {
     }
 
     private void getExamsNotifications() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            return;
+        }
+
         final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Exams").child(userid);
         ValueEventListener eventListener = new ValueEventListener() {
@@ -166,6 +180,12 @@ public class NotificationJobService extends JobService {
     }
 
     private void getPillNotifications() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            return;
+        }
+
         final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Pills").child(userid);
         ValueEventListener eventListener = new ValueEventListener() {
@@ -230,7 +250,7 @@ public class NotificationJobService extends JobService {
                 if (getCurrentTime.compareTo(nextPill) == 0) {
                     notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_2_ID)
+                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_3_ID)
                             .setSmallIcon(R.drawable.ic_icon)
                             .setContentTitle("Medicamentos")
                             .setContentText("Tem uma medicação a tomar agora.")
@@ -265,7 +285,7 @@ public class NotificationJobService extends JobService {
                 if (getCurrentTime.compareTo(nextPill) == 0) {
                     notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_2_ID)
+                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_3_ID)
                             .setSmallIcon(R.drawable.ic_icon)
                             .setContentTitle("Medicamentos")
                             .setContentText("Tem uma medicação a tomar agora.")
@@ -300,7 +320,7 @@ public class NotificationJobService extends JobService {
                 if (getCurrentTime.compareTo(nextPill) == 0) {
                     notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_2_ID)
+                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_3_ID)
                             .setSmallIcon(R.drawable.ic_icon)
                             .setContentTitle("Medicamentos")
                             .setContentText("Tem uma medicação a tomar agora.")
