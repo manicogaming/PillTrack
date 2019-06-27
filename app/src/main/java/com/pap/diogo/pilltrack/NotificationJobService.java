@@ -36,7 +36,7 @@ public class NotificationJobService extends JobService {
     private static final String TAG = "NotificationJobService";
     private boolean jobCancelled;
 
-    private String date, hour, hlocation, interval, pillhour, pillstartdate, pillenddate, name;
+    private String date, hour, hlocation, interval, pillhour, pillstartdate, pillenddate, name, specialty;
     private Date pDate;
     LocalDate cDate, mDate, sDate, eDate;
     private NotificationManagerCompat notificationManager;
@@ -91,6 +91,7 @@ public class NotificationJobService extends JobService {
                     date = snapshot.child("date").getValue(String.class);
                     hour = snapshot.child("hour").getValue(String.class);
                     hlocation = snapshot.child("hlocation").getValue(String.class);
+                    specialty = snapshot.child("name").getValue(String.class);
 
                     String dtStart = date;
                     DateTimeFormatter format = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -108,7 +109,7 @@ public class NotificationJobService extends JobService {
                         Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_1_ID)
                                 .setSmallIcon(R.drawable.ic_icon)
                                 .setContentTitle("Consultas")
-                                .setContentText("Tem uma consulta hoje ás " + hour + ".")
+                                .setContentText("Tem uma consulta hoje ás " + hour + " de " + specialty + ".")
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                 .setAutoCancel(true)
                                 .setOnlyAlertOnce(true)
@@ -143,6 +144,7 @@ public class NotificationJobService extends JobService {
                     date = snapshot.child("date").getValue(String.class);
                     hour = snapshot.child("hour").getValue(String.class);
                     hlocation = snapshot.child("hlocation").getValue(String.class);
+                    specialty = snapshot.child("name").getValue(String.class);
 
                     String dtStart = date;
                     DateTimeFormatter format = org.joda.time.format.DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -160,7 +162,7 @@ public class NotificationJobService extends JobService {
                         Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_2_ID)
                                 .setSmallIcon(R.drawable.ic_icon)
                                 .setContentTitle("Exames")
-                                .setContentText("Tem um exame hoje ás " + hour + ".")
+                                .setContentText("Tem uma consulta hoje ás " + hour + " de " + specialty + ".")
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                 .setAutoCancel(true)
                                 .setOnlyAlertOnce(true)
